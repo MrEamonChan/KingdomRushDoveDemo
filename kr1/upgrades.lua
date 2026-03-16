@@ -625,7 +625,7 @@ upgrades.list = {{
 		price = 2,
 		level = 3,
 		icon = 2,
-		damage_factor = 1.3
+		damage_factor = 1.27
 	},
 	archer_far_shots = {
 		range_factor = 1.05,
