@@ -1289,7 +1289,8 @@ return {
 			"kr_voice_pandatower_taunt01_f.ogg",
 			"kr_voice_CN_pandas_panda_style_3.ogg",
 			"kr_voice_sunwukong_4_a.ogg",
-			"kr_voice_CN_wukong_here_comes_your_grandpa_sun_1.ogg"
+			"kr_voice_CN_wukong_here_comes_your_grandpa_sun_1.ogg",
+			"kr_voice_aurion_01_b.ogg"
 		},
 		ids = {},
 		keep = true

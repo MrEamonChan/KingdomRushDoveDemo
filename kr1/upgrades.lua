@@ -1908,8 +1908,8 @@ function upgrades:patch_templates(max_level)
 
 	if u then
 		T("power_thunder_control").cooldown = 60
-		T("power_thunder_control").thunders[1].damage_max = 100
-		T("power_thunder_control").thunders[1].damage_min = 80
+		T("power_thunder_control").thunders[1].damage_max = 95
+		T("power_thunder_control").thunders[1].damage_min = 75
 	end
 
 	u = self:get_upgrade("thunder_level_3")
@@ -1925,15 +1925,17 @@ function upgrades:patch_templates(max_level)
 
 	if u then
 		T("mod_power_thunder_slow").slow.factor = 0.4
-		T("power_thunder_control").thunders[1].damage_max = 130
-		T("power_thunder_control").thunders[1].damage_min = 110
+		T("power_thunder_control").thunders[1].damage_max = 125
+		T("power_thunder_control").thunders[1].damage_min = 105
 	end
 
 	u = self:get_upgrade("thunder_level_5")
 
 	if u then
-		T("power_thunder_control").thunders[1].damage_max = 200
-		T("power_thunder_control").thunders[1].damage_min = 150
+		T("power_thunder_control").thunders[1].damage_max = 195
+		T("power_thunder_control").thunders[1].damage_min = 145
+		T("power_thunder_control").thunders[2].damage_max = 195
+		T("power_thunder_control").thunders[2].damage_min = 145
 		T("power_thunder_control").thunders[2].count = 6
 	end
 
