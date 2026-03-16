@@ -68246,8 +68246,17 @@ function scripts.enemy_dragons.insert(this, store)
 
 		this.enemy.gold = math.ceil(this.enemy.gold * this.gold_multiplier)
 
-		if this.health.hp_max > 2000 and store.wave_group_number > 6 then
-			this.health.hp_max = math.floor(this.health.hp_max * 1.1)
+		if store.wave_group_number > 6 then
+			if this.health.hp_max > 1600 then
+				this.health.hp_max = math.ceil(this.health.hp_max * 1.05)
+			end
+			if store.wave_group_number > 9 then
+				if this.health.armor >= this.health.magic_armor then
+					this.health.armor = this.health.armor + (1 - this.health.armor) * 0.1
+				else
+					this.health.magic_armor = this.health.magic_armor + (1 - this.health.magic_armor) * 0.1
+				end
+			end
 		end
 
 		return true
