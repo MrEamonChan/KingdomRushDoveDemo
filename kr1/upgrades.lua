@@ -1942,9 +1942,9 @@ function upgrades:patch_templates(max_level)
 	if u then
 		T("power_thunder_control").main_script.insert = function(this, store)
 			for _, e in pairs(store.soldiers) do
-				if e.health.dead then
+				if e.health.dead and not e.reinforcement then
 					U.soldier_revive(e)
-				elseif e.health.hp < e.health.hp_max then
+				elseif not e.health.dead and e.health.hp < e.health.hp_max then
 					e.health.hp = e.health.hp_max
 				end
 			end
