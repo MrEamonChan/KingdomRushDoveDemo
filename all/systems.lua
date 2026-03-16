@@ -1447,8 +1447,8 @@ function sys.game_upgrades:init(store)
 end
 
 function sys.game_upgrades:on_insert(entity, store)
-	local mage_towers = UP:mage_towers()
-	local mage_bullet_names = UP:mage_tower_bolts()
+	local mage_towers = UP.mage_towers
+	local mage_bullet_names = UP.mage_tower_bolts
 	local u = UP:get_upgrade("mage_brilliance")
 
 	if u and entity.tower and table.contains(mage_towers, entity.template_name) then
@@ -1514,8 +1514,8 @@ function sys.game_upgrades:on_insert(entity, store)
 end
 
 function sys.game_upgrades:on_remove(entity, store)
-	local mage_towers = UP:mage_towers()
-	local mage_bullet_names = UP:mage_tower_bolts()
+	local mage_towers = UP.mage_towers
+	local mage_bullet_names = UP.mage_tower_bolts
 	local u = UP:get_upgrade("mage_brilliance")
 
 	if u and entity.tower and table.contains(mage_towers, entity.template_name) then

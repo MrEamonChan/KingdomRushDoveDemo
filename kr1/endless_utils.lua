@@ -497,7 +497,7 @@ function patch_upgrade_map.archer_bleed(level, endless)
 end
 
 function patch_upgrade_map.archer_insight(level, endless)
-	for _, name in pairs(UP:arrows()) do
+	for _, name in ipairs(UP.arrows) do
 		local arrow = E:get_template(name)
 
 		if not arrow._endless_archer_insight then
@@ -511,7 +511,7 @@ function patch_upgrade_map.archer_insight(level, endless)
 end
 
 function patch_upgrade_map.archer_multishot(level, endless)
-	for _, name in pairs(table.append(UP:arrows(), {"arrow_arcane_burst"}, true)) do
+	for _, name in ipairs(table.append(UP.arrows, {"arrow_arcane_burst"}, true)) do
 		local arrow = E:get_template(name)
 
 		if not arrow._endless_multishot then
@@ -523,7 +523,7 @@ function patch_upgrade_map.archer_multishot(level, endless)
 end
 
 function patch_upgrade_map.archer_critical(level, endless)
-	for _, name in pairs(table.append(UP:arrows(), {"arrow_arcane_burst"}, true)) do
+	for _, name in pairs(table.append(UP.arrows, {"arrow_arcane_burst"}, true)) do
 		local arrow = E:get_template(name)
 
 		if not arrow._endless_archer_critical then
@@ -657,7 +657,7 @@ function patch_upgrade_map.barrack_luck(level, endless)
 end
 
 function patch_upgrade_map.barrack_unity(level, endless)
-	for _, name in pairs(UP:towers_with_barrack()) do
+	for _, name in pairs(UP.towers_with_barrack) do
 		if name ~= "tower_pandas_lvl4" then
 			local t = E:get_template(name)
 
@@ -708,7 +708,7 @@ function patch_upgrade_map.barrack_synergy(level, endless)
 end
 
 function patch_upgrade_map.barrack_rally(level, endless)
-	for _, name in pairs(UP:towers_with_barrack()) do
+	for _, name in pairs(UP.towers_with_barrack) do
 		local t = E:get_template(name)
 
 		t.barrack.rally_range = math.huge
@@ -974,7 +974,7 @@ function patch_upgrade_map.engineer_fireball(level, endless)
 end
 
 function patch_upgrade_map.mage_thunder(level, endless)
-	for _, name in pairs(table.append(UP:bolts(), {"ray_arcane_disintegrate", "bullet_tower_ray_lvl4"}, true)) do
+	for _, name in pairs(table.append(UP.bolts, {"ray_arcane_disintegrate", "bullet_tower_ray_lvl4"}, true)) do
 		local bolt = E:get_template(name)
 
 		if not bolt._endless_mage_thunder then
@@ -1045,7 +1045,7 @@ function patch_upgrade_map.mage_thunder(level, endless)
 end
 
 function patch_upgrade_map.mage_shatter(level, endless)
-	for _, name in pairs(table.append(UP:bolts(), {"bullet_pixie_poison"}, true)) do
+	for _, name in pairs(table.append(UP.bolts, {"bullet_pixie_poison"}, true)) do
 		local bolt = E:get_template(name)
 
 		if not bolt._endless_mage_shatter then
@@ -1069,7 +1069,7 @@ function patch_upgrade_map.mage_shatter(level, endless)
 end
 
 function patch_upgrade_map.mage_chain(level, endless)
-	for _, name in pairs(table.append(UP:bolts(), {"bullet_pixie_poison", "bullet_pixie_instakill", "ray_arcane_disintegrate"})) do
+	for _, name in pairs(table.append(UP.bolts, {"bullet_pixie_poison", "bullet_pixie_instakill", "ray_arcane_disintegrate"}, true)) do
 		local bolt = E:get_template(name)
 
 		if not bolt._endless_mage_chain then
