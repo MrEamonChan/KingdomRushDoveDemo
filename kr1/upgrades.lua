@@ -1568,19 +1568,24 @@ function upgrades:patch_templates(max_level)
 	if u then
 		T("mod_mage_treasure").extra_gold_factor = u.extra_gold_factor
 		T("mod_mage_treasure").max_extra_gold_factor = u.max_extra_gold_factor
+		for _, n in ipairs(self:mage_tower_bolts()) do
+			local b = T(n).bullet
+			add_mods(b, {"mod_mage_treasure"})
+		end
+		add_mods(T("tower_pixie").attacks.list[4], {"mod_mage_treasure"})
 	end
 
 	u = self:get_upgrade("mage_hermetic_study")
 
 	if u then
-		for _, n in pairs(mage_towers) do
+		for _, n in ipairs(mage_towers) do
 			T(n).tower.price = math.ceil(T(n).tower.price * u.cost_factor)
 		end
 	end
 
 	u = self:get_upgrade("mage_old_folk")
 	if u then
-		for _, n in pairs(mage_towers) do
+		for _, n in ipairs(mage_towers) do
 			local t = T(n)
 			if t.powers then
 				for _, p in pairs(t.powers) do
@@ -1597,7 +1602,7 @@ function upgrades:patch_templates(max_level)
 
 	u = self:get_upgrade("mage_strike")
 	if u then
-		for _, n in pairs(self:mage_tower_bolts()) do
+		for _, n in ipairs(self:mage_tower_bolts()) do
 			local b = T(n).bullet
 			b.damage_hooks[#b.damage_hooks + 1] = function(entity, damage, protection)
 				if protection <= 0 then
@@ -1609,7 +1614,7 @@ function upgrades:patch_templates(max_level)
 
 	u = self:get_upgrade("mage_unsteady")
 	if u then
-		for _, n in pairs(self:mage_tower_bolts()) do
+		for _, n in ipairs(self:mage_tower_bolts()) do
 			local b = T(n).bullet
 			b.damage_hooks[#b.damage_hooks + 1] = function(entity, damage, protection)
 				if math.random() < 0.1 and protection < 1 then
@@ -1622,7 +1627,7 @@ function upgrades:patch_templates(max_level)
 	u = self:get_upgrade("mage_empowered_magic")
 
 	if u then
-		for _, n in pairs(self:mage_tower_bolts()) do
+		for _, n in ipairs(self:mage_tower_bolts()) do
 			T(n).bullet.damage_min = math.ceil(T(n).bullet.damage_min * u.damage_factor)
 			T(n).bullet.damage_max = math.ceil(T(n).bullet.damage_max * u.damage_factor)
 		end
@@ -1642,7 +1647,7 @@ function upgrades:patch_templates(max_level)
 	u = self:get_upgrade("mage_arcane_spell")
 
 	if u then
-		for _, n in pairs(self:mage_tower_bolts()) do
+		for _, n in ipairs(self:mage_tower_bolts()) do
 			T(n).bullet.damage_min = math.ceil(T(n).bullet.damage_min * u.damage_factor)
 			T(n).bullet.damage_max = math.ceil(T(n).bullet.damage_max * u.damage_factor)
 		end
@@ -1662,7 +1667,7 @@ function upgrades:patch_templates(max_level)
 	u = self:get_upgrade("mage_power")
 
 	if u then
-		for _, n in pairs(self:mage_tower_bolts()) do
+		for _, n in ipairs(self:mage_tower_bolts()) do
 			T(n).bullet.damage_min = math.ceil(T(n).bullet.damage_min * u.damage_factor)
 			T(n).bullet.damage_max = math.ceil(T(n).bullet.damage_max * u.damage_factor)
 		end
