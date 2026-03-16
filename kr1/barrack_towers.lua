@@ -2522,11 +2522,10 @@ tt.powers.sting_missiles.price_inc = b.soldier.sting_missiles.price[2]
 tt.powers.sting_missiles.enc_icon = 15
 tt.powers.sting_missiles.cooldown = b.sting_missiles.cooldown
 --#endregion
+
 --#region soldier_tower_rocket_gunners_lvl4
 tt = RT("soldier_tower_rocket_gunners_lvl4", "soldier_militia")
-
 AC(tt, "nav_grid", "powers", "ranged", "tween")
-
 b = balance.towers.rocket_gunners
 tt.info.portrait = "kr5_info_portraits_soldiers_0007"
 tt.info.random_name_format = "SOLDIER_TOWER_ROCKET_GUNNERS_%i_NAME"

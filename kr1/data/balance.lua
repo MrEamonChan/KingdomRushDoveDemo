@@ -5833,7 +5833,7 @@ local towers = {
 				min_range = {20, 20, 20},
 				damage_type = DAMAGE_INSTAKILL,
 				hp_max_target = {300, 600, 900},
-				kill_hp_factor = {0.4, 0.5, 0.6}
+				kill_hp_factor = {0.45, 0.55, 0.65}
 			}
 		}
 	},
