@@ -2206,8 +2206,9 @@ function PowerButton:update(dt)
 		end
 	end
 
-	if not self.animation.paused then
-		self.ts = self.ts + dt
+	local tv = self.mask or self
+	if not tv.animation.paused then
+		tv.ts = tv.ts + dt
 	end
 end
 
@@ -2274,47 +2275,128 @@ end
 Power1Button = class("Power1Button", PowerButton)
 
 function Power1Button:initialize()
-
-	Power1Button.super.initialize(self, "fire_0001")
-
-	self.animations = {
-		default = {
-			to = 1,
-			prefix = "fire",
-			from = 1
-		},
-		highlighted = {
-			to = 2,
-			prefix = "fire",
-			from = 2
-		},
-		cooldown = {
-			to = 1,
-			prefix = "fire",
-			from = 1
-		},
-		locked = {
-			to = 30,
-			prefix = "fire_ready",
-			from = 30
-		},
-		unlocked = {
-			to = 44,
-			prefix = "fire_ready",
-			from = 30
-		},
-		selected = {
-			to = 29,
-			prefix = "fire_ready",
-			from = 29
-		},
-		ready = {
-			to = 28,
-			prefix = "fire_ready",
-			from = 1,
-			post = {1}
+	if E:get_template("user_power_1").template_name == "power_fireball_control" then
+		Power1Button.super.initialize(self, "fire_0001")
+		self.animations = {
+			default = {
+				to = 1,
+				prefix = "fire",
+				from = 1
+			},
+			highlighted = {
+				to = 2,
+				prefix = "fire",
+				from = 2
+			},
+			cooldown = {
+				to = 1,
+				prefix = "fire",
+				from = 1
+			},
+			locked = {
+				to = 30,
+				prefix = "fire_ready",
+				from = 30
+			},
+			unlocked = {
+				to = 44,
+				prefix = "fire_ready",
+				from = 30
+			},
+			selected = {
+				to = 29,
+				prefix = "fire_ready",
+				from = 29
+			},
+			ready = {
+				to = 28,
+				prefix = "fire_ready",
+				from = 1,
+				post = {1}
+			}
 		}
-	}
+	elseif E:get_template("user_power_1").template_name == "power_thunder_control" then
+		Power1Button.super.initialize(self, "power_button_icons_0017", "power_button_mask_0001")
+		local mask_prefix = "power_button_mask"
+
+		self.animations = {
+			default = {
+				to = 1,
+				from = 1,
+				prefix = mask_prefix
+			},
+			highlighted = {
+				to = 45,
+				from = 45,
+				prefix = mask_prefix
+			},
+			cooldown = {
+				to = 1,
+				from = 1,
+				prefix = mask_prefix
+			},
+			locked = {
+				to = 30,
+				from = 30,
+				prefix = mask_prefix
+			},
+			unlocked = {
+				to = 44,
+				from = 30,
+				prefix = mask_prefix
+			},
+			selected = {
+				to = 29,
+				from = 29,
+				prefix = mask_prefix
+			},
+			ready = {
+				to = 28,
+				from = 1,
+				prefix = mask_prefix,
+				post = {1}
+			}
+		}
+	end
+
+	-- self.animations = {
+	-- 	default = {
+	-- 		to = 1,
+	-- 		prefix = "fire",
+	-- 		from = 1
+	-- 	},
+	-- 	highlighted = {
+	-- 		to = 2,
+	-- 		prefix = "fire",
+	-- 		from = 2
+	-- 	},
+	-- 	cooldown = {
+	-- 		to = 1,
+	-- 		prefix = "fire",
+	-- 		from = 1
+	-- 	},
+	-- 	locked = {
+	-- 		to = 30,
+	-- 		prefix = "fire_ready",
+	-- 		from = 30
+	-- 	},
+	-- 	unlocked = {
+	-- 		to = 44,
+	-- 		prefix = "fire_ready",
+	-- 		from = 30
+	-- 	},
+	-- 	selected = {
+	-- 		to = 29,
+	-- 		prefix = "fire_ready",
+	-- 		from = 29
+	-- 	},
+	-- 	ready = {
+	-- 		to = 28,
+	-- 		prefix = "fire_ready",
+	-- 		from = 1,
+	-- 		post = {1}
+	-- 	}
+	-- }
 
 	self.selected_gui_mode = GUI_MODE_POWER_1
 
@@ -2394,28 +2476,23 @@ function Power2Button:fire(wx, wy)
 	Power2Button.super.fire(self, wx, wy)
 
 	local level_idx = game_gui.game.store.level_index
-	if level_idx == 115 and (game_gui.game.store.level_mode == GAME_MODE_IRON or game_gui.game.store.level_mode == GAME_MODE_HEROIC or (game_gui.game.store.level_mode == GAME_MODE_CAMPAIGN and game_gui.game.store.wave_group_number >= 15)) then
-		local e = E:create_entity("power_denas_control")
-		e.pos.x, e.pos.y = wx, wy
-		game_gui.game.simulation:insert_entity(e)
-	else
-		local i = math.random(1, 3)
-		local e = E:create_entity("re_current_" .. i)
 
-		e.pos.x = wx + 10
-		e.pos.y = wy - 10
-		e.nav_rally.center = V.v(wx, wy)
-		e.nav_rally.pos = V.vclone(e.pos)
-		game_gui.game.simulation:insert_entity(e)
-		i = math.random(1, 3)
-		e = E:create_entity("re_current_" .. i)
-		e.pos.x = wx - 10
-		e.pos.y = wy + 10
-		e.nav_rally.center = V.v(wx, wy)
-		e.nav_rally.pos = V.vclone(e.pos)
+	local i = math.random(1, 3)
+	local e = E:create_entity("re_current_" .. i)
 
-		game_gui.game.simulation:insert_entity(e)
-	end
+	e.pos.x = wx + 10
+	e.pos.y = wy - 10
+	e.nav_rally.center = V.v(wx, wy)
+	e.nav_rally.pos = V.vclone(e.pos)
+	game_gui.game.simulation:insert_entity(e)
+	i = math.random(1, 3)
+	e = E:create_entity("re_current_" .. i)
+	e.pos.x = wx - 10
+	e.pos.y = wy + 10
+	e.nav_rally.center = V.v(wx, wy)
+	e.nav_rally.pos = V.vclone(e.pos)
+
+	game_gui.game.simulation:insert_entity(e)
 
 	signal.emit("power-used", 2)
 end
@@ -3776,21 +3853,39 @@ function MousePointer:initialize()
 
 	local p1b, p2b, p3b, pb_point, pb_area, sunray_tower
 
-	p1b = KImageView:new("pointer_area_orange_0001")
-	p1b.anchor = V.v(p1b.size.x * 0.5, p1b.size.y * 0.5)
-	p1b.animation = {
-		to = 10,
-		prefix = "pointer_area_orange",
-		from = 1
-	}
-	p1b.loop = true
+	if E:get_template("user_power_1").template_name == "power_fireball_control" then
+		p1b = KImageView:new("pointer_fireball_0001")
+		p1b.anchor = V.v(p1b.size.x * 0.5, p1b.size.y * 0.5)
+		p1b.animation = {
+			to = 32,
+			prefix = "pointer_fireball",
+			from = 1
+		}
+		p1b.loop = true
 
-	local p1i = KImageView:new("pointer_user_power_0001")
+		local p1i = KImageView:new("pointer_user_power_0001")
 
-	p1i.anchor = V.v(p1i.size.x * 0.5, p1i.size.y * 100 / 100)
-	p1i.pos.x, p1i.pos.y = p1b.size.x * 0.5, p1b.size.y * 0.5
+		p1i.anchor = V.v(p1i.size.x * 0.5, p1i.size.y * 100 / 100)
+		p1i.pos.x, p1i.pos.y = p1b.size.x * 0.5, p1b.size.y * 0.5
 
-	p1b:add_child(p1i)
+		p1b:add_child(p1i)
+	elseif E:get_template("user_power_1").template_name == "power_thunder_control" then
+		p1b = KImageView:new("pointer_area_orange_0001")
+		p1b.anchor = V.v(p1b.size.x / 2, p1b.size.y / 2)
+		p1b.animation = {
+			to = 10,
+			prefix = "pointer_area_orange",
+			from = 1
+		}
+		p1b.loop = true
+
+		local p1i = KImageView:new("pointer_hero_power_0017")
+
+		p1i.anchor = V.v(p1i.size.x / 2, p1i.size.y * 100 / 100)
+		p1i.pos.x, p1i.pos.y = p1b.size.x / 2, p1b.size.y / 2
+
+		p1b:add_child(p1i)
+	end
 
 	p2b = KImageView:new("pointer_point_orange_0001")
 	p2b.anchor = V.v(p2b.size.x * 0.5, p2b.size.y * 0.5)

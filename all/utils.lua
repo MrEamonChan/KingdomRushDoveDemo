@@ -2952,4 +2952,18 @@ function U.render_clone(render)
 	return new_render
 end
 
+--- 复活士兵
+---@param soldier table 士兵实体
+function U.soldier_revive(soldier)
+	soldier.health.dead = false
+	soldier.health.hp = soldier.health.hp_max
+	soldier.health_bar.hidden = nil
+	soldier.ui.can_select = true
+	if soldier.unit.hide_during_death then
+		soldier.unit.hide_during_death = nil
+		U.sprites_show(soldier)
+	end
+	soldier.main_script.runs = 1
+end
+
 return U

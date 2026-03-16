@@ -7391,11 +7391,10 @@ tt.main_script.update = scripts.mactans_controller.update
 tt.sequence = nil
 tt.sequence_groups = nil
 --#endregion
+
 --#region power_thunder_control
 tt = RT("power_thunder_control")
-
 AC(tt, "user_power", "pos", "main_script", "user_selection")
-
 tt.cooldown = 70
 tt.flash_delay_max = 0.3
 tt.flash_delay_min = 0.1
@@ -7435,9 +7434,7 @@ tt.thunders[1].damage_max = 90
 tt.thunders[1].damage_min = 50
 tt.thunders[1].damage_radius = 100
 tt.thunders[1].damage_type = DAMAGE_TRUE
--- tt.thunders[1].delay_max = 0.4
 tt.thunders[1].delay_max = 0.33
--- tt.thunders[1].delay_min = 0.2
 tt.thunders[1].delay_min = 0.33
 tt.thunders[1].pop = {"pop_lightning1", "pop_lightning2", "pop_lightning3"}
 tt.thunders[1].pop_chance = 0.3
@@ -10043,12 +10040,12 @@ tt.render.sprites[1].hide_after_runs = 1
 tt.tween.props[1].keys = {{1, 255}, {2.5, 0}}
 --#endregion
 --#region fx_hero_venom_melee_attack_hit
-tt = RT("fx_hero_venom_melee_attack_hit", "fx5")
+tt = RT("fx_hero_venom_melee_attack_hit", "fx")
 tt.render.sprites[1].name = "hero_venom_hit_fx_idle"
 tt.render.sprites[1].z = Z_BULLETS + 1
 --#endregion
 --#region fx_hero_venom_beast_lvl_up
-tt = RT("fx_hero_venom_beast_lvl_up", "fx5")
+tt = RT("fx_hero_venom_beast_lvl_up", "fx")
 tt.render.sprites[1].name = "hero_venom_levelup_fx_idle"
 --#endregion
 --#region decal_hero_venom_slimewalk
@@ -26819,11 +26816,10 @@ tt.reinforcement.duration = nil
 tt.reinforcement.fade = false
 tt.reinforcement.fade_in = false
 tt.reinforcement.fade_out = false
+
 tt = RT("soldier_warden_stage_40_reinforcement", "soldier_warden_stage_40_island_stopped")
 b = balance.reinforcements
-
 E:add_comps(tt, "tween")
-
 tt.info.i18n_key = "SOLDIER_WARDEN_MAGE_REINFORCEMENT"
 tt.reinforcement.duration = b.soldier.duration
 tt.reinforcement.fade = true
@@ -26853,6 +26849,7 @@ tt.aura.vis_bans = bor(F_ENEMY)
 tt.aura.vis_flags = bor(F_MOD, F_TELEPORT, F_INSTAKILL)
 tt.main_script.insert = scripts.aura_apply_mod.insert
 tt.main_script.update = scripts.aura_apply_mod.update
+
 tt = RT("enemy_stage_40_boss_hit_point", "enemy")
 local b = balance.enemies.dragons.boss_stage_40.bossfight
 tt.enemy.gold = 0
@@ -26873,7 +26870,7 @@ tt.ui.click_rect = r(-30, -3, 60, 65)
 tt.ui.can_click = false
 tt.ui.can_select = false
 tt.vis.flags = bor(F_ENEMY, F_BOSS, F_FLYING)
-tt.vis.bans = bor(F_MOD, F_BLOCK, F_INSTAKILL)
+tt.vis.bans = bor(F_MOD, F_BLOCK, F_INSTAKILL, F_STUN)
 tt.move_bounds = v(25, 25)
 tt.move_speed = v(0.2, 0.2)
 tt.ui.click_rect = r(-10, -10, 20, 20)
@@ -27423,3 +27420,9 @@ tt.tween.props[1].loop = false
 tt.tween.props[1].sprite_id = 1
 tt.tween.disabled = false
 tt.tween.remove = true
+
+tt = RT("mod_mage_treasure", "modifier")
+tt.main_script.insert = scripts.mod_mage_treasure.insert
+
+tt = RT("mod_archer_magic", "modifier")
+tt.main_script.insert = scripts.mod_archer_magic.insert

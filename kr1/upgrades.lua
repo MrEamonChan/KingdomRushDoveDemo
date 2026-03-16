@@ -3,6 +3,7 @@ local log = require("lib.klua.log"):new("kr1.upgrades")
 local km = require("lib.klua.macros")
 local E = require("entity_db")
 local bit = require("bit")
+local U = require("utils")
 require("all.constants")
 
 local function T(name)
@@ -512,105 +513,6 @@ upgrades.list = {{
 		price = 4,
 		level = 6
 	},
-	-- rain_blazing_skies = {
-	-- 	from_kr = 2,
-	-- 	fireball_count_increase = 2,
-	-- 	class = "rain",
-	-- 	damage_increase = 30,
-	-- 	price = 2,
-	-- 	level = 1,
-	-- 	icon = 21
-	-- },
-	-- rain_scorched_earth = {
-	-- 	from_kr = 2,
-	-- 	price = 2,
-	-- 	class = "rain",
-	-- 	level = 2,
-	-- 	icon = 22
-	-- },
-	-- rain_bigger_and_meaner = {
-	-- 	from_kr = 2,
-	-- 	range_factor = 1.25,
-	-- 	cooldown_reduction = 10,
-	-- 	class = "rain",
-	-- 	damage_increase = 30,
-	-- 	price = 3,
-	-- 	level = 3,
-	-- 	icon = 23
-	-- },
-	-- rain_blazing_earth = {
-	-- 	from_kr = 2,
-	-- 	cooldown_reduction = 10,
-	-- 	class = "rain",
-	-- 	price = 3,
-	-- 	level = 4,
-	-- 	icon = 24
-	-- },
-	-- rain_cataclysm = {
-	-- 	from_kr = 2,
-	-- 	class = "rain",
-	-- 	damage_increase = 60,
-	-- 	price = 3,
-	-- 	level = 5,
-	-- 	icon = 25
-	-- },
-	-- rain_armaggedon = {
-	-- 	from_kr = 2,
-	-- 	class = "rain",
-	-- 	fireball_count_increase = 1,
-	-- 	icon = 25,
-	-- 	price = 4,
-	-- 	level = 6
-	-- },
-	-- reinforcement_level_1 = {
-	-- 	from_kr = 2,
-	-- 	class = "reinforcements",
-	-- 	template_name = "re_farmer_well_fed",
-	-- 	price = 2,
-	-- 	level = 1,
-	-- 	icon = 26
-	-- },
-	-- reinforcement_level_2 = {
-	-- 	from_kr = 2,
-	-- 	class = "reinforcements",
-	-- 	template_name = "re_conscript",
-	-- 	price = 3,
-	-- 	level = 2,
-	-- 	icon = 27
-	-- },
-	-- reinforcement_level_3 = {
-	-- 	from_kr = 2,
-	-- 	class = "reinforcements",
-	-- 	template_name = "re_warrior",
-	-- 	price = 3,
-	-- 	level = 3,
-	-- 	icon = 28
-	-- },
-	-- reinforcement_level_4 = {
-	-- 	from_kr = 2,
-	-- 	class = "reinforcements",
-	-- 	template_name = "re_legionnaire",
-	-- 	price = 3,
-	-- 	level = 4,
-	-- 	icon = 29
-	-- },
-	-- reinforcement_level_5 = {
-	-- 	from_kr = 2,
-	-- 	class = "reinforcements",
-	-- 	template_name = "re_legionnaire_ranged",
-	-- 	price = 4,
-	-- 	level = 5,
-	-- 	icon = 30
-	-- },
-	-- reinforcement_level_6 = {
-	-- 	from_kr = 3,
-	-- 	class = "reinforcements",
-	-- 	duration_inc = 2,
-	-- 	cooldown_dec = 1,
-	-- 	icon = 29,
-	-- 	price = 4,
-	-- 	level = 6
-	-- }
 	rain_blazing_skies = {
 		fireball_count_increase = 2,
 		class = "rain",
@@ -700,104 +602,302 @@ upgrades.list = {{
 		price = 4,
 		level = 6
 	}
+}, {
+	archer_salvage = {
+		cost_factor = 0.95,
+		class = "archers",
+		price = 1,
+		level = 1,
+		icon = 13
+	},
+	archer_eagle_eye = {
+		from_kr = 3,
+		range_factor = 1.25,
+		class = "archers",
+		price = 1,
+		level = 2,
+		icon = 4
+	},
+	-- 黑曜石箭头：对护甲低于 10 的敌人造成额外伤害
+	archer_obsidian = {
+		from_kr = 3,
+		class = "archers",
+		price = 2,
+		level = 3,
+		icon = 2,
+		damage_factor = 1.3
+	},
+	archer_far_shots = {
+		range_factor = 1.05,
+		class = "archers",
+		price = 2,
+		level = 4,
+		icon = 16
+	},
+	-- 附魔箭矢：攻击附带法术伤害
+	archer_magic = {
+		from_kr = 3,
+		class = "archers",
+		price = 2,
+		level = 5,
+		factor = 0.12,
+		icon = 3
+	},
+	archer_el_bloodletting_shoot = {
+		from_kr = 3,
+		price = 4,
+		icon = 5,
+		class = "archers",
+		level = 6
+	},
+	barrack_survival = {
+		health_factor = 1.1,
+		class = "barracks",
+		price = 1,
+		level = 1,
+		icon = 8
+	},
+	barrack_better_armor = {
+		class = "barracks",
+		armor_increase = 0.1,
+		price = 1,
+		level = 2,
+		icon = 9
+	},
+	barrack_go_on = {
+		from_kr = 2,
+		cooldown_factor = 0.75,
+		class = "barracks",
+		price = 2,
+		level = 3,
+		icon = 10
+	},
+	barrack_survival_2 = {
+		health_factor = 1.09,
+		class = "barracks",
+		price = 2,
+		level = 4,
+		icon = 11
+	},
+	barrack_mobilize = {
+		from_kr = 2,
+		class = "barracks",
+		icon = 7,
+		level = 5,
+		price = 3,
+		price_factor = 0.8
+	},
+	barrack_dominant = {
+		from_kr = 3,
+		icon = 7,
+		level = 6,
+		class = "barracks",
+		price = 4,
+		rally_range_factor = 2,
+		speed_factor = 1.2
+	},
+	mage_spell_reach = {
+		range_factor = 1.15,
+		class = "mages",
+		price = 1,
+		level = 1,
+		from_kr = 3,
+		icon = 11
+	},
+	mage_empowered_magic = {
+		damage_factor = 1.15,
+		class = "mages",
+		price = 1,
+		level = 2,
+		from_kr = 3,
+		icon = 12
+	},
+	mage_spell_reach_2 = {
+		range_factor = 1.05,
+		class = "mages",
+		price = 2,
+		level = 3,
+		from_kr = 3,
+		icon = 15
+	},
+	mage_old_folk = {
+		from_kr = 2,
+		cost_factor = 0.9,
+		class = "mages",
+		price = 2,
+		level = 4,
+		icon = 14
+	},
+	mage_treasure = {
+		from_kr = 3,
+		extra_gold_factor = 0.01,
+		max_extra_gold_factor = 0.1,
+		price = 3,
+		level = 5,
+		icon = 13,
+		class = "mages"
+	},
+	mage_brilliance = {
+		from_kr = 2,
+		class = "mages",
+		icon = 15,
+		price = 4,
+		level = 6,
+		damage_factors = {
+			1.1,
+			1.12,
+			1.14,
+			1.16,
+			1.18,
+			1.2,
+			1.22,
+			1.24,
+			1.26,
+			1.28,
+			1.29,
+			1.30,
+			1.31,
+			1.32,
+			1.33,
+			1.34,
+			1.35
+		}
+	},
+	engineer_concentrated_fire = {
+		damage_factor = 1.25,
+		class = "engineers",
+		price = 1,
+		level = 1,
+		icon = 16,
+		from_kr = 3
+	},
+	engineer_diffusion = {
+		class = "engineers",
+		radius_factor = 1.15,
+		price = 1,
+		level = 2,
+		icon = 17,
+		from_kr = 3
+	},
+	engineer_range_finder = {
+		from_kr = 3,
+		range_factor = 1.15,
+		class = "engineers",
+		price = 2,
+		level = 3,
+		icon = 18
+	},
+	engineer_field_logistics = {
+		class = "engineers",
+		cost_factor = 0.9,
+		price = 3,
+		level = 4,
+		icon = 25
+	},
+	engineer_efficiency = {
+		price = 3,
+		class = "engineers",
+		level = 5,
+		icon = 20,
+		from_kr = 3
+	},
+	engineer_gnomish_tinkering = {
+		from_kr = 2,
+		cooldown_factor_electric = 0.9,
+		cooldown_factor = 0.88,
+		class = "engineers",
+		icon = 19,
+		price = 4,
+		level = 6
+	},
+	reinforcement_level_1 = {
+		class = "reinforcements",
+		template_name = "re_farmer_well_fed",
+		price = 2,
+		level = 1,
+		icon = 28
+	},
+	reinforcement_level_2 = {
+		class = "reinforcements",
+		template_name = "re_conscript",
+		price = 3,
+		level = 2,
+		icon = 29
+	},
+	reinforcement_level_3 = {
+		class = "reinforcements",
+		template_name = "re_warrior",
+		price = 3,
+		level = 3,
+		icon = 30
+	},
+	reinforcement_level_4 = {
+		class = "reinforcements",
+		template_name = "re_legionnaire",
+		price = 3,
+		level = 4,
+		icon = 1
+	},
+	reinforcement_level_5 = {
+		class = "reinforcements",
+		template_name = "re_legionnaire_ranged",
+		price = 4,
+		level = 5,
+		icon = 2
+	},
+	reinforcement_level_6 = {
+		from_kr = 3,
+		class = "reinforcements",
+		duration_inc = 2,
+		cooldown_dec = 1,
+		icon = 29,
+		price = 4,
+		level = 6
+	},
+	thunder_level_1 = {
+		hits = 6,
+		class = "rain",
+		icon = 21,
+		price = 2,
+		level = 1,
+		from_kr = 3
+	},
+	thunder_level_2 = {
+		price = 2,
+		icon = 22,
+		class = "rain",
+		level = 2,
+		from_kr = 3
+	},
+	thunder_level_3 = {
+		price = 3,
+		icon = 23,
+		class = "rain",
+		level = 3,
+		from_kr = 3
+	},
+	thunder_level_4 = {
+		price = 3,
+		icon = 24,
+		class = "rain",
+		level = 4,
+		from_kr = 3
+	},
+	thunder_level_5 = {
+		price = 3,
+		icon = 25,
+		class = "rain",
+		level = 5,
+		from_kr = 3
+	},
+	thunder_level_6 = {
+		from_kr = 3,
+		price = 4,
+		icon = 10,
+		class = "rain",
+		level = 6
+	}
 }}
--- ,{
---     archer_salvage = {
--- 		cost_factor = 0.95,
--- 		class = "archers",
--- 		price = 1,
--- 		level = 1,
--- 		icon = 13
--- 	},
---     archer_eagle_eye = {
---         from_kr = 3,
--- 		range_factor = 1.25,
--- 		class = "archers",
--- 		price = 1,
--- 		level = 2,
--- 		icon = 4
--- 	},
---     -- 黑曜石箭头：对护甲低于 10 的敌人造成额外伤害
---     archer_obsidian = {
---         from_kr = 3,
---         class = "archers",
---         price = 2,
---         level = 3,
---         icon = 2,
---         damage_factor = 1.3
---     },
---     archer_far_shots = {
--- 		range_factor = 1.05,
--- 		class = "archers",
--- 		price = 2,
--- 		level = 4,
--- 		icon = 16
--- 	},
---     -- 附魔箭矢：攻击附带法术伤害
---     archer_magic = {
---         from_kr = 3,
---         class = "archers",
---         price = 2,
---         level = 5,
---         factor = 0.12,
---         icon = 3
---     },
---     archer_el_bloodletting_shoot = {
--- 		from_kr = 3,
--- 		price = 4,
--- 		icon = 5,
--- 		class = "archers",
--- 		level = 6
--- 	},
---     barrack_survival = {
--- 		health_factor = 1.1,
--- 		class = "barracks",
--- 		price = 1,
--- 		level = 1,
--- 		icon = 8
--- 	},
---     barrack_better_armor = {
--- 		class = "barracks",
--- 		armor_increase = 0.1,
--- 		price = 1,
--- 		level = 2,
--- 		icon = 9
--- 	},
--- 	barrack_go_on = {
--- 		from_kr = 2,
--- 		cooldown_factor = 0.8,
--- 		class = "barracks",
--- 		price = 3,
--- 		level = 3,
--- 		icon = 10
--- 	},
---     barrack_survival_2 = {
---         from_kr = 3,
---         health_factor = 1.09,
--- 		class = "barracks",
--- 		price = 2,
--- 		level = 4,
--- 		icon = 10
---     },
---     barrack_swift = {
---         from_kr = 2,
---         class = "barracks",
---         icon = 7,
---         level = 5,
---         price = 3,
---         speed_factor = 1.25,
---         cooldown_factor = 0.95
---     },
---     barrack_dominant = {
---         from_kr = 3,
---         icon = 7,
---         level = 6,
---         class = "barracks",
---         price = 4,
---         rally_range_factor = 2
---     },
-
--- }
 upgrades.list_count = #upgrades.list
 
 function upgrades:toggle_list_id()
@@ -1211,9 +1311,22 @@ function upgrades:patch_templates(max_level)
 		end
 	end
 
+	u = self:get_upgrade("archer_obsidian")
+	if u then
+		local archer_obsidian_factor = u.damage_factor
+		for _, n in ipairs(self:arrows()) do
+			local b = T(n).bullet
+			b.damage_hooks[#b.damage_hooks + 1] = function(entity, damage, protection)
+				if protection <= 0.1 then
+					damage.value = damage.value * archer_obsidian_factor
+				end
+			end
+		end
+	end
+
 	u = self:get_upgrade("archer_tear")
 	if u then
-		for _, n in pairs(self:arrows()) do
+		for _, n in ipairs(self:arrows()) do
 			local b = T(n).bullet
 			if b.damage_min and b.damage_max then
 				local damage_avg = (b.damage_min + b.damage_max) / 2
@@ -1227,6 +1340,15 @@ function upgrades:patch_templates(max_level)
 					apply_mod(b, "mod_archer_tear_tiny")
 				end
 			end
+		end
+	end
+
+	u = self:get_upgrade("archer_magic")
+	if u then
+		T("mod_archer_magic")._mod_archer_magic_factor = u.factor
+		for _, n in ipairs(self:arrows()) do
+			local b = T(n).bullet
+			apply_mod(b, "mod_archer_magic")
 		end
 	end
 
@@ -1376,12 +1498,36 @@ function upgrades:patch_templates(max_level)
 		end
 	end
 
+	u = self:get_upgrade("barrack_mobilize")
+	if u then
+		for _, n in ipairs(GS.barrack_towers) do
+			T(n).tower.price = math.floor(T(n).tower.price * u.price_factor)
+		end
+	end
+
+	u = self:get_upgrade("barrack_dominant")
+	if u then
+		for _, n in ipairs(barrack_towers) do
+			T(n).barrack.rally_range = T(n).barrack.rally_range * u.rally_range_factor
+		end
+		for _, n in ipairs(soldiers) do
+			T(n).motion.max_speed = T(n).motion.max_speed * u.speed_factor
+		end
+	end
+
 	local mage_towers = self:mage_towers()
 
 	u = self:get_upgrade("mage_spell_reach")
 
 	if u then
-		for _, n in pairs(mage_towers) do
+		for _, n in ipairs(mage_towers) do
+			T(n).attacks.range = T(n).attacks.range * u.range_factor
+		end
+	end
+
+	u = self:get_upgrade("mage_spell_reach_2")
+	if u then
+		for _, n in ipairs(mage_towers) do
 			T(n).attacks.range = T(n).attacks.range * u.range_factor
 		end
 	end
@@ -1416,6 +1562,12 @@ function upgrades:patch_templates(max_level)
 		end
 
 		add_mods(T("tower_pixie").attacks.list[4], {u.mod_normal})
+	end
+
+	u = self:get_upgrade("mage_treasure")
+	if u then
+		T("mod_mage_treasure").extra_gold_factor = u.extra_gold_factor
+		T("mod_mage_treasure").max_extra_gold_factor = u.max_extra_gold_factor
 	end
 
 	u = self:get_upgrade("mage_hermetic_study")
@@ -1689,6 +1841,8 @@ function upgrades:patch_templates(max_level)
 
 	if self.list_id == 1 or self.list_id == 2 then
 		E:set_template("user_power_1", T("power_fireball_control"))
+	elseif self.list_id == 3 then
+		E:set_template("user_power_1", T("power_thunder_control"))
 	end
 
 	T("power_fireball_control").user_power.level = self.levels.rain
@@ -1741,6 +1895,61 @@ function upgrades:patch_templates(max_level)
 	if u then
 		T("power_fireball_control").cataclysm_count = T("power_fireball_control").cataclysm_count + u.fireball_count_increase
 		T("power_fireball_control").fireball_count = T("power_fireball_control").fireball_count + u.fireball_count_increase
+	end
+
+	T("power_thunder_control").user_power.level = self.levels.thunder
+	u = self:get_upgrade("thunder_level_1")
+
+	if u then
+		T("power_thunder_control").thunders[1].count = 6
+	end
+
+	u = self:get_upgrade("thunder_level_2")
+
+	if u then
+		T("power_thunder_control").cooldown = 60
+		T("power_thunder_control").thunders[1].damage_max = 100
+		T("power_thunder_control").thunders[1].damage_min = 80
+	end
+
+	u = self:get_upgrade("thunder_level_3")
+
+	if u then
+		T("power_thunder_control").thunders[1].count = 8
+		T("power_thunder_control").rain.disabled = nil
+		T("power_thunder_control").slow.disabled = nil
+		T("mod_power_thunder_slow").slow.factor = 0.6
+	end
+
+	u = self:get_upgrade("thunder_level_4")
+
+	if u then
+		T("mod_power_thunder_slow").slow.factor = 0.4
+		T("power_thunder_control").thunders[1].damage_max = 130
+		T("power_thunder_control").thunders[1].damage_min = 110
+	end
+
+	u = self:get_upgrade("thunder_level_5")
+
+	if u then
+		T("power_thunder_control").thunders[1].damage_max = 200
+		T("power_thunder_control").thunders[1].damage_min = 150
+		T("power_thunder_control").thunders[2].count = 6
+	end
+
+	u = self:get_upgrade("thunder_level_6")
+
+	if u then
+		T("power_thunder_control").main_script.insert = function(this, store)
+			for _, e in pairs(store.soldiers) do
+				if e.health.dead then
+					U.soldier_revive(e)
+				elseif e.health.hp < e.health.hp_max then
+					e.health.hp = e.health.hp_max
+				end
+			end
+			return true
+		end
 	end
 
 	if self.levels.reinforcements > 0 then

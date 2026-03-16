@@ -16603,7 +16603,7 @@ function scripts.mod_archer_magic.insert(this, store)
 
 	local dmg = E:create_entity("damage")
 	dmg.damage_type = DAMAGE_MAGICAL
-	dmg.value = math.max(source_damage.value * this._mod_archer_magic_factor, 1)
+	dmg.value = math.ceil(math.max(source_damage.value * this._mod_archer_magic_factor, 1))
 	dmg.source_id = this.id
 	dmg.target_id = target.id
 	queue_damage(store, dmg)
@@ -73650,6 +73650,28 @@ function scripts.decal_boss_40_scream_chase_mod.update(this, store)
 	end
 
 	queue_remove(store, this)
+end
+
+scripts.mod_mage_treasure = {}
+function scripts.mod_mage_treasure.insert(this, store)
+	local target = store.entities[this.modifier.target_id]
+	if not target then
+		return false
+	end
+	if not target._mage_treasure_extra_gold then
+		target._mage_treasure_extra_gold = 0
+		target._mage_treasure_extra_gold_step = math.ceil(this.extra_gold_factor * target.enemy.gold)
+		target._mage_treasure_extra_gold_max = math.ceil(this.max_extra_gold_factor * target.enemy.gold)
+	end
+
+	if target._mage_treasure_extra_gold >= target._mage_treasure_extra_gold_max then
+		return false
+	end
+
+	target._mage_treasure_extra_gold = target._mage_treasure_extra_gold + target._mage_treasure_extra_gold_step
+	target.enemy.gold = target.enemy.gold + target._mage_treasure_extra_gold_step
+
+	return false
 end
 
 return scripts

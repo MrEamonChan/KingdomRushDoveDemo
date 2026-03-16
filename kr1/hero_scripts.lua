@@ -4371,18 +4371,7 @@ scripts.hero_priest = {
 							for _, s in pairs(targets) do
 								-- 复活
 								if s.health.dead and not s.unit.hide_during_death and (math.random() < a.revive_chance) and not s.reinforcement and not s.hero and not U.is_wraith(s.template_name) then
-									s.health.dead = false
-									s.health.hp = s.health.hp_max
-									s.health_bar.hidden = nil
-									s.ui.can_select = true
-
-									if s.unit.hide_during_death then
-										s.unit.hide_during_death = nil
-
-										U.sprites_show(s)
-									end
-
-									s.main_script.runs = 1
+									U.soldier_revive(s)
 
 									local fx = E:create_entity("fx_priest_revive")
 

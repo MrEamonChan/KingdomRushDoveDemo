@@ -12999,29 +12999,29 @@ tt.particle_system.emit_rotation_spread = math.pi * 0.5
 tt.particle_system.z = Z_FLYING_HEROES
 --#endregion
 --#region fx_hero_dragon_gem_bolt_hit
-tt = RT("fx_hero_dragon_gem_bolt_hit", "fx5")
+tt = RT("fx_hero_dragon_gem_bolt_hit", "fx")
 tt.render.sprites[1].name = "hero_evil_dragon_attack_fx_idle"
 tt.render.sprites[1].z = Z_OBJECTS
 tt.render.sprites[1].draw_order = DO_MOD_FX
 --#endregion
 --#region fx_hero_dragon_gem_bolt_hit_flying
-tt = RT("fx_hero_dragon_gem_bolt_hit_flying", "fx5")
+tt = RT("fx_hero_dragon_gem_bolt_hit_flying", "fx")
 tt.render.sprites[1].name = "hero_evil_dragon_attack_fx_air_idle"
 tt.render.sprites[1].z = Z_EFFECTS
 tt.render.sprites[1].draw_order = DO_MOD_FX
 --#endregion
 --#region fx_hero_dragon_gem_skill_stun
-tt = RT("fx_hero_dragon_gem_skill_stun", "fx5")
+tt = RT("fx_hero_dragon_gem_skill_stun", "fx")
 tt.render.sprites[1].name = "hero_evil_dragon_breath_cloud_idle"
 tt.render.sprites[1].loop = true
 --#endregion
 --#region fx_hero_dragon_gem_ultimate_shard_arrival_1
-tt = RT("fx_hero_dragon_gem_ultimate_shard_arrival_1", "fx5")
+tt = RT("fx_hero_dragon_gem_ultimate_shard_arrival_1", "fx")
 tt.render.sprites[1].name = "hero_evil_dragon_ultimate_fx_a_idle"
 tt.render.sprites[1].loop = false
 --#endregion
 --#region fx_hero_dragon_gem_ultimate_shard_arrival_2
-tt = RT("fx_hero_dragon_gem_ultimate_shard_arrival_2", "fx5")
+tt = RT("fx_hero_dragon_gem_ultimate_shard_arrival_2", "fx")
 tt.render.sprites[1].name = "hero_evil_dragon_ultimate_fx_b_idle"
 tt.render.sprites[1].loop = false
 --#endregion

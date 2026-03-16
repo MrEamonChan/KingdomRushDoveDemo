@@ -2229,7 +2229,7 @@ return {
 	},
 	["kr1-desktop/images/fullhd/gui_common-1.dds"] = {
 		size = 22369796,
-		hash = "023e78c8"
+		hash = "11c58b9a"
 	},
 	["kr1-desktop/images/fullhd/gui_ico-1.dds"] = {
 		size = 2102756,
