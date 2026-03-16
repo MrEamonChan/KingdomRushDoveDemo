@@ -956,7 +956,6 @@ tt.melee.attacks[1].damage_min = 20
 tt.melee.attacks[1].damage_type = DAMAGE_MAGICAL
 tt.melee.range = 75
 tt.motion.max_speed = 2.6 * FPS
-tt.regen.cooldown = 0.5
 tt.render.sprites[1].prefix = "soldierdjinn"
 tt.render.sprites[1].anchor.y = anchor_y
 tt.soldier.melee_slot_offset = vec_2(10, 0)
@@ -987,7 +986,6 @@ tt.unit.marker_offset = vec_2(0, ady(4))
 tt.unit.mod_offset = vec_2(0, 30)
 tt.unit.price = 150
 tt.vis.bans = bor(tt.vis.bans, F_POISON, F_CANNIBALIZE, F_SKELETON, F_BLOOD, F_LYCAN)
--- tt.sound_events.insert = "GenieTaunt"
 tt.sound_events.change_rally_point = "GenieTaunt"
 --#endregion
 --#region spell_djinn

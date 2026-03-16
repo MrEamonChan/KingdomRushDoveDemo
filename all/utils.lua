@@ -2482,11 +2482,15 @@ function U.remove_insert_hook(store, id)
 	store.last_hooks.on_insert[id] = nil
 end
 
+--- 为游戏全局的实体添加一个删除钩子，只在实体成功删除时调用
+---@param store any
+---@param id any
+---@param func function 回调函数(this, store)
 function U.insert_remove_hook(store, id, func)
 	store.last_hooks.on_remove[id] = func
 end
 
-function U.insert_remove_hook(store, id)
+function U.remove_remove_hook(store, id)
 	store.last_hooks.on_remove[id] = nil
 end
 
