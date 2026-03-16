@@ -70650,7 +70650,7 @@ function scripts.enemy_basic_shadow.update(this, store, script)
 				smoke_ps.particle_system.emit = true
 				disable_smoke_ps_start_ts = store.tick_ts
 				hide_start_ts = store.tick_ts
-				this.shadow_pushed_bans = U.push_bans(this.vis, this.shadow_vis_bans)
+				U.bans_add(this.vis, this.shadow_vis_bans)
 				this.render.sprites[1].angles.walk = table.deepclone(this.render.sprites[1].angles.walk_shadow)
 				is_hidden = true
 
@@ -70661,10 +70661,7 @@ function scripts.enemy_basic_shadow.update(this, store, script)
 				smoke_ps_dark.particle_system.emit = false
 				smoke_ps.particle_system.emit = true
 				disable_smoke_ps_start_ts = store.tick_ts
-
-				U.pop_bans(this.vis, this.shadow_pushed_bans)
-
-				this.shadow_pushed_bans = nil
+				U.bans_remove(this.vis, this.shadow_vis_bans)
 				this.render.sprites[1].angles.walk = table.deepclone(this.render.sprites[1].angles.walk_normal)
 				is_hidden = false
 			end
