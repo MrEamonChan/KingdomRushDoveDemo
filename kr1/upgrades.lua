@@ -673,7 +673,7 @@ upgrades.list = {{
 		icon = 10
 	},
 	barrack_survival_2 = {
-		health_factor = 1.09,
+		health_factor = 1.05,
 		class = "barracks",
 		price = 2,
 		level = 4,
