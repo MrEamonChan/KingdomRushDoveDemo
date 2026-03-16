@@ -1934,8 +1934,6 @@ function upgrades:patch_templates(max_level)
 	if u then
 		T("power_thunder_control").thunders[1].damage_max = 195
 		T("power_thunder_control").thunders[1].damage_min = 145
-		T("power_thunder_control").thunders[2].damage_max = 195
-		T("power_thunder_control").thunders[2].damage_min = 145
 		T("power_thunder_control").thunders[2].count = 6
 	end
 
