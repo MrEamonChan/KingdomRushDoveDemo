@@ -3251,9 +3251,6 @@ if not IS_ANDROID then
 
 			if not f.marked_to_remove then
 				local ffi_f = render_frames_ffi[n]
-				if not f.z then
-					log.error("prefix: %s, name: %s, _draw_order: %d, pos: %s", f.prefix or "nil", f.name or "nil", f._draw_order or 0, f.pos and (f.pos.x .. "," .. f.pos.y) or "nil")
-				end
 				ffi_f.z = f.z
 				ffi_f.sort_y = f.sort_y or (f.sort_y_offset or 0) + f.pos.y
 				ffi_f.draw_order = f._draw_order
@@ -3529,61 +3526,6 @@ function sys.seen_tracker:on_update(dt, ts, store)
 		store.seen_dirty = false
 	end
 	perf.stop("seen_tracker")
-end
-
-sys.dbg_enemy_tracker = {}
-sys.dbg_enemy_tracker.name = "dbg_enemy_tracker"
-
-local function format_stats(det)
-	local diff = det.c_removed - (det.c_killed + det.c_end_node_reached)
-
-	return string.format("enemy tracker - ins:%s | rem:%s (kill:%s + reach:%s = %s) %s", det.c_inserted, det.c_removed, det.c_killed, det.c_end_node_reached, diff, diff ~= 0 and "ERROR" or "")
-end
-
-function sys.dbg_enemy_tracker:init(store)
-	store.det = {}
-	store.det.c_inserted = 0
-	store.det.c_removed = 0
-	store.det.c_killed = 0
-	store.det.c_end_node_reached = 0
-end
-
-function sys.dbg_enemy_tracker:on_insert(entity, store)
-	if entity.enemy then
-		store.det.c_inserted = store.det.c_inserted + 1
-
-		log.debug(format_stats(store.det))
-	end
-
-	return true
-end
-
-function sys.dbg_enemy_tracker:on_remove(entity, store)
-	if entity.enemy then
-		store.det.c_removed = store.det.c_removed + 1
-
-		if entity.enemy and entity.health.dead then
-			store.det.c_killed = store.det.c_killed + 1
-		end
-
-		if entity.nav_path then
-			local pi = entity.nav_path.pi
-			local ni = entity.nav_path.ni
-			local end_ni = P:get_end_node(pi)
-
-			if end_ni <= ni then
-				store.det.c_end_node_reached = store.det.c_end_node_reached + 1
-			end
-		end
-
-		log.debug(format_stats(store.det))
-
-		if store.det.c_removed ~= store.det.c_killed + store.det.c_end_node_reached then
-			log.debug("DBG_ENEMY_TRACKER: ENEMY REMOVAL UNKNOWN: (%s) %s", entity.id, entity.template_name)
-		end
-	end
-
-	return true
 end
 
 sys.editor_overrides = {}
