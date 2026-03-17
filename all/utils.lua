@@ -2966,6 +2966,7 @@ function U.soldier_revive(soldier)
 		U.sprites_show(soldier)
 	end
 	soldier.main_script.runs = 1
+	soldier.force_respawn = true
 end
 
 return U
