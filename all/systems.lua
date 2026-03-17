@@ -1239,8 +1239,6 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 	perf.start("tower_upgrade")
 	for _, e in pairs(store.towers) do
 		if e.tower.sell or e.tower.destroy then
-			log.debug("selling %s", e.id)
-
 			if e.tower.sell then
 				local refund = store.wave_group_number == 0 and e.tower.spent or km.round(e.tower.refund_factor * e.tower.spent)
 
@@ -1446,21 +1444,22 @@ function sys.game_upgrades:init(store)
 	store.game_upgrades_data.mage_towers_count = 0
 end
 
+local mage_tower_map = table.to_map(UP.mage_towers)
+
 function sys.game_upgrades:on_insert(entity, store)
-	local mage_towers = UP.mage_towers
 	local mage_bullet_names = UP.mage_tower_bolts
 	local u = UP:get_upgrade("mage_brilliance")
 
-	if u and entity.tower and table.contains(mage_towers, entity.template_name) then
+	if entity.tower and u and mage_tower_map[entity.template_name] then
 		local existing_towers = table.filter(store.towers, function(_, e)
-			return table.contains(mage_towers, e.template_name)
+			return mage_tower_map[e.template_name]
 		end)
 		local dps = E:get_template("mod_ray_arcane").dps
 		local bullet_ray_high_elven = E:get_template("ray_high_elven_sentinel").bullet
 		local modifier_pixie = E:get_template("mod_pixie_pickpocket").modifier
 		local f = u.damage_factors[km.clamp(1, #u.damage_factors, #existing_towers + 1)]
 
-		for _, bn in pairs(mage_bullet_names) do
+		for _, bn in ipairs(mage_bullet_names) do
 			local b = E:get_template(bn).bullet
 
 			if not b._orig_damage_min then
@@ -1518,16 +1517,16 @@ function sys.game_upgrades:on_remove(entity, store)
 	local mage_bullet_names = UP.mage_tower_bolts
 	local u = UP:get_upgrade("mage_brilliance")
 
-	if u and entity.tower and table.contains(mage_towers, entity.template_name) then
+	if entity.tower and u and mage_tower_map[entity.template_name] then
 		local existing_towers = table.filter(store.towers, function(_, e)
-			return table.contains(mage_towers, e.template_name)
+			return mage_tower_map[e.template_name]
 		end)
 		local dps = E:get_template("mod_ray_arcane").dps
 		local bullet_ray_high_elven = E:get_template("ray_high_elven_sentinel").bullet
 		local modifier_pixie = E:get_template("mod_pixie_pickpocket").modifier
 		local f = u.damage_factors[km.clamp(1, #u.damage_factors, #existing_towers - 1)]
 
-		for _, bn in pairs(mage_bullet_names) do
+		for _, bn in ipairs(mage_bullet_names) do
 			local b = E:get_template(bn).bullet
 
 			b.damage_min = ceil(b._orig_damage_min * f)
