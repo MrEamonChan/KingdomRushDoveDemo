@@ -5726,7 +5726,7 @@ local towers = {
 			max_speed = 90,
 			duration = 10,
 			regen_health = 1,
-			range = {160, 160, 160, 160},
+			range = {160, 160, 160, 180},
 			cooldown = {4, 4, 4, 4},
 			hp_max = {12, 16, 20, 25},
 			melee_attack = {
@@ -5734,7 +5734,12 @@ local towers = {
 				cooldown = {1, 1, 1, 1},
 				damage_max = {4, 8, 12, 18},
 				damage_min = {2, 5, 8, 12}
-			}
+			},
+			stun_duration = 0.4,
+			damage_radius = 45,
+			damage_min = 42,
+			damage_max = 70,
+			damage_type = DAMAGE_PHYSICAL
 		},
 		big_guy = {
 			max_range = 160,
@@ -5746,7 +5751,7 @@ local towers = {
 			cooldown = {36, 36, 36},
 			hp_max = {100, 150, 200},
 			explosion_damage = {100, 175, 250},
-			explosion_range = {60, 60, 60},
+			explosion_range = {65, 65, 65},
 			explosion_damage_type = DAMAGE_EXPLOSION,
 			melee_attack = {
 				range = 40,
@@ -5766,12 +5771,12 @@ local towers = {
 			burning_damage_max = {4, 6, 10},
 			s_total_burning_damage_min = {8, 16, 24},
 			s_total_burning_damage_max = {16, 24, 40},
-			damage_type = DAMAGE_EXPLOSION
+			damage_type = DAMAGE_TRUE
 		},
 		demon_explosion = {
-			damage_min = {2, 5, 8, 12},
-			damage_max = {4, 8, 12, 18},
-			range = {40, 40, 40, 40},
+			damage_min = {2, 5, 8, 15},
+			damage_max = {4, 8, 12, 20},
+			range = {45, 45, 45, 45},
 			damage_type = DAMAGE_EXPLOSION,
 			stun_duration = {0.25, 0.4, 0.6, 0.8}
 		}

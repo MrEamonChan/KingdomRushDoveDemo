@@ -1368,11 +1368,9 @@ tt.tween.props[2].sprite_id = 2
 tt.tween.props[2].loop = true
 tt.tween.props[2].keys = {{0, 0}, {0.5, 255}, {1, 0}}
 --#endregion
---#region tower_tricannon_overheat_scorch_aura_mod
+
 tt = RT("tower_tricannon_overheat_scorch_aura_mod", "modifier")
-
 AC(tt, "dps", "render")
-
 tt.modifier.duration = b.overheat.decal.effect.duration
 tt.dps.damage_min = b.overheat.decal.effect.damage
 tt.dps.damage_max = b.overheat.decal.effect.damage
@@ -1386,7 +1384,7 @@ tt.render.sprites[1].loop = true
 tt.modifier.max_duplicates = 5
 tt.main_script.insert = scripts.mod_dps.insert
 tt.main_script.update = scripts.mod_dps.update
---#endregion
+
 --#region tower_tricannon_bomb
 tt = RT("tower_tricannon_bomb", "bomb")
 tt.bullet.damage_max = b.basic_attack.damage_max[4]
@@ -1466,11 +1464,10 @@ tt.tween.props[1].name = "alpha"
 tt.tween.props[1].keys = {{1, 255}, {2.5, 0}}
 tt.tween.remove = true
 --#endregion
+
 --#region tower_demon_pit_lvl4
 tt = RT("tower_demon_pit_lvl4", "tower")
-
 AC(tt, "attacks", "powers")
-
 tt.tower.type = "demon_pit"
 tt.tower.level = 1
 tt.tower.price = b.price[4]
@@ -1496,7 +1493,7 @@ tt.powers.big_guy.key = "BIG_DEMON"
 tt.info.i18n_key = "TOWER_DEMON_PIT_4"
 tt.info.portrait = "kr5_portraits_towers_0006"
 tt.info.enc_icon = 4
-tt.info.fn = scripts.tower_demon_pit.get_info
+-- tt.info.fn = scripts.tower_demon_pit.get_info
 tt.main_script.update = scripts.tower_demon_pit.update
 tt.ui.click_rect = r(-30, 0, 60, 60)
 tt.sound_events.insert = "TowerDemonPitTaunt"
@@ -1508,7 +1505,7 @@ tt.attacks.list[1].bullet = "bullet_tower_demon_pit_basic_attack_lvl4"
 tt.attacks.list[1].cooldown = b.basic_attack.cooldown[4]
 tt.attacks.list[1].shoot_time = fts(33)
 tt.attacks.list[1].bullet_start_offset = vec_2(-7, 100)
-tt.attacks.list[1].node_prediction = fts(60)
+tt.attacks.list[1].node_prediction = fts(40)
 tt.attacks.list[1].animation = "attack"
 tt.attacks.list[1].animation_reload = "reload_2"
 tt.attacks.list[1].vis_flags = bor(F_RANGED)
@@ -1516,7 +1513,7 @@ tt.attacks.list[1].vis_bans = bor(F_FLYING, F_CLIFF)
 tt.attacks.list[2] = CC("custom_attack")
 tt.attacks.list[2].bullet = "bullet_tower_demon_pit_big_guy_lvl4"
 tt.attacks.list[2].cooldown = b.big_guy.cooldown[1]
-tt.attacks.list[2].shoot_time = fts(43)
+tt.attacks.list[2].shoot_time = fts(31)
 tt.attacks.list[2].bullet_start_offset = vec_2(-7, 70)
 tt.attacks.list[2].node_prediction = fts(80)
 tt.attacks.list[2].animation = "big_guy_spawn"
@@ -1544,11 +1541,10 @@ tt.render.sprites[5] = CC("sprite")
 tt.render.sprites[5].prefix = "demon_pit_tower_lvl4_tower_front"
 tt.render.sprites[5].offset = vec_2(0, 10)
 --#endregion
+
 --#region soldier_tower_demon_pit_basic_attack_lvl4
 tt = RT("soldier_tower_demon_pit_basic_attack_lvl4", "soldier_militia")
-
 AC(tt, "reinforcement", "tween")
-
 tt.level = 4
 tt.health.hp_max = b.basic_attack.hp_max[4]
 tt.health.armor = b.basic_attack.armor
@@ -1595,11 +1591,10 @@ tt.patrol_pos_offset = vec_2(15, 10)
 tt.patrol_min_cd = 3
 tt.patrol_max_cd = 6
 --#endregion
+
 --#region big_guy_tower_demon_pit_lvl4
 tt = RT("big_guy_tower_demon_pit_lvl4", "soldier_militia")
-
 AC(tt, "reinforcement", "tween")
-
 tt.health.armor = b.big_guy.armor
 tt.health_bar.offset = vec_2(0, 42)
 tt.health_bar.type = HEALTH_BAR_SIZE_MEDIUM
@@ -1636,6 +1631,7 @@ tt.unit.mod_offset = vec_2(0, 14)
 tt.unit.level = 0
 tt.vis.bans = bor(F_SKELETON, F_CANNIBALIZE, F_LYCAN)
 --#endregion
+
 --#region bullet_tower_demon_pit_basic_attack_lvl4
 tt = RT("bullet_tower_demon_pit_basic_attack_lvl4", "bomb")
 tt.sound_events.hit_water = nil
@@ -1648,15 +1644,20 @@ tt.bullet.hit_payload = "soldier_tower_demon_pit_basic_attack_lvl4"
 tt.bullet.rotation_speed = 40
 tt.bullet.pop = nil
 tt.bullet.particles_name = "tower_demon_pit_demon_trail"
-tt.bullet.damage_min = 30
-tt.bullet.damage_max = 50
+tt.bullet.damage_min = b.basic_attack.damage_min
+tt.bullet.damage_max = b.basic_attack.damage_max
+tt.bullet.damage_radius = b.basic_attack.damage_radius
+tt.bullet.damage_type = b.basic_attack.damage_type
+tt.bullet.mod = "mod_tower_demon_pit_basic_attack_stun"
 tt.sound_events.insert = "TowerDemonPitBasicAttack"
 --#endregion
+
+tt = RT("mod_tower_demon_pit_basic_attack_stun", "mod_stun")
+tt.modifier.duration = b.basic_attack.stun_duration
+
 --#region bullet_tower_demon_pit_big_guy_lvl4
 tt = RT("bullet_tower_demon_pit_big_guy_lvl4", "bullet")
-
 AC(tt, "main_script")
-
 tt.bullet.flight_time = fts(31)
 tt.bullet.hit_payload = "big_guy_tower_demon_pit_lvl4"
 tt.sound_events.hit_water = nil
@@ -1671,17 +1672,17 @@ tt.bullet.damage_max = 0
 tt.sound_events.insert = "TowerDemonPitBasicAttack"
 tt.main_script.update = scripts.projecticle_big_guy_tower_demon_pit.update
 --#endregion
+
 --#region mod_soldier_tower_demon_pit_explosion
 tt = RT("mod_soldier_tower_demon_pit_explosion", "mod_stun")
 tt.modifier.duration = nil
 tt.modifier.vis_flags = bor(F_MOD, F_STUN)
 tt.modifier.vis_bans = bor(F_BOSS)
 --#endregion
+
 --#region mod_tower_demon_pit_master_explosion_burning
 tt = RT("mod_tower_demon_pit_master_explosion_burning", "modifier")
-
 AC(tt, "dps", "render")
-
 tt.modifier.duration = nil
 tt.dps.damage_min = nil
 tt.dps.damage_max = nil

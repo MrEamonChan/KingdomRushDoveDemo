@@ -314,11 +314,7 @@ scripts.tower_ranger = {
 					-- block empty
 					else
 						if pow_p.level > 0 then
-							local poisonable = table.filter(enemies, function(_, e)
-								return not U.flag_has(e.vis.bans, F_POISON) and not U.has_modifiers(store, e, pow_p.mods[1])
-							end)
-
-							for _, e in pairs(enemies) do
+							for _, e in ipairs(enemies) do
 								if not U.flag_has(e.vis.bans, F_POISON) and not U.has_modifiers(store, e, pow_p.mods[1]) then
 									enemy = e
 
@@ -6789,52 +6785,52 @@ end
 -- 恶魔澡坑_START
 scripts.tower_demon_pit = {}
 
-function scripts.tower_demon_pit.get_info(this)
-	local b = E:create_entity(this.attacks.list[1].bullet)
-	local d = E:create_entity(b.bullet.hit_payload)
+-- function scripts.tower_demon_pit.get_info(this)
+-- 	local b = E:create_entity(this.attacks.list[1].bullet)
+-- 	local d = E:create_entity(b.bullet.hit_payload)
 
-	if this.powers then
-		for pn, p in pairs(this.powers) do
-			for i = 1, p.level do
-				SU.soldier_power_upgrade(d, pn)
-			end
-		end
-	end
+-- 	if this.powers then
+-- 		for pn, p in pairs(this.powers) do
+-- 			for i = 1, p.level do
+-- 				SU.soldier_power_upgrade(d, pn)
+-- 			end
+-- 		end
+-- 	end
 
-	local s_info = d.info.fn(d)
-	local attacks
+-- 	local s_info = d.info.fn(d)
+-- 	local attacks
 
-	if d.melee and d.melee.attacks then
-		attacks = d.melee.attacks
-	elseif d.ranged and d.ranged.attacks then
-		attacks = d.ranged.attacks
-	end
+-- 	if d.melee and d.melee.attacks then
+-- 		attacks = d.melee.attacks
+-- 	elseif d.ranged and d.ranged.attacks then
+-- 		attacks = d.ranged.attacks
+-- 	end
 
-	local min, max
+-- 	local min, max
 
-	for _, a in pairs(attacks) do
-		if a.damage_min then
-			local damage_factor = this.tower.damage_factor
+-- 	for _, a in pairs(attacks) do
+-- 		if a.damage_min then
+-- 			local damage_factor = this.tower.damage_factor
 
-			min, max = a.damage_min * damage_factor, a.damage_max * damage_factor
+-- 			min, max = a.damage_min * damage_factor, a.damage_max * damage_factor
 
-			break
-		end
-	end
+-- 			break
+-- 		end
+-- 	end
 
-	if min and max then
-		min, max = math.ceil(min), math.ceil(max)
-	end
+-- 	if min and max then
+-- 		min, max = math.ceil(min), math.ceil(max)
+-- 	end
 
-	return {
-		type = STATS_TYPE_TOWER_BARRACK,
-		hp_max = d.health.hp_max,
-		damage_min = min,
-		damage_max = max,
-		armor = d.health.armor,
-		respawn = d.health.dead_lifetime
-	}
-end
+-- 	return {
+-- 		type = STATS_TYPE_TOWER_BARRACK,
+-- 		hp_max = d.health.hp_max,
+-- 		damage_min = min,
+-- 		damage_max = max,
+-- 		armor = d.health.armor,
+-- 		respawn = d.health.dead_lifetime
+-- 	}
+-- end
 
 function scripts.tower_demon_pit.update(this, store)
 	local a = this.attacks
