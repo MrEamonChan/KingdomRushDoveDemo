@@ -4506,8 +4506,10 @@ function EncyclopediaView:load_creeps(index)
 				else
 					from_kr = 2
 				end
-			else
+			elseif i <= 173 then
 				from_kr = 3
+			else
+				from_kr = 5
 			end
 
 			local f = string.format("encyclopedia_creep_thumbs_%04i", t.info.enc_icon)
@@ -4678,8 +4680,10 @@ function EncyclopediaView:detail_creep(index)
 		else
 			from_kr = 2
 		end
-	else
+	elseif index <= 173 then
 		from_kr = 3
+	else
+		from_kr = 5
 	end
 
 	local f = string.format("encyclopedia_creeps_%04i", ce.info.enc_icon)
