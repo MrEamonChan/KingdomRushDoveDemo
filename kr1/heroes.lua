@@ -8245,10 +8245,10 @@ tt = RT("hero_durax", "hero")
 AC(tt, "melee", "ranged", "timed_attacks", "transfer")
 tt.hero.level_stats.armor = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 tt.hero.level_stats.hp_max = {280, 300, 320, 340, 360, 380, 400, 420, 440, 460}
-tt.hero.level_stats.melee_damage_max = {12, 13, 15, 16, 18, 19, 21, 22, 24, 25}
-tt.hero.level_stats.melee_damage_min = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+tt.hero.level_stats.melee_damage_max = {13, 15, 16, 18, 19, 21, 22, 24, 25, 27}
+tt.hero.level_stats.melee_damage_min = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18}
 tt.hero.skills.crystallites = CC("hero_skill")
-tt.hero.skills.crystallites.duration = {35, 60, 85}
+tt.hero.skills.crystallites.duration = {50, 75, 100}
 tt.hero.skills.crystallites.xp_gain = {225, 450, 675}
 tt.hero.skills.crystallites.damage_factor = 0.8
 tt.hero.skills.crystallites.xp_level_steps = {
