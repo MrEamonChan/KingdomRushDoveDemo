@@ -42,10 +42,6 @@ local function get_attack_ready(attack, store)
 	attack.ts = store.tick_ts - attack.cooldown
 end
 
-local function enemy_is_silent_target(e)
-	return (band(e.vis.flags, F_SPELLCASTER) ~= 0 or e.ranged or e.timed_attacks or e.auras or e.death_spawns) and e.enemy.can_do_magic
-end
-
 local function fts(v)
 	return v / FPS
 end
@@ -80,16 +76,6 @@ local function apply_ultimate(this, store, target, animation_name)
 	this.ultimate.ts = store.tick_ts
 
 	SU.hero_gain_xp_from_skill(this, this.hero.skills.ultimate)
-end
-
-local function soldiers_around_need_heal(this, store, trigger_hp_factor, range)
-	for _, v in pairs(store.soldiers) do
-		if not v.reinforcement and (not v.health.dead and v.health.hp < trigger_hp_factor * v.health.hp_max) and U.is_inside_ellipse(v.pos, this.pos, range) then
-			return true
-		end
-	end
-
-	return false
 end
 
 -- require("game_scripts_utils")
@@ -3759,7 +3745,7 @@ scripts.hero_van_helsing = {
 
 				if ready_to_use_skill(a, store) and not shot_ready() then
 					local g = E:get_template("van_helsing_grenade")
-					local target, _, pred_pos = U.find_foremost_enemy_between_range_filter_on(this.pos, a.min_range, a.max_range, a.shoot_time + g.bullet.flight_time, a.vis_flags, a.vis_bans, enemy_is_silent_target)
+					local target, _, pred_pos = U.find_foremost_enemy_between_range_filter_on(this.pos, a.min_range, a.max_range, a.shoot_time + g.bullet.flight_time, a.vis_flags, a.vis_bans, U.enemy_is_silent_target)
 
 					if not target then
 						SU.delay_attack(store, a, 0.2)
@@ -14186,7 +14172,7 @@ function scripts.hero_bravebark.update(this, store)
 			a = this.springsap
 			skill = this.hero.skills.springsap
 
-			if ready_to_use_skill(a, store) and soldiers_around_need_heal(this, store, a.trigger_hp_factor, a.radius) then
+			if ready_to_use_skill(a, store) and U.is_soldiers_around_need_heal(store.soldiers, this.pos, a.trigger_hp_factor, a.radius) then
 				a.ts = store.tick_ts
 
 				SU.hero_gain_xp_from_skill(this, skill)

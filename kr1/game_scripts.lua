@@ -41,10 +41,6 @@ local function get_attack_ready(attack, store)
 	attack.ts = store.tick_ts - attack.cooldown
 end
 
-local function enemy_is_silent_target(e)
-	return (band(e.vis.flags, F_SPELLCASTER) ~= 0 or e.ranged or e.timed_attacks or e.auras or e.death_spawns) and e.enemy.can_do_magic
-end
-
 local function fts(v)
 	return v / FPS
 end
@@ -59,18 +55,6 @@ end
 
 local function queue_damage(store, damage)
 	store.damage_queue[#store.damage_queue + 1] = damage
-end
-
-local function soldiers_around_need_heal(this, store, trigger_hp_factor, range)
-	local targets = table.filter(store.soldiers, function(k, v)
-		return (not v.reinforcement) and (not v.health.dead and v.health.hp < trigger_hp_factor * v.health.hp_max) and U.is_inside_ellipse(v.pos, this.pos, range)
-	end)
-
-	if not targets or #targets == 0 then
-		return false
-	else
-		return true
-	end
 end
 
 local function y_show_taunt_set(store, taunts, set_name, index, wait)
@@ -11249,7 +11233,7 @@ function scripts.soldier_forest.update(this, store)
 			::label_56_0::
 
 			if pow_c.level > 0 and store.tick_ts - ca.ts > ca.cooldown then
-				if not soldiers_around_need_heal(this, store, ca.trigger_hp_factor, ca.max_range) then
+				if not U.is_soldiers_around_need_heal(store.soldiers, this.pos, ca.trigger_hp_factor, ca.max_range) then
 					SU.delay_attack(store, ca, fts(6))
 				else
 					for _, s in pairs(tower.barrack.soldiers) do
