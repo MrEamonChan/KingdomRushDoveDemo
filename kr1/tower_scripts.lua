@@ -20661,7 +20661,7 @@ function scripts.tower_arborean_emissary_gift_of_nature_heal_mod.update(this, st
 			return
 		end
 
-		if this.render and m.use_mod_offset and target.unit.mod_offset then
+		if m.use_mod_offset and target.unit.mod_offset then
 			for i = 1, #this.render.sprites do
 				local s = this.render.sprites[i]
 

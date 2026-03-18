@@ -3416,6 +3416,7 @@ tt.positions = {{{0, v(100, 0)}, {0.3, v(100, 50)}, {0.5, v(50, 0)}, {0.7, v(0, 
 --#region tower_arborean_emissary_lvl4
 tt = RT("tower_arborean_emissary_lvl4", "tower")
 AC(tt, "attacks", "powers", "vis")
+b = balance.towers.arborean_emissary
 image_y = 90
 tt.tower.type = "arborean_emissary"
 tt.tower.kind = TOWER_KIND_MAGE
@@ -3639,7 +3640,6 @@ tt.entity = "decal_tower_arborean_emissary_gift_of_nature_wisp"
 tt.aura = "aura_tower_arborean_emissary_gift_of_nature"
 tt.start_offset = {v(-35, 67), v(35, 68), v(0, 50)}
 tt.end_offset = {v(-50, 60), v(0, 80), v(50, 60)}
-
 --#endregion
 
 --#region tower_dragons_lvl4
