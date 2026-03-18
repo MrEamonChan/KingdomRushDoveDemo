@@ -2855,6 +2855,7 @@ tt.modifier.duration = fts(5)
 tt.boss_damage_config = b.disintegrate.boss_damage
 tt.modifier.allows_duplicates = true
 --#endregion
+
 --#region mod_tower_arcane_wizard_power_empowerment
 tt = RT("mod_tower_arcane_wizard_power_empowerment", "modifier")
 tt.main_script.insert = scripts.mod_tower_factors.insert
@@ -2865,11 +2866,10 @@ tt.damage_factor = nil
 tt.modifier.duration = 1e+99
 tt.modifier.use_mod_offset = false
 --#endregion
+
 --#region mod_tower_arcane_wizard_power_empowerment_fx
 tt = RT("mod_tower_arcane_wizard_power_empowerment_fx", "modifier")
-
 AC(tt, "render", "tween")
-
 tt.main_script.update = scripts.tower_arcane_wizard_power_empowerment_mark_mod.update
 tt.modifier.duration = 1e+99
 tt.modifier.use_mod_offset = false

@@ -12873,16 +12873,6 @@ scripts.tower_arcane_wizard5 = {}
 
 function scripts.tower_arcane_wizard5.get_info(this)
 	local o = scripts.tower_common.get_info(this)
-
-	o.type = STATS_TYPE_TOWER_MAGE
-
-	if this.attacks and this.attacks.list[1].loops then
-		local loops = this.attacks.list[1].loops
-
-		o.damage_min = o.damage_min * loops
-		o.damage_max = o.damage_max * loops
-	end
-
 	o.damage_type = DAMAGE_MAGICAL
 
 	return o
@@ -19560,6 +19550,16 @@ function scripts.controller_tower_swap.update(this, store)
 		b[key] = tmp
 	end
 
+	local function remove_modifiers(tower)
+		local mods = tower._applied_mods
+		if mods then
+			for i = #mods, 1, -1 do
+				queue_remove(store, mods[i])
+				mods[i] = nil
+			end
+		end
+	end
+
 	local t1 = this.tower_1
 	local t2 = this.tower_2
 
@@ -19573,7 +19573,11 @@ function scripts.controller_tower_swap.update(this, store)
 			t1.ui.can_click = false
 
 			create_spawner_out(t1)
+
+			-- 这么做，实际上会先清理掉 modifiers，因为删除是从后往前删的
 			queue_remove(store, t1)
+			remove_modifiers(t1)
+
 			U.y_wait(store, this.delay)
 			create_spawner_in(t1)
 			U.y_wait(store, this.fx_spawn_delay)
@@ -19585,7 +19589,10 @@ function scripts.controller_tower_swap.update(this, store)
 			t2.ui.can_click = false
 
 			create_spawner_out(t1)
+
 			queue_remove(store, t1)
+			remove_modifiers(t1)
+
 			create_spawner_out(t2)
 
 			if t1.mercenary then
@@ -19609,6 +19616,8 @@ function scripts.controller_tower_swap.update(this, store)
 			end
 
 			queue_remove(store, t2)
+			remove_modifiers(t2)
+
 			U.y_wait(store, this.delay)
 			create_spawner_in(t1)
 			create_spawner_in(t2)
