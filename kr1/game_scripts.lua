@@ -102,24 +102,6 @@ scripts.mod_high_elven = {
 		return true
 	end
 }
-scripts.mod_tower_decal = {}
-
-function scripts.mod_tower_decal.insert(this, store)
-	local m = this.modifier
-	local target = store.entities[m.target_id]
-
-	if not target or not target.tower then
-		log.error("cannot insert mod_crossbow_eagle to entity %s - ", target.id, target.template_name)
-
-		return false
-	end
-
-	return true
-end
-
-function scripts.mod_tower_decal.remove(this, store)
-	return true
-end
 
 scripts.mod_crossbow_eagle = {}
 
