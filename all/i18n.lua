@@ -47,7 +47,8 @@ function _(s, default)
 		return default
 	else
 		-- DEBUG_USE
-		print("Missing translation for '" .. s .. "' in locale '" .. i18n.current_locale .. "'")
+		-- print("Missing translation for '" .. s .. "' in locale '" .. i18n.current_locale .. "'")
+		-- print(debug.traceback())
 		return s
 	end
 end

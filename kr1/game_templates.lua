@@ -458,11 +458,10 @@ tt.render.sprites[1].name = "hobgoblin_decal"
 tt.render.sprites[1].z = Z_DECALS
 tt.render.sprites[1].animated = false
 --#endregion
+
 --#region tower_sasquash_holder
 tt = RT("tower_sasquash_holder")
-
 AC(tt, "tower", "tower_holder", "pos", "render", "ui", "info", "editor", "main_script")
-
 tt.tower.type = "holder_sasquash"
 tt.tower.level = 1
 tt.tower.can_be_mod = false

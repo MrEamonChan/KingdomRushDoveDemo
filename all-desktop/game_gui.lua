@@ -5535,7 +5535,7 @@ function PickView:on_down(button, x, y)
 				game_gui:show_invalid_point_cross(x, y)
 			end
 		elseif game_gui.mode == GUI_MODE_SUMMON_HERO then
-			LU.insert_hero(game_gui.game.store, game_gui.selected_hero_to_summon, v(wx, wy), true)
+			LU.insert_hero(game_gui.game.store, game_gui.selected_hero_to_summon, v(wx, wy))
 			game_gui:set_mode()
 		else
 			local e = game_gui:entity_at_pos(wx, wy)

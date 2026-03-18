@@ -1981,7 +1981,7 @@ scripts.tower_barrack_mercenaries = {}
 function scripts.tower_barrack_mercenaries.get_info(this)
 	return {
 		type = STATS_TYPE_TEXT,
-		desc = _((this.info.i18n_key or string.upper(this.template_name)) .. "_DESCRIPTION")
+		desc = (this.info.i18n_key or string.upper(this.template_name)) .. "_DESCRIPTION"
 	}
 end
 
