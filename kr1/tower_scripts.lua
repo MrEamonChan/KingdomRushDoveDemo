@@ -19962,12 +19962,12 @@ function scripts.tower_arborean_emissary.update(this, store)
 			SU.towers_swaped(store, this, this.attacks.list)
 
 			if ready_to_use_power(pow_g, ag, store, tw.cooldown_factor) then
-				if U.is_soldiers_around_need_heal(store.soldiers, this.pos, 0.99, a.range) then
+				if U.is_soldiers_around_need_heal(store.soldiers, tpos, 0.99, a.range) then
 					last_ts = store.tick_ts
 					U.animation_start_group(this, ag.animation, nil, store.tick_ts, false, "layers")
 					U.y_wait(store, ag.shoot_time, false)
 					local targets = table.filter(store.soldiers, function(k, v)
-						return (not v.health.dead and v.health.hp < v.health.hp_max) and U.is_inside_ellipse(v.pos, tpos, a.range)
+						return not v.health.dead and U.is_inside_ellipse(v.pos, tpos, a.range)
 					end)
 					if #targets > 0 then
 						S:queue(ag.sound)
@@ -20737,6 +20737,7 @@ function scripts.controller_tower_arborean_emissary_gift_of_nature.update(this, 
 
 	::label_1022_0::
 
+	-- aura 无 render
 	local a = E:create_entity(this.aura)
 
 	a.pos = this.pos

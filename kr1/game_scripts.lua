@@ -112,8 +112,6 @@ function scripts.mod_crossbow_eagle.insert(this, store)
 	local cooldown_factor = this.cooldown_factor + m.level * this.cooldown_factor_inc
 
 	if not target or not target.tower then
-		log.error("cannot insert mod_crossbow_eagle to entity %s - ", target.id, target.template_name)
-
 		return false
 	end
 
