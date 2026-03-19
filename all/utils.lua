@@ -2969,4 +2969,18 @@ function U.soldier_revive(soldier)
 	soldier.force_respawn = true
 end
 
+--- 判断敌人是否是可沉默的对象
+function U.enemy_is_silent_target(e)
+	return (band(e.vis.flags, F_SPELLCASTER) ~= 0 or e.ranged or e.timed_attacks or e.auras or e.death_spawns) and e.enemy.can_do_magic
+end
+
+function U.is_soldiers_around_need_heal(soldiers, center, trigger_hp_factor, range)
+	for _, s in pairs(soldiers) do
+		if not s.reinforcement and (not s.health.dead and s.health.hp < trigger_hp_factor * s.health.hp_max) and U.is_inside_ellipse(s.pos, center, range) then
+			return true
+		end
+	end
+	return false
+end
+
 return U

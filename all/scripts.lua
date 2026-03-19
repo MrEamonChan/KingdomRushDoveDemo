@@ -9649,4 +9649,21 @@ function scripts.mod_fx_in_hit_pos.update(this, store)
 	return this.multi_sprite_fx_update(this, store)
 end
 
+scripts.mod_tower_decal = {}
+
+function scripts.mod_tower_decal.insert(this, store)
+	local m = this.modifier
+	local target = store.entities[m.target_id]
+
+	if not target or not target.tower then
+		return false
+	end
+
+	return true
+end
+
+function scripts.mod_tower_decal.remove(this, store)
+	return true
+end
+
 return scripts

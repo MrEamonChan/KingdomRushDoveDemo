@@ -54,10 +54,6 @@ local function get_attack_ready(attack, store)
 	attack.ts = store.tick_ts - attack.cooldown
 end
 
-local function enemy_is_silent_target(e)
-	return (band(e.vis.flags, F_SPELLCASTER) ~= 0 or e.ranged or e.timed_attacks or e.auras or e.death_spawns) and e.enemy.can_do_magic
-end
-
 local function fts(v)
 	return v / FPS
 end
@@ -72,18 +68,6 @@ end
 
 local function queue_damage(store, damage)
 	store.damage_queue[#store.damage_queue + 1] = damage
-end
-
-local function soldiers_around_need_heal(this, store, trigger_hp_factor, range)
-	local targets = table.filter(store.soldiers, function(k, v)
-		return (not v.reinforcement) and (not v.health.dead and v.health.hp < trigger_hp_factor * v.health.hp_max) and U.is_inside_ellipse(v.pos, this.pos, range)
-	end)
-
-	if not targets or #targets == 0 then
-		return false
-	else
-		return true
-	end
 end
 
 local function ready_to_use_power(power, power_attack, store, factor)
@@ -956,7 +940,7 @@ scripts.tower_totem = {
 						local enemy
 
 						if name == "silence" then
-							enemy = U.detect_foremost_enemy_in_range_filter_on(tpos, a.range, ta.vis_flags, ta.vis_bans, enemy_is_silent_target)
+							enemy = U.detect_foremost_enemy_in_range_filter_on(tpos, a.range, ta.vis_flags, ta.vis_bans, U.enemy_is_silent_target)
 						else
 							enemy = U.find_foremost_enemy_with_max_coverage_in_range_filter_off(tpos, a.range, nil, ta.vis_flags, ta.vis_bans, 80)
 						end
@@ -1605,7 +1589,7 @@ scripts.tower_wild_magus = {
 				end
 
 				if ready_to_use_power(pow_w, wa, store, tw.cooldown_factor) then
-					local enemy, enemies = U.find_foremost_enemy_in_range_filter_on(tpos, a.range, false, wa.vis_flags, wa.vis_bans, enemy_is_silent_target)
+					local enemy, enemies = U.find_foremost_enemy_in_range_filter_on(tpos, a.range, false, wa.vis_flags, wa.vis_bans, U.enemy_is_silent_target)
 
 					if enemy then
 						wa.ts = store.tick_ts
@@ -1870,8 +1854,8 @@ scripts.tower_high_elven = {
 					if enemy then
 						if #enemies >= 3 or enemy.health.hp > 750 then
 							table.sort(enemies, function(a, b)
-								local e1_magic = enemy_is_silent_target(a)
-								local e2_magic = enemy_is_silent_target(b)
+								local e1_magic = U.enemy_is_silent_target(a)
+								local e2_magic = U.enemy_is_silent_target(b)
 
 								if e1_magic and not e2_magic then
 									return true
@@ -12508,7 +12492,7 @@ function scripts.tower_royal_archers_pow_rapacious_hunter_tamer.update(this, sto
 
 			if enemy then
 				for _, e in pairs(enemies) do
-					if band(e.vis.flags, F_MOCKING) == 0 and enemy_is_silent_target(e) then
+					if band(e.vis.flags, F_MOCKING) == 0 and U.enemy_is_silent_target(e) then
 						enemy = e
 
 						break
@@ -12635,7 +12619,7 @@ function scripts.tower_royal_archers_pow_rapacious_hunter_eagle.update(this, sto
 	while true do
 		local distance_from_target = V.dist(this.pos.x, this.pos.y, target.pos.x, target.pos.y)
 
-		if not store.entities[target.id] or target.health.dead or far_from_tower or not target_still_valid or not enemy_is_silent_target(target) then
+		if not store.entities[target.id] or target.health.dead or far_from_tower or not target_still_valid or not U.enemy_is_silent_target(target) then
 			far_from_tower = false
 
 			local _, targets = U.find_foremost_enemy_in_range_filter_off(tpos(this.owner), tamer_attack.range, false, tamer_attack.vis_flags, tamer_attack.vis_bans)
@@ -12644,7 +12628,7 @@ function scripts.tower_royal_archers_pow_rapacious_hunter_eagle.update(this, sto
 				target = targets[1]
 
 				for _, t in pairs(targets) do
-					if band(t.vis.flags, F_MOCKING) == 0 and enemy_is_silent_target(t) then
+					if band(t.vis.flags, F_MOCKING) == 0 and U.enemy_is_silent_target(t) then
 						target = t
 
 						break
@@ -12812,7 +12796,7 @@ function scripts.tower_royal_archers_pow_rapacious_hunter_tamer_mark_mod.insert(
 		return false
 	end
 
-	if enemy_is_silent_target(target) then
+	if U.enemy_is_silent_target(target) then
 		if band(target.vis.flags, F_MOCKING) == 0 then
 			this.mocking_added = true
 			target.vis.flags = bor(target.vis.flags, F_MOCKING)
@@ -12873,16 +12857,6 @@ scripts.tower_arcane_wizard5 = {}
 
 function scripts.tower_arcane_wizard5.get_info(this)
 	local o = scripts.tower_common.get_info(this)
-
-	o.type = STATS_TYPE_TOWER_MAGE
-
-	if this.attacks and this.attacks.list[1].loops then
-		local loops = this.attacks.list[1].loops
-
-		o.damage_min = o.damage_min * loops
-		o.damage_max = o.damage_max * loops
-	end
-
 	o.damage_type = DAMAGE_MAGICAL
 
 	return o
@@ -19560,6 +19534,16 @@ function scripts.controller_tower_swap.update(this, store)
 		b[key] = tmp
 	end
 
+	local function remove_modifiers(tower)
+		local mods = tower._applied_mods
+		if mods then
+			for i = #mods, 1, -1 do
+				queue_remove(store, mods[i])
+				mods[i] = nil
+			end
+		end
+	end
+
 	local t1 = this.tower_1
 	local t2 = this.tower_2
 
@@ -19573,7 +19557,11 @@ function scripts.controller_tower_swap.update(this, store)
 			t1.ui.can_click = false
 
 			create_spawner_out(t1)
+
+			-- 这么做，实际上会先清理掉 modifiers，因为删除是从后往前删的
 			queue_remove(store, t1)
+			remove_modifiers(t1)
+
 			U.y_wait(store, this.delay)
 			create_spawner_in(t1)
 			U.y_wait(store, this.fx_spawn_delay)
@@ -19585,7 +19573,10 @@ function scripts.controller_tower_swap.update(this, store)
 			t2.ui.can_click = false
 
 			create_spawner_out(t1)
+
 			queue_remove(store, t1)
+			remove_modifiers(t1)
+
 			create_spawner_out(t2)
 
 			if t1.mercenary then
@@ -19609,6 +19600,8 @@ function scripts.controller_tower_swap.update(this, store)
 			end
 
 			queue_remove(store, t2)
+			remove_modifiers(t2)
+
 			U.y_wait(store, this.delay)
 			create_spawner_in(t1)
 			create_spawner_in(t2)
@@ -19969,12 +19962,12 @@ function scripts.tower_arborean_emissary.update(this, store)
 			SU.towers_swaped(store, this, this.attacks.list)
 
 			if ready_to_use_power(pow_g, ag, store, tw.cooldown_factor) then
-				if soldiers_around_need_heal(this, store, 0.99, a.range) then
+				if U.is_soldiers_around_need_heal(store.soldiers, tpos, 0.99, a.range) then
 					last_ts = store.tick_ts
 					U.animation_start_group(this, ag.animation, nil, store.tick_ts, false, "layers")
 					U.y_wait(store, ag.shoot_time, false)
 					local targets = table.filter(store.soldiers, function(k, v)
-						return (not v.health.dead and v.health.hp < v.health.hp_max) and U.is_inside_ellipse(v.pos, tpos, a.range)
+						return not v.health.dead and U.is_inside_ellipse(v.pos, tpos, a.range)
 					end)
 					if #targets > 0 then
 						S:queue(ag.sound)
@@ -20668,7 +20661,7 @@ function scripts.tower_arborean_emissary_gift_of_nature_heal_mod.update(this, st
 			return
 		end
 
-		if this.render and m.use_mod_offset and target.unit.mod_offset then
+		if m.use_mod_offset and target.unit.mod_offset then
 			for i = 1, #this.render.sprites do
 				local s = this.render.sprites[i]
 
@@ -20744,6 +20737,7 @@ function scripts.controller_tower_arborean_emissary_gift_of_nature.update(this, 
 
 	::label_1022_0::
 
+	-- aura 无 render
 	local a = E:create_entity(this.aura)
 
 	a.pos = this.pos
