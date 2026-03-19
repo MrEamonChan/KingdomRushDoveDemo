@@ -3526,7 +3526,7 @@ scripts.hero_van_helsing = {
 					U.y_animation_play(this, "start", nil, store.tick_ts)
 					U.animation_start(this, "idle", nil, store.tick_ts, true)
 
-					while store.tick_ts - death_ts < this.health.dead_lifetime do
+					while store.tick_ts - death_ts < this.health.dead_lifetime and not this.force_respawn do
 						SU.y_hero_new_rally(store, this)
 
 						this.health.ignore_damage = true
@@ -3535,6 +3535,7 @@ scripts.hero_van_helsing = {
 					end
 
 					this.vis.bans = bans
+					this.force_respawn = false
 					this.vis.flags = flags
 					this.render.sprites[1].prefix = prefix
 					this.health.hp = this.health.hp_max
