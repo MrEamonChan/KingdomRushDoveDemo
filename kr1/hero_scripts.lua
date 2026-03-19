@@ -18542,13 +18542,11 @@ function scripts.arrow_hero_hunter_ricochet.update(this, store)
 		end
 	end
 
-	if b.hit_time > fts(1) then
-		while store.tick_ts - start_ts < b.hit_time do
-			coroutine.yield()
+	while store.tick_ts - start_ts < b.hit_time do
+		coroutine.yield()
 
-			if target and U.flag_has(target.vis.bans, F_RANGED) then
-				target = nil
-			end
+		if target and U.flag_has(target.vis.bans, F_RANGED) then
+			target = nil
 		end
 	end
 
@@ -18556,28 +18554,24 @@ function scripts.arrow_hero_hunter_ricochet.update(this, store)
 		create_arrow_trail(this.pos, target)
 	end
 
-	if this.ray_duration then
-		while store.tick_ts - start_ts < this.ray_duration do
-			coroutine.yield()
-		end
+	while store.tick_ts - start_ts < this.ray_duration do
+		coroutine.yield()
 	end
 
 	if target and not target.health.dead then
 		S:queue(this.sound_bounce)
 
-		if b.mod or b.mods then
-			local mods = b.mods or {b.mod}
+		local mods = b.mods
 
-			for _, mod_name in pairs(mods) do
-				local m = E:create_entity(mod_name)
+		for _, mod_name in ipairs(mods) do
+			local m = E:create_entity(mod_name)
 
-				m.modifier.source_id = this.id
-				m.modifier.target_id = target.id
-				m.modifier.damage_factor = this.bullet.damage_factor
-				m.bounce_count = bounce_count
+			m.modifier.source_id = this.id
+			m.modifier.target_id = target.id
+			m.modifier.damage_factor = this.bullet.damage_factor
+			m.bounce_count = bounce_count
 
-				queue_insert(store, m)
-			end
+			queue_insert(store, m)
 		end
 
 		table.insert(already_hit, target.id)
@@ -18585,24 +18579,12 @@ function scripts.arrow_hero_hunter_ricochet.update(this, store)
 		last_target = target
 	end
 
-	if b.hit_fx then
-		local sfx = E:create_entity(b.hit_fx)
-
-		sfx.pos.x, sfx.pos.y = b.to.x, b.to.y
-		sfx.render.sprites[1].ts = store.tick_ts
-		sfx.render.sprites[1].runs = 0
-
-		queue_insert(store, sfx)
-	end
-
 	S:queue(this.sound)
 	U.y_wait(store, this.time_between_bounces)
 
 	if target then
-		local search_pos = V.vclone(target.pos)
-
 		if bounce_count < this.bounces then
-			local targets = U.find_enemies_in_range_filter_on(search_pos, this.bounce_range, b.vis_flags, b.vis_bans, function(v)
+			local targets = U.find_enemies_in_range_filter_on(target.pos, this.bounce_range, b.vis_flags, b.vis_bans, function(v)
 				return not table.contains(already_hit, v.id)
 			end)
 
@@ -18618,6 +18600,34 @@ function scripts.arrow_hero_hunter_ricochet.update(this, store)
 
 				goto label_346_0
 			end
+		end
+	end
+
+	-- 添加一个返回攻击效果
+	if target then
+		local source = store.entities[b.source_id]
+		if source then
+			U.y_wait(store, E:get_template("mod_hero_hunter_ricochet_attack").modifier.duration)
+			create_arrow_trail(target.pos, source)
+			local targets = U.find_enemies_around_line(target.pos.x, target.pos.y, source.pos.x, source.pos.y, this.back_radius, b.vis_flags, b.vis_bans)
+
+			if targets then
+				S:queue(this.sound_bounce)
+				local mods = b.mods
+				for _, t in ipairs(targets) do
+					bounce_count = bounce_count + 1
+					for _, mod_name in ipairs(mods) do
+						local m = E:create_entity(mod_name)
+						m.modifier.source_id = this.id
+						m.modifier.target_id = t.id
+						m.modifier.damage_factor = this.bullet.damage_factor
+						m.bounce_count = bounce_count
+						m.back_attack = true
+						queue_insert(store, m)
+					end
+				end
+			end
+			U.y_wait(store, this.time_between_bounces)
 		end
 	end
 
@@ -18645,8 +18655,6 @@ function scripts.arrow_hero_hunter_ricochet_trail.update(this, store)
 			local d = math.max(math.abs(tpx - b.to.x), math.abs(tpy - b.to.y))
 
 			if d > b.max_track_distance then
-				log.paranoid("(%s) ray_simple target (%s) out of max_track_distance", this.id, target.id)
-
 				target = nil
 			else
 				dest.x, dest.y = target.pos.x, target.pos.y
@@ -18733,7 +18741,7 @@ function scripts.mod_hero_hunter_ricochet_attack.update(this, store)
 			return
 		end
 
-		if this.render and target.unit then
+		if target.unit then
 			local s = this.render.sprites[1]
 			local flip_sign = 1
 
@@ -18741,22 +18749,21 @@ function scripts.mod_hero_hunter_ricochet_attack.update(this, store)
 				flip_sign = target.render.sprites[1].flip_x and -1 or 1
 			end
 
-			if m.health_bar_offset and target.health_bar then
-				local hb = target.health_bar.offset
-				local hbo = m.health_bar_offset
+			if this.back_attack then
+				flip_sign = -flip_sign
+			end
 
-				s.offset.x, s.offset.y = hb.x + hbo.x * flip_sign, hb.y + hbo.y
-			elseif m.use_mod_offset and target.unit.mod_offset then
+			if target.unit.mod_offset then
 				s.offset.x, s.offset.y = target.unit.mod_offset.x * flip_sign, target.unit.mod_offset.y
 
-				if target.render.sprites[1].flip_x then
+				if flip_sign == -1 then
 					s.offset.x = s.offset.x - this.enemy_distance
 				else
 					s.offset.x = s.offset.x + this.enemy_distance
 				end
-
-				s.flip_x = not target.render.sprites[1].flip_x
 			end
+
+			s.flip_x = flip_sign == 1
 		end
 
 		coroutine.yield()

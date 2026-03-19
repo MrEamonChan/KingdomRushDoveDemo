@@ -11677,6 +11677,7 @@ tt.time_between_bounces = fts(2)
 tt.bullet.mods = {"mod_hero_hunter_ricochet_attack", "mod_hero_hunter_ricochet_stun"}
 tt.trail_arrow = "arrow_hero_hunter_ricochet_trail"
 tt.sound_bounce = "HeroHunterRicochetBounce"
+tt.back_radius = b.back_radius
 --#endregion
 --#region arrow_hero_hunter_ricochet_trail
 tt = RT("arrow_hero_hunter_ricochet_trail", "bullet")
@@ -11774,6 +11775,7 @@ tt.damage_type = b.damage_type
 tt.damage_min = nil
 tt.damage_max = nil
 tt.tween.props[1].keys = {{0, 255}, {tt.modifier.duration - fts(4), 255}, {tt.modifier.duration, 0}}
+tt.back_attack = false
 --#endregion
 --#region mod_hero_hunter_ricochet_stun
 tt = RT("mod_hero_hunter_ricochet_stun", "mod_stun")

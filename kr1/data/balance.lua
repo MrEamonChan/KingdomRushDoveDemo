@@ -923,7 +923,7 @@ local heroes = {
 		}
 	},
 	hero_hunter = {
-		distance_to_flywalk = 120,
+		distance_to_flywalk = 90,
 		dead_lifetime = 15,
 		flywalk_speed = 95,
 		speed = 75,
@@ -939,8 +939,8 @@ local heroes = {
 			damage_min = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
 		},
 		basic_ranged = {
-			max_range = 240,
-			min_range = 80,
+			max_range = 250,
+			min_range = 72,
 			-- cooldown = 2.5,
 			cooldown = 1,
 			xp_gain_factor = 1.8,
@@ -961,11 +961,12 @@ local heroes = {
 			max_range_trigger = 200,
 			cooldown = {15, 15, 15},
 			damage_type = DAMAGE_RUDE,
-			damage_max = {47, 85, 116},
-			damage_min = {30, 57, 79},
+			damage_max = {43, 77, 105},
+			damage_min = {27, 52, 72},
 			bounces = {2, 3, 4},
 			s_bounces = {3, 4, 5},
-			xp_gain = {120, 240, 360}
+			xp_gain = {120, 240, 360},
+			back_radius = 60
 		},
 		shoot_around = {
 			max_range = 78,
