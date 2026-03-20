@@ -8878,10 +8878,8 @@ function scripts.controller_stage_22_boss_crocs.update(this, store)
 	U.animation_start(this, this.default_idle, nil, store.tick_ts, true, 1, true)
 
 	local function get_towers_to_eat()
-		local towers = table.filter(store.entities, function(k, v)
-			local is_tower = v.tower and not v.pending_removal and (not this.excluded_templates or not table.contains(this.excluded_templates, v.template_name)) and v.vis and band(v.vis.flags, this.vis_bans) == 0 and band(v.vis.bans, this.vis_flags) == 0 and (not this.exclude_tower_kind or not table.contains(this.exclude_tower_kind, v.tower.kind)) and v.tower.can_be_mod
-			--local is_tower = v.tower and not v.pending_removal and (not this.excluded_templates or not table.contains(this.excluded_templates, v.template_name)) and v.vis and band(v.vis.flags, this.vis_bans) == 0 and band(v.vis.bans, this.vis_flags) == 0 and (not this.exclude_tower_kind or not table.contains(this.exclude_tower_kind, v.tower.kind)) and v.tower.can_be_mod
-
+		local towers = table.filter(store.towers, function(k, v)
+			local is_tower = not v.pending_removal and (not this.excluded_templates or not table.contains(this.excluded_templates, v.template_name)) and v.vis and band(v.vis.flags, this.vis_bans) == 0 and band(v.vis.bans, this.vis_flags) == 0 and (not this.exclude_tower_kind or not table.contains(this.exclude_tower_kind, v.tower.kind)) and v.tower.can_be_mod
 			return is_tower
 		end)
 

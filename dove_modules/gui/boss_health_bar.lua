@@ -151,7 +151,7 @@ end
 function BossHealthBar:update(dt)
 	if self.entity then
 		local health = self.entity.health
-		if not health or health.dead then
+		if not health or health.dead or not self.store.entities[self.entity.id] then
 			self.entity = nil
 			local new_entity
 			for _, e in pairs(self.store.enemies) do
