@@ -28,6 +28,10 @@ local U = require("utils")
 local V = require("lib.klua.vector")
 local v = V.v
 local r = V.r
+
+-- Dove modules
+local RichTextLabel = require("dove_modules.gui.rich_text_label")
+local text_diff = require("dove_modules.gui.text_utils")
 local P = require("path_db")
 local GR = require("grid_db")
 local GS = require("kr1.game_settings")
@@ -6701,13 +6705,14 @@ function TowerMenuTooltip:initialize()
 
 	self:add_child(title)
 
-	local desc = GGLabel:new(V.v(self.size.x - 2 * margin.x, 74))
+	-- 使用富文本标签替代普通标签
+	local desc = RichTextLabel:new(V.v(self.size.x - 2 * margin.x, 74), nil, GGLabel.static.font_scale, GGLabel.static.ref_h)
 
 	desc.pos = v(margin.x, margin.y + 14)
 	desc.font_name = "body"
 	desc.font_size = 12.5
 	desc.line_height = CJK(0.9, nil, 1.1, 0.9)
-	desc.colors.text = {240, 230, 185}
+	desc.default_color = {240, 230, 185}
 	desc.text_align = "left"
 	desc.text = "Archers ready to strike at your enemies from a distance."
 	desc.fit_size = true
@@ -6803,7 +6808,7 @@ function TowerMenuTooltip:show(entity, item)
 
 	if item.action == "tw_upgrade" then
 		self.title.text = item.tt_title or U.balance_format(_(item.action_arg))
-		self.desc.text = U.balance_format(item.tt_desc) or ""
+		self.desc:set_text(U.balance_format(item.tt_desc) or "")
 
 		local te
 
@@ -6841,39 +6846,59 @@ function TowerMenuTooltip:show(entity, item)
 		end
 	elseif item.action == "upgrade_power" then
 		local power = entity.powers[item.action_arg]
-		local show_level = km.clamp(1, power.max_level, power.level + 1)
+		local current_level = km.clamp(1, #item.tt_list, power.level)
+		local next_level = km.clamp(1, #item.tt_list, power.level + 1)
 
-		if show_level > #item.tt_list then
-			show_level = #item.tt_list
+		-- 判断是否已满级
+		local is_max_level = power.level >= power.max_level
+
+		if is_max_level then
+			-- 满级：直接显示当前级数据
+			local texts = item.tt_list[current_level]
+			self.title.text = texts.tt_title
+			self.desc:set_text(text_diff.mark_number(U.balance_format(texts.tt_desc)))
+		elseif power.level == 0 then
+			-- 未解锁：显示下一级数据
+			local next_texts = item.tt_list[next_level]
+			self.title.text = next_texts.tt_title
+			self.desc:set_text(text_diff.mark_number(U.balance_format(next_texts.tt_desc)))
+		else
+			-- 未满级：显示对比（当前级 → 下一级）
+			local current_texts = item.tt_list[current_level]
+			local next_texts = item.tt_list[next_level]
+
+			self.title.text = next_texts.tt_title
+
+			-- 使用智能对比生成富文本
+			local current_desc = U.balance_format(current_texts.tt_desc)
+			local next_desc = U.balance_format(next_texts.tt_desc)
+			local diff_text = text_diff.create_diff_text(current_desc, next_desc)
+
+			self.desc:set_text(diff_text)
 		end
-
-		local texts = item.tt_list[show_level]
-
-		self.title.text = texts.tt_title
-		self.desc.text = U.balance_format(texts.tt_desc)
 	elseif item.action == "tw_buy_soldier" or item.action == "tw_buy_attack" or item.action == "tw_unblock" or item.action == "tw_repair" then
 		if item.tt_title then
 			self.title.text = item.tt_title
 		end
 
 		if item.tt_desc then
-			self.desc.text = U.balance_format(item.tt_desc)
+			self.desc:set_text(U.balance_format(item.tt_desc))
 		end
 	elseif item.action == "tw_sell" then
 		self.title.text = _("Sell Tower")
 
 		local refund = game_gui.game.store.wave_group_number == 0 and entity.tower.spent or km.round(entity.tower.refund_factor * entity.tower.spent)
 
-		self.desc.text = string.format(_("Sell this tower and get a %s GP refund."), refund)
+		self.desc:set_text(string.format(_("Sell this tower and get a %s GP refund."), refund))
 	elseif item.action == "tw_change_mode" then
 		local current_mode = entity.tower_upgrade_persistent_data.current_mode
 
 		if entity.tower_upgrade_persistent_data.max_current_mode == 0 then
 			self.title.text = item.tt_title
-			self.desc.text = U.balance_format(item.tt_desc)
+			self.desc:set_text(U.balance_format(item.tt_desc))
 		else
 			self.title.text = item["tt_title_mode" .. current_mode]
-			self.desc.text = item["tt_desc_mode" .. current_mode]
+			self.desc:set_text(item["tt_desc_mode" .. current_mode])
 
 			if item["tt_phrase_mode" .. current_mode] then
 				self.phrase_label.text = item["tt_phrase_mode" .. current_mode]
