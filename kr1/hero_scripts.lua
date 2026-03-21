@@ -2894,19 +2894,6 @@ scripts.beastmaster_falcon = {
 }
 -- 兽王-宠物
 scripts.beastmaster_pet = {
-	get_info = function(this)
-		local min, max = this.melee.attacks[1].damage_min * this.unit.damage_factor, this.melee.attacks[1].damage_max * this.unit.damage_factor
-
-		return {
-			type = STATS_TYPE_SOLDIER,
-			hp = this.health.hp,
-			hp_max = this.health.hp_max,
-			damage_min = min,
-			damage_max = max,
-			armor = this.health.armor,
-			respawn = this.owner.timed_attacks.list[2].cooldown
-		}
-	end,
 	insert = function(this, store)
 		this.melee.order = U.attack_order(this.melee.attacks)
 
@@ -3141,6 +3128,10 @@ scripts.hero_beastmaster = {
 				skill = this.hero.skills.boarmaster
 
 				if not a.disabled and #this.boars >= a.max then
+					-- a.ts = store.tick_ts
+					a.disabled = true
+				elseif a.disabled and #this.boars < a.max then
+					a.disabled = nil
 					a.ts = store.tick_ts
 				end
 
