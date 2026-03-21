@@ -21553,18 +21553,23 @@ end
 
 function scripts.malik_slave_controller.update(this, store)
 	local function do_thunder_fx(pos)
-		-- local e = E:create_entity("fx_power_thunder_explosion")
-		local e = E:create_entity("fx_fireball_explosion")
+		if E:get_template("user_power_1").template_name == "power_fireball_control" then
+			local e = E:create_entity("fx_fireball_explosion")
 
-		e.pos.x, e.pos.y = pos.x, pos.y
-		e.render.sprites[1].ts = store.tick_ts
-
-		-- e.render.sprites[2].ts = store.tick_ts
-		queue_insert(store, e)
-	-- e = E:create_entity("fx_power_thunder_explosion_decal")
-	-- e.pos.x, e.pos.y = pos.x, pos.y
-	-- e.render.sprites[1].ts = store.tick_ts
-	-- queue_insert(store, e)
+			e.pos.x, e.pos.y = pos.x, pos.y
+			e.render.sprites[1].ts = store.tick_ts
+			queue_insert(store, e)
+		elseif E:get_template("user_power_1").template_name == "power_thunder_control" then
+			local e = E:create_entity("fx_power_thunder_explosion")
+			e.pos.x, e.pos.y = pos.x, pos.y
+			e.render.sprites[1].ts = store.tick_ts
+			e.render.sprites[2].ts = store.tick_ts
+			queue_insert(store, e)
+			e = E:create_entity("fx_power_thunder_explosion_decal")
+			e.pos.x, e.pos.y = pos.x, pos.y
+			e.render.sprites[1].ts = store.tick_ts
+			queue_insert(store, e)
+		end
 	end
 
 	local function y_await_arrival(entities)
@@ -21668,10 +21673,6 @@ function scripts.malik_slave_controller.update(this, store)
 	S:queue("ElvesMalikHammer")
 	U.y_animation_play(free_seq, nil, nil, store.tick_ts)
 	LU.insert_hero(store, "hero_baby_malik", this.hero_spawn_pos)
-	-- hero.nav_grid.ignore_waypoints = true
-	-- hero.nav_rally.new = true
-	-- hero.nav_rally.pos = v(575, 557)
-	-- hero.nav_rally.center = v(575, 557)
 	coroutine.yield()
 
 	free_seq.render.sprites[1].hidden = true
