@@ -3104,7 +3104,7 @@ function HudBottomView:update(dt)
 	self.herobar:update(dt)
 end
 
-HudCountersView = class("HudCountersView", KStaticView)
+HudCountersView = class("HudCountersView", KView)
 
 function HudCountersView:initialize(level_mode)
 	HudCountersView.super.initialize(self, nil, "top_left")
@@ -3164,13 +3164,11 @@ function HudCountersView:update(dt)
 	if store.lives ~= self.lbl_lives_value then
 		self.lbl_lives_value = store.lives
 		self.lbl_lives.text = string.format("%d", store.lives)
-		self.canvas_cache_dirty = true
 	end
 
 	if store.player_gold ~= self.lbl_gold_value then
 		self.lbl_gold_value = store.player_gold
 		self.lbl_gold.text = string.format("%d", store.player_gold)
-		self.canvas_cache_dirty = true
 	end
 
 	local wave_value = store.wave_group_number
@@ -3182,7 +3180,6 @@ function HudCountersView:update(dt)
 
 	if wave_value ~= self.lbl_wave_value then
 		self.lbl_wave_value = wave_value
-		self.canvas_cache_dirty = true
 
 		if game_gui.game.store.level_mode_override == GAME_MODE_ENDLESS then
 			self.lbl_wave.text = string.format("%d", wave_value)

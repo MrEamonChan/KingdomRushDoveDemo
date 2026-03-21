@@ -13,7 +13,10 @@ fi
 
 mkdir -p ".versions"
 ARCHIVE_DIR=".versions/KingdomRushDove-Android-v${current_id}.zip"
-LOVE_FILE=".versions/KingdomRushDove-Android-v${current_id}.love"
+LOVE_FILE="../Application/love-android/app/src/embed/assets/game.love"
+LOVE_ANDROID="../Application/love-android"
+OUTPUT_RAW="app/build/outputs/apk/embedNoRecord/release/app-embed-noRecord-release.apk"
+OUTPUT_FINAL="app/build/outputs/apk/embedNoRecord/release/KingdomRushDove-Android-v${current_id}.apk"
 
 # 依赖检查
 if ! command -v zip >/dev/null 2>&1; then
@@ -85,9 +88,15 @@ mv "$ARCHIVE_DIR" "$LOVE_FILE"
 
 echo "Packed -> $LOVE_FILE"
 
+cd $LOVE_ANDROID
+
+./gradlew assembleEmbedNoRecordRelease
+
+mv "$OUTPUT_RAW" "$OUTPUT_FINAL"
+
 # 如果传入了参数 quick，则使用内网 scp 传输
 if [ "${1:-}" = "quick" ]; then
-    scp -P 60001 "$LOVE_FILE" dove@10.112.99.5:/srv/files/王国保卫战Dove版-安卓端/
+    scp -P 60001 "$OUTPUT_FINAL" dove@10.112.99.5:/srv/files/王国保卫战Dove版-安卓端/
 else
-    scp -P 60001 "$LOVE_FILE" dove@krdovedownload6.crazyspotteddove.top:/srv/files/王国保卫战Dove版-安卓端/
+    scp -P 60001 "$OUTPUT_FINAL" dove@krdovedownload6.crazyspotteddove.top:/srv/files/王国保卫战Dove版-安卓端/
 fi

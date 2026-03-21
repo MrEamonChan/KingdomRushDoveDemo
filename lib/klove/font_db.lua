@@ -159,6 +159,17 @@ function font_db:get_ascent(name)
 end
 
 function font_db:create_text_image(text, size, alignment, font_name, font_size, color, line_height, scale, fit_height, debug_bg)
+	-- 修复Android高DPI问题：
+	-- 在高DPI设备上，love.graphics.newCanvas()可能会创建更大的Canvas
+	-- 需要除以DPI来补偿，确保Canvas大小正确
+	local dpi_scale = love.window.getDPIScale()
+	local dpi_compensation = 1.0
+
+	-- 只在Android且DPI>1时应用补偿
+	if love.system.getOS() == "Android" and dpi_scale > 1.0 then
+		dpi_compensation = dpi_scale
+	end
+
 	if scale and scale ~= 1 then
 		font_size = math.floor(font_size / scale)
 		size.x = math.ceil(size.x / scale)
@@ -185,9 +196,18 @@ function font_db:create_text_image(text, size, alignment, font_name, font_size, 
 	font:setLineHeight(line_height)
 
 	local padding = 8
-	local c = G.newCanvas(w + padding, h + padding)
+	-- 应用DPI补偿到Canvas大小
+	local canvas_w = math.ceil((w + padding) / dpi_compensation)
+	local canvas_h = math.ceil((h + padding) / dpi_compensation)
+	local c = G.newCanvas(canvas_w, canvas_h)
 
 	G.setCanvas(c)
+
+	-- 在Canvas内部也需要调整坐标来补偿DPI
+	if dpi_compensation > 1 then
+		G.push()
+		G.scale(1 / dpi_compensation, 1 / dpi_compensation)
+	end
 
 	if debug_bg then
 		G.setColor(0.784, 0.784, 0.784, 0.392)
@@ -200,6 +220,11 @@ function font_db:create_text_image(text, size, alignment, font_name, font_size, 
 	G.setFont(font)
 	G.setColor_old(color)
 	G.printf(text, padding * 0.5, vadj + padding * 0.5, w, alignment)
+
+	if dpi_compensation > 1 then
+		G.pop()
+	end
+
 	G.setCanvas()
 
 	local image_data = c:newImageData()
