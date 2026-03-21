@@ -3108,30 +3108,23 @@ tt.timed_attacks.list[2].sound = "HeroBeastMasterSummonBoar"
 tt.timed_attacks.list[2].spawn_time = fts(35)
 tt.vis.bans = F_POISON
 --#endregion
---#region aura_beastmaster_regeneration
+
 tt = RT("aura_beastmaster_regeneration", "aura")
-
 AC(tt, "hps")
-
-tt.hps.heal_min = 5
-tt.hps.heal_max = 5
+tt.hps.heal_min = 6
+tt.hps.heal_max = 6
 tt.hps.heal_every = 0.25
 tt.main_script.update = scripts.aura_beastmaster_regeneration.update
---#endregion
 
---#region mod_beastmaster_lash
 tt = RT("mod_beastmaster_lash", "mod_blood")
 tt.modifier.duration = 6
 tt.modifier.level = 0
 tt.dps.damage_type = DAMAGE_TRUE
 tt.dps.damage_every = 1
---#endregion
 
 --#region beastmaster_boar
 tt = RT("beastmaster_boar", "soldier")
-
 AC(tt, "melee", "nav_grid")
-
 anchor_y = 0.29
 image_y = 60
 tt.info.portrait = "kr2_info_portraits_soldiers_0016"
@@ -3165,11 +3158,10 @@ tt.unit.hide_after_death = true
 tt.unit.explode_fx = nil
 tt.vis.bans = bor(F_SKELETON, F_CANNIBALIZE, F_LYCAN)
 --#endregion
+
 --#region beastmaster_wolf
 tt = RT("beastmaster_wolf", "soldier")
-
 AC(tt, "melee", "nav_grid", "dodge")
-
 anchor_y = 0.26
 anchor_x = 0.5
 image_y = 50
