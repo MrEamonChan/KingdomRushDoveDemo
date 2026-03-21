@@ -6587,7 +6587,7 @@ function EditableGroup:add_items(data)
 	end
 
 	-- 重新调整所有 item 的位置
-	local max_rows = 7 -- 每列最多 6 个 item
+	local max_rows = 8 -- 每列最多 6 个 item
 	local row_height = self.item_height
 	local actual_columns = math.ceil(total_items / max_rows - 0.0001) -- 实际列数
 	local column_width = (self.size.x - (1 + actual_columns) * self.padding.x) / actual_columns -- 动态计算列宽
@@ -6811,7 +6811,8 @@ function KeysetPanelView:initialize(sw, sh)
 		force_next_wave = "跳波",
 		wealthy = "获得金币",
 		healthy = "获得生命",
-		fps = "显示帧率"
+		fps = "显示帧率",
+		restart = "重开（斗蛐蛐生效）"
 	})
 end
 

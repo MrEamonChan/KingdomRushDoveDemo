@@ -933,7 +933,8 @@ function game_gui:keypressed(key, isrepeat)
 	elseif ks.fps == key then
 		require("dove_modules.perf.perf_ui").toggle()
 	elseif ks.random_towers == key then
-
+	elseif ks.restart == key and game_gui.game.store.criket.on then
+		game_gui:restart_game()
 	end
 end
 
