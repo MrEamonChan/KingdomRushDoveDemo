@@ -5536,11 +5536,10 @@ tt.image_w = 40
 -- tt.unit.explode_fx = nil
 -- tt.vis.bans = F_ALL
 --#endregion
+
 --#region hero_baby_malik
 tt = RT("hero_baby_malik", "stage_hero")
-
 AC(tt, "melee")
-
 tt.hero.level_stats.armor = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 tt.hero.level_stats.hp_max = {320, 345, 370, 395, 420, 445, 470, 495, 520, 545}
 tt.hero.level_stats.melee_damage_max = {17, 18, 20, 21, 23, 24, 25, 27, 28, 30}

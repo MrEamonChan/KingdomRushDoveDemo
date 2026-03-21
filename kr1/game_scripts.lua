@@ -11696,7 +11696,6 @@ function scripts.hero_baby_malik.level_up(this, store, initial)
 	local ls = this.hero.level_stats
 
 	this.health.hp_max = ls.hp_max[hl]
-	this.regen.health = ls.regen_health[hl]
 	this.health.armor = ls.armor[hl]
 	this.melee.attacks[1].damage_min = ls.melee_damage_min[hl]
 	this.melee.attacks[1].damage_max = ls.melee_damage_max[hl]
