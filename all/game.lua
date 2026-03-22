@@ -204,6 +204,8 @@ function game:init(screen_w, screen_h, done_callback)
 		end
 	end
 
+	self.camera:clamp()
+
 	RU.init()
 
 	self.store.ephemeral = {}
@@ -339,6 +341,7 @@ function game:update(dt)
 
 			self.camera.x = self.camera.x - sx + click_state.x
 			self.camera.y = self.camera.y - sy + click_state.y
+			self.camera:clamp()
 			click_state.x = sx
 			click_state.y = sy
 		end
@@ -1472,7 +1475,7 @@ function game:draw_game()
 
 	local c = self.camera
 
-	c:clamp()
+	-- c:clamp()
 
 	local rox, roy = -(c.x * c.zoom - self.screen_w * 0.5), -(c.y * c.zoom - self.screen_h * 0.5)
 	gs = gs * c.zoom

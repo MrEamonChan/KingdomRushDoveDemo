@@ -1180,16 +1180,17 @@ function game_gui:show_wave_flags(group)
 			local incoming_report = GU.incoming_wave_report(group, w.path_index, self.game.store.level_mode)
 
 			if incoming_report and #incoming_report > 0 then
-				local wf = WaveFlag:new(w.some_flying, duration, incoming_report, w.path_index)
-				local wfx, wfy = self:g2u_old(item.pos)
+				-- 创建WaveFlag并传入世界坐标
+				local wf = WaveFlag:new(w.some_flying, duration, incoming_report, w.path_index, item.pos)
 
+				-- 设置指针方向（不会再改变）
 				wf.pointer.r = item.r - math.pi * 0.5
 				wf.hidden = false
 
-				local vf = V.v(V.rotate(-item.r, 1, 0))
-				local pf = V.v(wfx, wfy)
-
-				wf.pos = self:find_flag_position(pf, vf, 50, item.len)
+				-- 初始位置将在update中通过g2u计算
+				local init_x, init_y = self:g2u(item.pos)
+				wf.pos.x = init_x
+				wf.pos.y = init_y
 
 				self.layer_gui_game:add_child(wf)
 				wf:order_below(self.towertooltip)
@@ -6301,6 +6302,35 @@ function TowerMenu:update(dt)
 		return
 	end
 
+	-- 根据相机动态更新TowerMenu的位置和缩放
+	if not self.tweening then
+		local ro = e.tower.range_offset
+		local mo = e.tower.menu_offset
+		local ewx_g, ewy_g = e.pos.x + ro.x + mo.x, e.pos.y + ro.y + mo.y
+
+		-- 边界检查（针对3级塔）
+		if e.tower.level == 3 then
+			local visible_coords = game_gui.game.store.visible_coords
+
+			if ewy_g + data.tower_menu_button_height > visible_coords.top then
+				ewy_g = visible_coords.top - data.tower_menu_button_height
+			end
+
+			if ewx_g + data.tower_menu_button_width > visible_coords.right then
+				ewx_g = visible_coords.right - data.tower_menu_button_width
+			elseif ewx_g - data.tower_menu_button_width < visible_coords.left then
+				ewx_g = visible_coords.left + data.tower_menu_button_width
+			end
+		end
+
+		local ewx, ewy = game_gui:g2u(V.v(ewx_g, ewy_g), true)
+
+		self.pos.x = ewx
+		self.pos.y = ewy
+		self.scale.x = game_gui.game.camera.zoom
+		self.scale.y = game_gui.game.camera.zoom
+	end
+
 	local store = game_gui.game.store
 
 	for _, c in pairs(self.children) do
@@ -6801,6 +6831,8 @@ end
 
 function TowerMenuTooltip:show(entity, item)
 	self.hidden = false
+	self.current_entity = entity -- 保存引用以便update使用
+	self.current_item = item
 	self.damage_label.hidden = true
 	self.health_label.hidden = true
 	self.armor_label.hidden = true
@@ -6954,12 +6986,33 @@ end
 
 function TowerMenuTooltip:hide()
 	self.hidden = true
+	self.current_entity = nil
+	self.current_item = nil
 end
 
 TowerMenuButton = class("TowerMenuButton", KView)
 
--- 事件驱动的，完全禁用 update
+-- 如果tooltip正在显示，根据相机动态更新位置和缩放
 function TowerMenuTooltip:update(dt)
+	if not self.hidden and self.current_entity and self.current_item then
+		local entity = self.current_entity
+		local camera = game_gui.game.camera
+
+		-- tooltip随相机缩放
+		self.scale.x = camera.zoom
+		self.scale.y = camera.zoom
+
+		-- 基础偏移（不需要乘以zoom，因为tooltip自身会缩放）
+		local oy = 142
+		local ex, ey = game_gui:g2u(V.v(entity.pos.x, entity.pos.y), true)
+
+		self.pos.x = ex - math.floor(self.size.x * camera.zoom * 0.5)
+		self.pos.y = ey - self.size.y * camera.zoom - oy - 20
+
+		if self.pos.y < self.size.y * camera.zoom / 3 then
+			self.pos.y = ey + 76
+		end
+	end
 end
 
 function TowerMenuButton:enable()
@@ -7272,7 +7325,7 @@ end
 
 WaveFlag = class("WaveFlag", KView)
 
-function WaveFlag:initialize(flying, duration, report, path_index)
+function WaveFlag:initialize(flying, duration, report, path_index, world_pos)
 	WaveFlag.super.initialize(self)
 
 	self.path_index = path_index
@@ -7281,6 +7334,7 @@ function WaveFlag:initialize(flying, duration, report, path_index)
 	self.start_game_ts = game_gui.game.store.tick_ts
 	self.ts = 0
 	self.pulse_animation = true
+	self.world_pos = world_pos -- 存储世界坐标
 
 	local halo = KImageView:new("nextwaveTimer_glow_0001")
 	local bg_circle = KImageView:new("nextwaveTimer_Full")
@@ -7374,10 +7428,39 @@ function WaveFlag:update(dt)
 		self.ts = self.ts + dt
 	end
 
-	if self.pulse_animation then
-		local scale = 0.85 + 0.15 * (0.5 * math.sin(2 * math.pi * self.ts * 1.25) + 1)
+	-- 根据相机更新位置：将世界坐标转换为屏幕坐标
+	if self.world_pos then
+		local sx, sy = game_gui:g2u(self.world_pos)
 
-		self.scale.x, self.scale.y = scale, scale
+		-- 检查是否在视野内，如果超出则钳制到屏幕边缘
+		local margin = 60 -- 屏幕边缘距离
+		local clamped_x, clamped_y = sx, sy
+
+		if sx < margin then
+			clamped_x = margin
+		elseif sx > game_gui.sw - margin then
+			clamped_x = game_gui.sw - margin
+		end
+
+		if sy < margin then
+			clamped_y = margin
+		elseif sy > game_gui.sh - margin then
+			clamped_y = game_gui.sh - margin
+		end
+
+		self.pos.x = clamped_x
+		self.pos.y = clamped_y
+	end
+
+	-- 根据相机zoom调整缩放（但脉冲动画会覆盖这个基础缩放）
+	local base_scale = game_gui.game.camera.zoom
+
+	if self.pulse_animation then
+		local pulse = 0.85 + 0.15 * (0.5 * math.sin(2 * math.pi * self.ts * 1.25) + 1)
+
+		self.scale.x, self.scale.y = base_scale * pulse, base_scale * pulse
+	else
+		self.scale.x, self.scale.y = base_scale, base_scale
 	end
 
 	if self.duration and self.duration > 0 then
