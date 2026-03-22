@@ -2960,6 +2960,10 @@ function HudBottomView:initialize(sw, sh)
 
 	bg_bar.anchor = v(0, bg_bar.size.y)
 	bg_bar.pos = v(0, sh)
+	-- 拉伸bg_bar以适应屏幕宽度
+	if bg_bar.size.x < sw then
+		bg_bar.scale.x = sw / bg_bar.size.x
+	end
 
 	self:add_child(bg_bar)
 
@@ -3475,6 +3479,17 @@ function PauseView:initialize()
 			game_gui.game.store.force_next_wave = true
 		end
 		self:add_child(btn_force_wave)
+
+		button_height = button_height + 100
+		local btn_perf = GGOptionsButton:new("性能检测")
+		btn_perf:set_anchor_to_center()
+		btn_perf.pos.x = right_x
+		btn_perf.pos.y = button_height
+		function btn_perf.on_click()
+			S:queue("GUIButtonCommon")
+			require("dove_modules.perf.perf_ui").toggle()
+		end
+		self:add_child(btn_perf)
 	end
 
 	mx = 45
