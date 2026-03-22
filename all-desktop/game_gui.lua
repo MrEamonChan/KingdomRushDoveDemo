@@ -358,6 +358,8 @@ function game_gui:init(w, h, game)
 	local boss_health_bar = require("dove_modules.gui.boss_health_bar"):new(sw)
 	boss_health_bar.hidden = true
 
+	local speed_state_indicator = SpeedStateIndicator:new()
+
 	local point_confirm = KImageView:new("confirm_feedback_0001")
 
 	point_confirm.animation = {
@@ -496,6 +498,7 @@ function game_gui:init(w, h, game)
 	layer_gui_game:add_child(heromenu)
 	layer_gui_game:add_child(incoming_tooltip)
 	layer_gui_game:add_child(boss_health_bar)
+	layer_gui_game:add_child(speed_state_indicator)
 
 	layer_gui_hud:add_child(hud_counters)
 	layer_gui_hud:add_child(hud_pause)
@@ -532,6 +535,7 @@ function game_gui:init(w, h, game)
 	self.melee_range = meleerange
 	self.ranged_range = rangedrange
 	self.boss_health_bar = boss_health_bar
+	self.speed_state_indicator = speed_state_indicator
 	self.point_confirm = point_confirm
 	self.rallyflag = rallyflag
 	self.hud_bottom = hud_bottom
@@ -1773,18 +1777,64 @@ function game_gui.swap_tower()
 end
 
 function game_gui:set_boss(e)
-	-- local boss_health_bar = self.boss_health_bar
-	-- boss_health_bar:set_entity(e)
-	-- local portrait_ss = I:s(e.info.portrait)
-	-- boss_health_bar:set_portrait(portrait_ss, I:i(portrait_ss.atlas))
-	-- 	if e.info and e.info.i18n_key then
-	-- 	self.l_name.text = string.upper(_(e.info.i18n_key .. "_NAME"))
-	-- else
-	-- 	self.l_name.text = string.upper(_(string.upper(e.template_name) .. "_NAME"))
-	-- end
-	-- boss_health_bar:set_name(_(e.info.i18n_key and e.info.i18n_key .. "_NAME" or string.upper(e.template_name) .. "_NAME"))
-	-- boss_health_bar:enable()
 	self.boss_health_bar:enable_with(e, self.game.simulation.store)
+end
+
+SpeedStateIndicator = class("SpeedStateIndicator", KView)
+
+function SpeedStateIndicator:initialize()
+	SpeedStateIndicator.super.initialize(self)
+
+	-- 设置大小和位置
+	self.size = v(300, 50)
+	self.pos = v(120, 50) -- GUI坐标系中的位置
+
+	-- 创建文本标签
+	local label = GGLabel:new(V.v(300, 50))
+	label.pos = v(0, 0)
+	label.font_name = "hud" -- 使用hud字体，支持中文
+	label.font_size = 16
+	label.colors.text = {255, 255, 255, 180} -- 半透明白色
+	label.text_align = "left"
+	label.vertical_align = "top"
+	label.text = ""
+
+	self.label = label
+	self:add_child(label)
+
+	-- 状态
+	self.visible = false
+	self.hidden = true
+	self.last_speed_factor = 1
+end
+
+function SpeedStateIndicator:update(dt)
+	local store = game_gui.game.store
+	local should_show = store.speed_factor ~= 1
+
+	if should_show ~= self.visible then
+		self.visible = should_show
+		self.hidden = not should_show
+	end
+
+	-- 更新文字和颜色效果
+	if should_show and store.speed_factor ~= self.last_speed_factor then
+		self.last_speed_factor = store.speed_factor
+
+		if store.speed_factor > 1 then
+			self.label.text = string.format("%s 倍加速中...", store.speed_factor)
+		else
+			self.label.text = string.format("%s 倍减速中...", store.speed_factor)
+		end
+	end
+
+	-- 动态颜色效果
+	if should_show then
+		local r = math.floor((math.sin(store.ts) + 1) * 127.5 + 127.5)
+		local g = math.floor((math.sin(store.ts + 2) + 1) * 127.5 + 127.5)
+		local b = math.floor((math.sin(store.ts + 4) + 1) * 127.5 + 127.5)
+		self.label.colors.text = {r, g, b, 180}
+	end
 end
 
 TimeRewardFx = class("TimeRewardFx", KView)

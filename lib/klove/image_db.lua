@@ -125,7 +125,7 @@ while true do
         cout:push({'ERROR','Not a file',f})
     else
         local data
-        if string.match(fn, '.dds$') then
+        if string.match(fn, '.dds$') or string.match(fn, '.astc$') or string.match(fn, '.pkm$') then
             data = love.image.newCompressedData(f)
         else
             data = love.image.newImageData(f)
@@ -489,8 +489,19 @@ function image_db:preload_atlas(ref_scale, path, name)
 		-- Texture 中 x 坐标，Texture 中 y 坐标，宽度，高度，Texture 宽度，Texture 高度
 		v.quad = G.newQuad(v.f_quad[1], v.f_quad[2], v.f_quad[3], v.f_quad[4], v.a_size[1], v.a_size[2])
 
+		-- Android 端：自动选择实际存在的格式（ASTC > PNG > DDS）
 		if is_android then
-			v.a_name = v.a_name:gsub(".dds$", ".png")
+			if v.a_name:match("%.dds$") then
+				local astc_name = v.a_name:gsub("%.dds$", ".astc")
+				local png_name = v.a_name:gsub("%.dds$", ".png")
+
+				if is_file(path .. "/" .. astc_name) then
+					v.a_name = astc_name
+				elseif is_file(path .. "/" .. png_name) then
+					v.a_name = png_name
+				end
+			-- 都不存在则保留 .dds，后续会报错
+			end
 		end
 
 		image_names[v.a_name] = true
@@ -563,8 +574,20 @@ function image_db:load_image_file(fn, path)
 		if string.match(f, ".dds$") then
 			compressed = true
 
+			-- Android 端应该已在 preload_atlas 中转换为 .astc 或 .png，此处为容错
 			if is_android then
-				return self:load_image_file(fn:gsub("%.dds$", ".png"), path)
+				local astc_fn = fn:gsub("%.dds$", ".astc")
+				if is_file(path .. "/" .. astc_fn) then
+					return self:load_image_file(astc_fn, path)
+				end
+
+				local png_fn = fn:gsub("%.dds$", ".png")
+				if is_file(path .. "/" .. png_fn) then
+					return self:load_image_file(png_fn, path)
+				end
+
+				log.error("No Android-compatible format found for %s (tried .astc, .png)", f)
+				return nil
 			end
 
 			-- 检查 DXT3 和 BC7 是否都不支持

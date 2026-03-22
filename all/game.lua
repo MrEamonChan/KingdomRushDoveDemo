@@ -1395,77 +1395,6 @@ function game:draw_path(rox, roy, gs)
 	G.setShader()
 end
 
--- 绘制变速状态显示
-function game:draw_speed_state(rox, roy, gs)
-	local d = self.store
-
-	if not self.cn_font then
-		self.cn_font = G.newFont("_assets/all-desktop/fonts/msyhbd.ttc", math.floor(love.window.toPixels(20)))
-	end
-
-	G.push()
-	G.translate(rox, roy)
-	G.scale(gs, gs)
-
-	if not self.speed_state then
-		self.speed_state = G.newCanvas()
-
-		G.setCanvas(self.speed_state)
-	else
-		G.setCanvas(self.speed_state)
-		G.clear(0, 0, 0, 0)
-	end
-
-	local r = (math.sin(d.ts) + 1)
-	local g = (math.sin(d.ts + 2) + 1)
-	local b = (math.sin(d.ts + 4) + 1)
-
-	-- 180 / 255 = 0.7058823529411765
-	G.setColor(r, g, b, 0.7058823529411765)
-	G.setFont(self.cn_font)
-
-	-- local pos = vec_2(500, 500)
-	local pos = {
-		x = 120,
-		y = 120
-	}
-
-	-- local function draw_polygon(offset_x)
-	--     offset_x = offset_x or 0
-	--     local x = pos.x + offset_x
-	--     local y = pos.y
-	--     local w = 100
-	--     local h
-	--     if offset_x < 0 then
-	--         h = -100
-	--     else
-	--         h = 100
-	--     end
-	--     G.polygon("fill", x, y, x, y + w, x + h / 2, y + w / 2)
-	-- end
-	if d.speed_factor > 1 then
-		-- draw_polygon(1)
-		-- draw_polygon(75)
-		-- if d.speed_factor > 2 then
-		--     draw_polygon(150)
-		-- end
-		G.printf(string.format("%s 倍加速中...", d.speed_factor), pos.x, pos.y - 75, G.getWidth() - pos.x)
-	else
-		-- draw_polygon(-1)
-		-- draw_polygon(-75)
-		-- if d.speed_factor < 0.5 then
-		--     draw_polygon(-150)
-		-- end
-		G.printf(string.format("%s 倍减速中...", d.speed_factor), pos.x, pos.y - 75, G.getWidth() - pos.x)
-	end
-
-	-- G.printf(string.format("按 %s 还原", game_gui.key_shortcuts.normal), pos.x, pos.y - 35, G.getWidth() - pos.x)
-	-- 恢复默认
-	G.setColor(1, 1, 1, 1)
-	G.setCanvas()
-	G.pop()
-end
-
 function game:draw_game()
 	local d = self.store
 
@@ -1506,11 +1435,6 @@ function game:draw_game()
 	G.pop()
 
 	self.game_gui.window:draw_child(self.game_gui.layer_gui)
-
-	if d.speed_factor ~= 1 then
-		self:draw_speed_state(d.visible_coords.left, d.visible_coords.bottom, gs)
-		G.draw(self.speed_state)
-	end
 
 -- self:after_draw_debug(rox, roy, gs)
 end
