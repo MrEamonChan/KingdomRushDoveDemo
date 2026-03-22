@@ -13,6 +13,7 @@ local F = require("lib.klove.font_db")
 require("klove.kui")
 
 local i18n = require("i18n")
+-- v(1416 * 1.5, 658 * 1.5)
 local fallback_resolutions = {v(800, 600), v(1024, 768), v(1300, 768), v(1500, 800), v(1422, 800), v(1600, 1080), v(1365, 768), v(1280, 720), v(1920, 1080)}
 local screen_settings = {}
 
@@ -100,6 +101,9 @@ function screen_settings:init(w, h, params, done_callback)
 	else
 		resolutions = fallback_resolutions
 	end
+
+	-- DEBUG USE
+	-- table.merge(resolutions, fallback_resolutions, false)
 
 	table.sort(resolutions, function(r1, r2)
 		return r1.x > r2.x or r1.x == r2.x and r1.y > r2.y
@@ -593,17 +597,21 @@ function screen_settings:update_resolutions_list(fullscreen, highdpi)
 	local dt_w, dt_h = love.window.getDesktopDimensions()
 
 	for _, r in pairs(self.all_resolutions) do
-		local aspect = r.x / r.y
+		-- local aspect = r.x / r.y
 
-		if not fullscreen and (aspect > 1.7777777777777777 or aspect < 1.3333333333333333) then
+		-- 取消 aspect 限制
+		-- if not fullscreen and (aspect > 1.7777777777777777 or aspect < 1.3333333333333333) then
 		-- block empty
-		elseif r.x < 640 or r.y < 480 then
+		if r.x < 640 or r.y < 480 then
 		-- block empty
 		elseif not fullscreen and highdpi and dt_w < r.x then
 		-- block empty
 		else
 			table.insert(resolutions, r)
 		end
+
+	-- DEBUG
+	-- table.insert(resolutions, r)
 	end
 
 	local sl_res = self.sl_res

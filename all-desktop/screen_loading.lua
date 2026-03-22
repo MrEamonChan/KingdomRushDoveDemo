@@ -19,6 +19,7 @@ local screen = {}
 screen.required_textures_base = {"loading_common"}
 screen.required_textures = nil
 screen.required_sounds = {"common", "music_screen_map"}
+screen.ref_w = 1920
 screen.ref_h = 1080
 screen.ref_res = TEXTURE_SIZE_ALIAS.fullhd
 

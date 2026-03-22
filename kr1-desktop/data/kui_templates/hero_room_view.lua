@@ -20,6 +20,7 @@ local hero_room_view = {
 		x = 1920,
 		y = 1080
 	},
+	scale = v(1.35, 1.35),
 	children = {{
 		id = "back",
 		image_name = "heroroom_bg",
@@ -27,7 +28,6 @@ local hero_room_view = {
 		size = v(W, H),
 		anchor = v(W * 0.5, H * 0.5),
 		pos = v(960, 540),
-		scale = v(1.35, 1.35),
 		children = {{
 			text_key = "HERO ROOM",
 			class = "GGPanelHeader",

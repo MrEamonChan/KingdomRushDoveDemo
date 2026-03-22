@@ -605,10 +605,10 @@ function screen_map:init(w, h, done_callback)
 
 	wid("map_counters_stars").text = string.format("%s/%s", screen_map.total_stars, GS.max_stars)
 
-	local upgrades_view_scale = 1
+	local upgrades_view_scale = 1.2
 	local upgrades = UpgradesView:new(sw, sh)
 
-	upgrades.scale = vec_1(upgrades_view_scale)
+	upgrades.scale = v(upgrades_view_scale, upgrades_view_scale)
 	upgrades.pos = v((1 - upgrades_view_scale) * 0.5 * sw, (1 - upgrades_view_scale) * 0.5 * sh)
 
 	self.window:add_child(upgrades)
@@ -637,7 +637,8 @@ function screen_map:init(w, h, done_callback)
 	local tt = kui_db:get_table("hero_room_view", ctx)
 
 	hero_room = HeroRoomViewKR1:new_from_table(tt)
-	hero_room.pos = v((sw - hero_room.size.x) / 2, 0)
+	hero_room.pos = v((sw - hero_room.size.x * hero_room.scale.x) / 2, (sh - hero_room.size.y * hero_room.scale.y) / 2)
+
 	self.hero_room = hero_room
 
 	self.window:add_child(hero_room)
@@ -1128,6 +1129,11 @@ function MapView:initialize(screen_w, screen_h)
 
 	self.screen_w = screen_w
 	self.screen_h = screen_h
+
+	-- 尺寸适配，占满屏幕
+	local scale = math.max(self.screen_w / self.size.x, self.screen_h / self.size.y)
+	self.scale = v(scale, scale)
+	self.size = v(self.size.x * self.scale.x, self.size.y * self.scale.y)
 	self.stime = 0
 	self.max_scroll_speed = 350
 	self.scrolling_dir = 0
@@ -2609,14 +2615,6 @@ function LevelSelectView:initialize(sw, sh, level_num, stars, heroic, iron, slot
 		end
 	end
 
-	-- if screen_map.kr2_map and not is_extra_level(level_num, 2) then
-	-- 	level_num = level_num + GS.level2_from
-	-- elseif screen_map.kr3_map and not is_extra_level(level_num, 3) then
-	-- 	level_num = level_num + GS.level3_from
-	-- elseif screen_map.kr5_map and not is_extra_level(level_num, 5) then
-	-- 	level_num = level_num + GS.level5_from
-	-- end
-
 	local level_string = string.format("%02i", level_num)
 	local level_data = screen_map.level_data[level_num]
 
@@ -3304,7 +3302,15 @@ function UpgradesView:update_tooltip_position()
 	if not self.tip_panel.hidden then
 		local mx, my = screen_map.window:get_mouse_position()
 
-		self.tip_panel.pos = v(mx / screen_map.window.scale.x, my / screen_map.window.scale.y)
+		-- screen -> window local
+		local wx = mx / screen_map.window.scale.x
+		local wy = my / screen_map.window.scale.y
+
+		-- window local -> upgrades local（考虑 pos/anchor/scale）
+		local lx = (wx - self.pos.x + self.anchor.x * self.scale.x) / self.scale.x
+		local ly = (wy - self.pos.y + self.anchor.y * self.scale.y) / self.scale.y
+
+		self.tip_panel.pos = v(lx, ly)
 	end
 end
 
@@ -3522,10 +3528,6 @@ function UpgradeButtons:initialize(sprite, data_values, my_id, scale)
 	self.size.y = self.size.y * scale
 	self._scale = scale
 	self.my_id = my_id
-	-- self.disabled_image = KImageView:new("Disabled_" .. sprite, nil, scale)
-	-- self.disabled_image.size.x = self.disabled_image.size.x * scale
-	-- self.disabled_image.size.y = self.disabled_image.size.y * scale
-	-- self:add_child(self.disabled_image)
 	self.data_values = data_values
 	self.over_circle = KImageView:new("Upgrades_Icons_over", nil, scale)
 	self.over_circle.size.x = self.over_circle.size.x * scale
@@ -3604,7 +3606,6 @@ function UpgradeButtons:grey_me()
 
 	self:disable()
 
-	-- self.disabled_image.hidden = false
 	self.cost_panel.hidden = true
 	self.disabled_cost_panel.hidden = false
 	self.bought = false
@@ -3617,7 +3618,6 @@ function UpgradeButtons:ungrey_me()
 
 	self:enable()
 
-	-- self.disabled_image.hidden = true
 	self.cost_panel.hidden = false
 	self.disabled_cost_panel.hidden = true
 	self.bought = false
@@ -3663,7 +3663,6 @@ function UpgradeButtons:set_bought()
 	self.bought_circle.hidden = false
 	self.over_circle.hidden = true
 
-	-- self.disabled_image.hidden = true
 	self:enable()
 
 	return self.data_values.price

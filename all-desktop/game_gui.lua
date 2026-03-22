@@ -3108,7 +3108,7 @@ HudCountersView = class("HudCountersView", KView)
 
 function HudCountersView:initialize(level_mode)
 	HudCountersView.super.initialize(self, nil, "top_left")
-
+	self.propagate_on_click = true
 	self.level_mode = level_mode
 	self.heart_x = 70
 	self.heart_y = 50
@@ -3153,6 +3153,9 @@ function HudCountersView:initialize(level_mode)
 	self.lbl_lives = lbl_lives
 	self.lbl_gold = lbl_gold
 	self.lbl_wave = lbl_wave
+	self.lbl_lives.propagate_on_click = true
+	self.lbl_gold.propagate_on_click = true
+	self.lbl_wave.propagate_on_click = true
 	self.lbl_lives_value = -1
 	self.lbl_gold_value = -1
 	self.lbl_wave_value = -1

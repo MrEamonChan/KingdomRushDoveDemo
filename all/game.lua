@@ -123,7 +123,6 @@ function game:init(screen_w, screen_h, done_callback)
 	self.path_meshes = {} -- path_id -> { mesh = ..., total_len = ... }
 
 	local aspect = screen_w / screen_h
-
 	if aspect < MIN_SCREEN_ASPECT then
 		self.game_scale = screen_w / MIN_SCREEN_ASPECT / self.ref_h
 	else
@@ -131,17 +130,14 @@ function game:init(screen_w, screen_h, done_callback)
 	end
 
 	self.game_ref_origin = V.v((screen_w - self.ref_w * self.game_scale) * 0.5, (screen_h - self.ref_h * self.game_scale) * 0.5)
-
 	local visible_h = REF_H
 	local visible_w = math.ceil(self.screen_w * self.ref_h / self.screen_h)
 
 	visible_w = km.clamp(REF_H * 4 / 3, REF_H * 16 / 9, visible_w)
-
 	local v_left = (self.ref_w - visible_w) * 0.5
 	local v_right = self.ref_w + (visible_w - self.ref_w) * 0.5
 	local v_top = visible_h
 	local v_bottom = 0
-
 	self.store.visible_coords = {
 		top = v_top,
 		left = v_left,
@@ -157,6 +153,13 @@ function game:init(screen_w, screen_h, done_callback)
 	self.camera.wh = visible_h * self.game_scale
 	self.camera.wl = v_left * self.game_scale
 	self.camera.wr = v_right * self.game_scale
+
+	if aspect < 1920 / 1080 then
+		-- 我不知道为什么铁皮把 game.ref_w, game.ref_h 直接定义成 REF_W, REF_H! 总之这里相机要对 1920x1080 的设计分辨率进行适配，避免窄屏无法看到所有的地图
+		self.camera.wl = 0.5 * (self.game_scale * visible_w - self.camera.wh * 1920 / 1080)
+		self.camera.wr = self.camera.wl + self.camera.wh * 1920 / 1080
+	end
+
 	self.camera.wt = (visible_h - v_top) * self.game_scale
 	self.camera.wb = (visible_h - v_bottom) * self.game_scale
 	self.camera.zoom = 1

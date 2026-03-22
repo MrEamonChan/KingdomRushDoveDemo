@@ -2,31 +2,50 @@
 local V = require("lib.klua.vector")
 local SU = {}
 
-function SU.clamp_window_aspect(w, h, ref_w, ref_h, min_aspect, max_aspect)
-	min_aspect = min_aspect or MIN_SCREEN_ASPECT
-	max_aspect = max_aspect or MAX_SCREEN_ASPECT
-
+function SU.clamp_window_aspect(w, h, ref_w, ref_h)
 	local sw, sh, scale
 	local origin = V.v(0, 0)
 
-	if min_aspect > w / h and ref_w then
-		sw = ref_w
-		sh = ref_w / min_aspect
-		scale = w / ref_w
-		origin.y = (h - sh * scale) * 0.5
-	else
-		sw = ref_h * (w / h)
-		sh = ref_h
-		scale = h / ref_h
+	-- -- 屏幕比较方，按照宽来伸缩，上下有可能留下黑边
+	-- if MIN_SCREEN_ASPECT > w / h then
+	-- 	print("clamp to width")
+	-- 	sw = ref_w
+	-- 	sh = ref_w / MIN_SCREEN_ASPECT
+	-- 	scale = w / ref_w
+	-- 	origin.y = (h - sh * scale) * 0.5
+	-- elseif MAX_SCREEN_ASPECT < w / h then
+	-- 	print("clamp to height")
+	-- 	sh = ref_h
+	-- 	sw = ref_h * MAX_SCREEN_ASPECT
+	-- 	scale = h / ref_h
+	-- 	origin.x = (w - sw * scale) * 0.5
+	-- else
+	-- 	print("no clamp")
+	-- 	sw = ref_h * (w / h)
+	-- 	sh = ref_h
+	-- 	scale = h / ref_h
+	-- end
 
-		if max_aspect < sw / sh then
-			sw = sh * max_aspect
-			origin.x = (w - sw * scale) * 0.5
-		end
-	end
+	-- 不搞分别，统一按照高度来伸缩！
+	sw = ref_h * (w / h)
+	sh = ref_h
+	scale = h / ref_h
 
 	return sw, sh, scale, origin
 end
+
+-- function SU.clamp_window_aspect(w, h, ref_w, ref_h)
+--     local scale_x = w / ref_w
+--     local scale_y = h / ref_h
+--     local scale = math.max(scale_x, scale_y) -- 保证内容填满屏幕，允许溢出
+--     local sw = ref_w
+--     local sh = ref_h
+--     local origin = V.v(
+--         (w - ref_w * scale) * 0.5, -- 居中
+--         (h - ref_h * scale) * 0.5
+--     )
+--     return sw, sh, scale, origin
+-- end
 
 function SU.remove_references(screen, klass)
 	for k, v in pairs(screen) do
