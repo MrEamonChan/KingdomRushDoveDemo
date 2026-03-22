@@ -163,9 +163,9 @@ cd $LOVE_ANDROID
 
 mv "$OUTPUT_RAW" "$OUTPUT_FINAL"
 
-# # 如果传入了参数 quick，则使用内网 scp 传输
-# if [ "${1:-}" = "quick" ]; then
-#     scp -P 60001 "$OUTPUT_FINAL" dove@10.112.99.5:/srv/files/王国保卫战Dove版-安卓端/
-# else
-#     scp -P 60001 "$OUTPUT_FINAL" dove@krdovedownload6.crazyspotteddove.top:/srv/files/王国保卫战Dove版-安卓端/
-# fi
+# 如果传入了参数 quick，则使用内网 scp 传输
+if [ "${1:-}" = "quick" ]; then
+    scp -P 60001 "$OUTPUT_FINAL" dove@10.112.99.5:/srv/files/王国保卫战Dove版-安卓端/
+else
+    scp -P 60001 "$OUTPUT_FINAL" dove@krdovedownload6.crazyspotteddove.top:/srv/files/王国保卫战Dove版-安卓端/
+fi

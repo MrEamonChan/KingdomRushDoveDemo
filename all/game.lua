@@ -156,7 +156,7 @@ function game:init(screen_w, screen_h, done_callback)
 
 	if aspect < 1920 / 1080 then
 		-- 我不知道为什么铁皮把 game.ref_w, game.ref_h 直接定义成 REF_W, REF_H! 总之这里相机要对 1920x1080 的设计分辨率进行适配，避免窄屏无法看到所有的地图
-		self.camera.wl = 0.5 * (self.game_scale * visible_w - self.camera.wh * 1920 / 1080)
+		self.camera.wl = 0.5 * (self.game_scale * visible_w - self.camera.wh * 1920 / 1080) + self.camera.wl
 		self.camera.wr = self.camera.wl + self.camera.wh * 1920 / 1080
 	end
 
@@ -165,6 +165,13 @@ function game:init(screen_w, screen_h, done_callback)
 	self.camera.zoom = 1
 	self.camera.min_zoom = aspect > 1.7777777777777777 and math.min(screen_w, MAX_SCREEN_ASPECT * screen_h) / (visible_w * self.game_scale) or 1
 	self.camera.max_zoom = 2
+
+	-- 打印所有 window, camera 参数
+	-- print( "screen_w:", screen_w, "screen_h:", screen_h, "game_scale:", self.game_scale)
+	-- print( "camera.ww:", self.camera.ww, "camera.wh:", self.camera.wh, "camera.wl:", self.camera.wl, "camera.wr:", self.camera.wr, "camera.wt:", self.camera.wt, "camera.wb:", self.camera.wb, "camera.zoom:", self.camera.zoom, "camera.min_zoom:", self.camera.min_zoom, "camera.max_zoom:", self.camera.max_zoom)
+	-- print( "game_ref_origin:", self.game_ref_origin.x, self.game_ref_origin.y)
+	-- print( "visible_coords:", self.store.visible_coords.left, self.store.visible_coords.top, self.store.visible_coords.right, self.store.visible_coords.bottom)
+
 	function self.camera:clamp()
 		self.zoom = km.clamp(self.min_zoom, self.max_zoom, self.zoom)
 		self.x = km.clamp(self.wl + self.ww * self.min_zoom / (2 * self.zoom), self.wr - self.ww * self.min_zoom / (2 * self.zoom), self.x)
