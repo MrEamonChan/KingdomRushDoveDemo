@@ -33640,6 +33640,7 @@ function scripts.decal_hero_builder_ultimate_projectile.update(this, store)
 		queue_insert(store, aura)
 	end
 
+	SU.insert_sprite(store, this.bullet.arrive_decal, this.pos)
 	queue_remove(store, this)
 end
 
