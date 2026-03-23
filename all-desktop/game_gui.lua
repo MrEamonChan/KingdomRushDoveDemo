@@ -44,6 +44,8 @@ local EU = require("endless_utils")
 local EL = require("kr1.data.endless")
 local perf = require("dove_modules.perf.perf")
 local is_android = love.system.getOS() == "Android"
+-- DEBUG USE
+-- is_android = true
 local function ISW(...)
 	return i18n.sw(i18n, ...)
 end
@@ -380,7 +382,9 @@ function game_gui:init(w, h, game)
 	rallyflag.hidden = true
 	rallyflag.anchor = v(rallyflag.size.x * 0.5, rallyflag.size.y * 0.5)
 
-	local hud_bottom = HudBottomView:new(sw, sh)
+	local hud_bottom_scale = is_android and 1.3 or 1
+	local hud_bottom = HudBottomView:new(sw, sh, hud_bottom_scale)
+
 	local hud_counters = HudCountersView:new(self.game.simulation.store.level_mode)
 
 	hud_counters.anchor = v(0, 0)
@@ -399,7 +403,7 @@ function game_gui:init(w, h, game)
 
 	hud_pause.anchor = v(hud_pause.size.x, 0)
 	hud_pause.pos = v(sw + -37, -21)
-	hud_pause.scale = v(0.9, 0.9)
+	hud_pause.scale = is_android and v(1.3, 1.3) or v(0.9, 0.9)
 
 	local pauseview = PauseView:new()
 
@@ -2999,8 +3003,9 @@ end
 
 HudBottomView = class("HudBottomView", KVirtualView)
 
-function HudBottomView:initialize(sw, sh)
+function HudBottomView:initialize(sw, sh, ui_scale)
 	sh = sh + 1
+	ui_scale = ui_scale or 1
 
 	HudBottomView.super.initialize(self)
 
@@ -3010,8 +3015,9 @@ function HudBottomView:initialize(sw, sh)
 
 	bg_bar.anchor = v(0, bg_bar.size.y)
 	bg_bar.pos = v(0, sh)
+	bg_bar.scale = v(ui_scale, ui_scale)
 	-- 拉伸bg_bar以适应屏幕宽度
-	if bg_bar.size.x < sw then
+	if bg_bar.size.x * ui_scale < sw then
 		bg_bar.scale.x = sw / bg_bar.size.x
 	end
 
@@ -3019,8 +3025,9 @@ function HudBottomView:initialize(sw, sh)
 
 	local powers = GG9View:new("bg_bottom_left", V.v(247, 36), V.r(140, 36, 10, 1))
 
-	powers.anchor = v(0, powers.size.y)
+	powers.anchor = v(0, powers.size.y * ui_scale)
 	powers.pos = v(105, sh)
+	powers.scale = v(ui_scale, ui_scale)
 	self.powers = powers
 
 	self:add_child(powers)
@@ -3056,12 +3063,13 @@ function HudBottomView:initialize(sw, sh)
 		powers:add_child(pn)
 	end
 
-	local x_center = math.floor((sw - powers.size.x - powers.pos.x) * 0.5) + powers.pos.x + powers.size.x
+	local x_center = math.floor((sw - powers.size.x * ui_scale - powers.pos.x) * 0.5) + powers.pos.x + powers.size.x * ui_scale
 
 	local bg_center = KImageView:new("bg_bottom_center")
 
 	bg_center.anchor = v(bg_center.size.x * 0.5, bg_center.size.y)
 	bg_center.pos = v(x_center, sh)
+	bg_center.scale = v(ui_scale, ui_scale)
 	self.bg_center = bg_center
 
 	self:add_child(bg_center)
@@ -3071,6 +3079,7 @@ function HudBottomView:initialize(sw, sh)
 	infobar.anchor = v(math.floor(infobar.size.x * 0.5), infobar.size.y)
 	infobar.pos = v(x_center, sh + infobar.size.y)
 	infobar.pos_hidden = V.vclone(infobar.pos)
+	infobar.scale = v(ui_scale, ui_scale)
 	infobar.hidden = true
 	self.infobar = infobar
 
@@ -3083,6 +3092,7 @@ function HudBottomView:initialize(sw, sh)
 	herobar.propagate_on_down = true
 	herobar.propagate_on_up = true
 	herobar.pos = v(0, sh)
+	herobar.scale = v(ui_scale, ui_scale)
 	self.herobar = herobar
 
 	self:add_child(herobar)
