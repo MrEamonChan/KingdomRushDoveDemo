@@ -13580,7 +13580,6 @@ tt.render.sprites[1].name = "in"
 tt.render.sprites[1].angles = {}
 tt.render.sprites[1].angles.walk = {"walk"}
 tt.render.sprites[1].anchor = vec_2(0.5, 0.5)
-tt.render.sprites[1].scale = vec_1(1080 / 768)
 tt.soldier.melee_slot_offset = vec_2(3, 0)
 tt.tween.disabled = true
 tt.unit.hit_offset = vec_2(0, 5)
@@ -13887,12 +13886,11 @@ tt.sound_events.insert = "HeroWitchVeggiefyIn"
 tt.shoot_sound = nil
 tt.hit_sound = nil
 --#endregion
+
 --#region aura_hero_witch_path_aoe
 tt = RT("aura_hero_witch_path_aoe", "aura")
 b = balance.heroes.hero_witch.skill_path_aoe
-
 AC(tt, "render", "tween")
-
 tt.aura.mod = "mod_hero_witch_path_aoe"
 tt.aura.duration = nil
 tt.aura.radius = 75
@@ -13902,17 +13900,18 @@ tt.aura.cycle_time = fts(5)
 tt.render.sprites[1].name = "hero_witch_skill_4_potion_decal_1"
 tt.render.sprites[1].animated = false
 tt.render.sprites[1].z = Z_DECALS
-tt.render.sprites[1].scale = vec_1(1080 / 768)
+-- tt.render.sprites[1].scale = vec_1(1080 / 768)
 tt.render.sprites[2] = CC("sprite")
 tt.render.sprites[2].name = "hero_witch_skill_4_potion_decal_2"
 tt.render.sprites[2].animated = false
 tt.render.sprites[2].z = Z_DECALS
-tt.render.sprites[2].scale = vec_1(1080 / 768)
+-- tt.render.sprites[2].scale = vec_1(1080 / 768)
 tt.main_script.insert = scripts.aura_apply_mod.insert
 tt.main_script.update = scripts.aura_hero_witch_path_aoe.update
 tt.start_fx = "fx_hero_witch_skill_path_aoe_in"
 tt.start_wait_time = fts(14)
 tt.tween.disabled = true
+-- level_up fn 中被动态定义
 tt.tween.props[1].name = "alpha"
 tt.tween.props[1].sprite_id = 1
 tt.tween.props[1].keys = {}

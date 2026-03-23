@@ -2258,7 +2258,7 @@ function sys.tween:on_update(dt, ts, store)
 					-- end
 					tween_prop.interp_fn(ka, kb, time, s, tween_prop.name)
 
-					finished = finished and tween_prop.loop or ka == kb
+					finished = finished and (tween_prop.loop or ka == kb)
 				end
 			end
 

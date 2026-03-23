@@ -166,14 +166,14 @@ E:add_comps(tt, "editor")
 tt.render.sprites[1].animated = false
 tt.pos = v(REF_W * 0.5, REF_H * 0.5)
 tt.editor.props = {{"render.sprites[1].name", PT_STRING}, {"render.sprites[1].z", PT_NUMBER, 1}, {"render.sprites[1].sort_y", PT_NUMBER, 1}}
+
 tt = E:register_t("decal_defend_point", "decal_tween")
-
 E:add_comps(tt, "main_script", "editor")
-
 tt.main_script.insert = scripts.decal_defend_point.insert
 tt.tween.remove = false
 tt.tween.props[1].keys = {{2, 255}, {5, 0}}
 tt.tween.props[1].sprite_id = 2
+tt.tween.run_once = true
 tt.render.sprites[1].name = "defendFlag_0069"
 tt.render.sprites[1].animated = false
 tt.render.sprites[1].z = Z_DECALS
@@ -185,9 +185,7 @@ tt.editor.exit_id = 1
 tt.editor.props = {{"editor.exit_id", PT_NUMBER}}
 
 local tt = E:register_t("decal_defense_flag", "decal")
-
 E:add_comps(tt, "editor")
-
 tt.editor.tag = 0
 tt.editor.props = {{"editor.tag", PT_NUMBER}}
 tt.render.sprites[1].name = "DefenseFlag"
@@ -195,7 +193,6 @@ tt.render.sprites[1].animated = false
 tt.render.sprites[1].anchor = v(0.5, 0.17)
 
 local tt = E:register_t("decal_defense_flag_water", "decal")
-
 tt.render.sprites[1].name = "decal_defense_flag_water"
 tt.render.sprites[1].anchor = v(0.5, 0.12962962962962962)
 
