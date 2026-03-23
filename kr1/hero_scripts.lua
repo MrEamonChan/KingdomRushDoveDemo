@@ -179,10 +179,6 @@ local function valid_twister_node_nearby(pos)
 	return P:valid_node_nearby(pos.x, pos.y, nil, NF_TWISTER) and GR:cell_is_only(pos.x, pos.y, bor(TERRAIN_LAND, TERRAIN_ICE))
 end
 
-local function valid_rally_node_nearby(pos)
-	return GR:cell_is_only(pos.x, pos.y, bor(TERRAIN_LAND, TERRAIN_ICE)) and P:valid_node_nearby(pos.x, pos.y, nil, NF_RALLY)
-end
-
 -- 杰拉尔德
 scripts.hero_gerald = {
 	level_up = function(this, store)
@@ -12264,7 +12260,7 @@ function scripts.hero_veznan.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, this.ranged.attacks[1].max_range)
 
-				if target and target.pos and valid_rally_node_nearby(target.pos) then
+				if target and target.pos and U.has_valid_rally_node_nearby(target.pos) then
 					U.y_animation_play(this, "levelup", nil, store.tick_ts, 1)
 					S:queue(this.sound_events.change_rally_point)
 
@@ -12859,7 +12855,7 @@ function scripts.hero_elves_denas.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, this.ranged.attacks[1].max_range)
 
-				if target and target.pos and valid_rally_node_nearby(target.pos) then
+				if target and target.pos and U.has_valid_rally_node_nearby(target.pos) then
 					U.y_animation_play(this, "levelup", nil, store.tick_ts, 1)
 					S:queue(this.sound_events.change_rally_point)
 
@@ -16527,7 +16523,7 @@ function scripts.hero_bruce.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, 150)
 
-				if target and target.pos and valid_rally_node_nearby(target.pos) then
+				if target and target.pos and U.has_valid_rally_node_nearby(target.pos) then
 					S:queue(this.sound_events.change_rally_point)
 
 					local e = E:create_entity(this.hero.skills.ultimate.controller_name)
@@ -18219,7 +18215,7 @@ function scripts.hero_hunter.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local enemy = find_target_at_critical_moment(this, store, this.ranged.attacks[1].max_range)
 
-				if enemy and enemy.pos and valid_rally_node_nearby(enemy.pos) then
+				if enemy and enemy.pos and U.has_valid_rally_node_nearby(enemy.pos) then
 					shooting_state = false
 
 					U.y_animation_play(this, "respawn", nil, store.tick_ts, 1)
@@ -19635,7 +19631,7 @@ function scripts.hero_space_elf.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, this.ranged.attacks[1].max_range, false, false, bor(F_BOSS, F_FLYING))
 
-				if target and valid_rally_node_nearby(target.pos) then
+				if target and U.has_valid_rally_node_nearby(target.pos) then
 					U.y_animation_play(this, "levelup", nil, store.tick_ts, 1)
 					S:queue(this.sound_events.change_rally_point)
 
@@ -20773,7 +20769,7 @@ function scripts.hero_raelyn.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, 140, false, true, F_FLYING)
 
-				if target and valid_rally_node_nearby(target.pos) then
+				if target and U.has_valid_rally_node_nearby(target.pos) then
 					local start_ts = store.tick_ts
 
 					U.y_animation_play(this, "levelup", nil, store.tick_ts, 1)
@@ -21686,7 +21682,7 @@ function scripts.hero_venom.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = find_target_at_critical_moment(this, store, 160, false, true, F_FLYING)
 
-				if target and valid_rally_node_nearby(target.pos) then
+				if target and U.has_valid_rally_node_nearby(target.pos) then
 					play_level_up_animation()
 					S:queue(this.sound_events.change_rally_point)
 
@@ -22511,7 +22507,7 @@ function scripts.hero_dragon_gem.update(this, store)
 		if ready_to_use_skill(this.ultimate, store) then
 			local target = find_target_at_critical_moment(this, store, 160, true, false, F_FLYING)
 
-			if target and valid_rally_node_nearby(target.pos) then
+			if target and U.has_valid_rally_node_nearby(target.pos) then
 				S:queue(this.sound_events.ultimate)
 
 				local e = E:create_entity(this.hero.skills.ultimate.controller_name)
@@ -24109,7 +24105,7 @@ function scripts.hero_witch.update(this, store)
 			if ready_to_use_skill(this.ultimate, store) then
 				local target = U.find_teleport_moment(store, this.pos, this.ranged.attacks[1].max_range, MANY_ENEMY_COUNT)
 
-				if target and valid_rally_node_nearby(target.pos) then
+				if target and U.has_valid_rally_node_nearby(target.pos) then
 					apply_ultimate(this, store, target, "levelup")
 				else
 					this.ultimate.ts = this.ultimate.ts + 1
@@ -25309,7 +25305,7 @@ function scripts.hero_dragon_bone.update(this, store)
 		if ready_to_use_skill(a, store) then
 			local target = U.detect_foremost_enemy_in_range_filter_off(this.pos, basic_ranged.max_range, F_BLOCK, F_NONE)
 
-			if target and valid_rally_node_nearby(target.pos) then
+			if target and U.has_valid_rally_node_nearby(target.pos) then
 				apply_ultimate(this, store, target, "levelup")
 			else
 				a.ts = a.ts + 1
@@ -26573,7 +26569,7 @@ function scripts.hero_lumenir.update(this, store)
 		if ready_to_use_skill(a, store) then
 			local target = U.detect_foremost_enemy_in_range_filter_off(this.pos, basic_ranged.max_range, F_RANGED, F_NONE)
 
-			if target and valid_rally_node_nearby(target.pos) then
+			if target and U.has_valid_rally_node_nearby(target.pos) then
 				apply_ultimate(this, store, target, "levelup")
 			else
 				a.ts = a.ts + 1
@@ -28034,7 +28030,7 @@ function scripts.hero_wukong.update(this, store)
 			if ready_to_use_skill(a, store) then
 				local target = find_target_at_critical_moment(this, store, hair_clones_attack.max_range, false, false)
 
-				if target and valid_rally_node_nearby(target.pos) then
+				if target and U.has_valid_rally_node_nearby(target.pos) then
 					apply_ultimate(this, store, target, "levelup")
 					U.heal(this, h.hp_max)
 

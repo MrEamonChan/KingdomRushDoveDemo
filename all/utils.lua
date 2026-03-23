@@ -2706,7 +2706,7 @@ function U.find_modifiers_with_flags(this, bans)
 	return result
 end
 
-function U.valid_rally_node_nearby(pos)
+function U.has_valid_rally_node_nearby(pos)
 	return GR:cell_is_only(pos.x, pos.y, bor(TERRAIN_LAND, TERRAIN_ICE)) and P:valid_node_nearby(pos.x, pos.y, nil, NF_RALLY)
 end
 

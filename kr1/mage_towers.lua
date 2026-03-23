@@ -2004,11 +2004,10 @@ tt.particles_name_A = "ps_tower_necromancer_rider_trail_A"
 tt.particles_name_B = "ps_tower_necromancer_rider_trail_B"
 tt.sound_events.insert = "TowerNecromancerDeathRider"
 --#endregion
+
 --#region mod_tower_necromancer_curse
 tt = RT("mod_tower_necromancer_curse", "modifier")
-
 AC(tt, "render")
-
 tt.modifier.duration = b.curse.duration
 tt.main_script.insert = scripts.mod_tower_necromancer_curse.insert
 tt.main_script.remove = scripts.mod_tower_necromancer_curse.remove

@@ -85,10 +85,6 @@ local function apply_precision(b)
 	end
 end
 
-local function valid_rally_node_nearby(pos)
-	return GR:cell_is_only(pos.x, pos.y, bor(TERRAIN_LAND, TERRAIN_ICE)) and P:valid_node_nearby(pos.x, pos.y, nil, NF_RALLY)
-end
-
 -- 矮人射手
 scripts.tower_archer_dwarf = {
 	get_info = function(this)
@@ -6899,7 +6895,7 @@ function scripts.tower_demon_pit.update(this, store)
 						y_wait(store, aa.shoot_time)
 
 						local enemy = U.detect_foremost_enemy_in_range_filter_on(tpos(this), a.range * 1.2, aa.vis_flags, aa.vis_bans, function(e, o)
-							return valid_rally_node_nearby(e.pos)
+							return U.has_valid_rally_node_nearby(e.pos)
 						end)
 						local enemy_pos = enemy and U.calculate_enemy_ffe_pos(enemy, aa.node_prediction) or nil
 
@@ -6932,7 +6928,7 @@ function scripts.tower_demon_pit.update(this, store)
 						y_wait(store, aa.shoot_time)
 
 						local enemy = U.detect_foremost_enemy_in_range_filter_on(tpos(this), a.range * 1.2, aa.vis_flags, aa.vis_bans, function(e, o)
-							return valid_rally_node_nearby(e.pos)
+							return U.has_valid_rally_node_nearby(e.pos)
 						end)
 						local enemy_pos = enemy and U.calculate_enemy_ffe_pos(enemy, aa.node_prediction) or nil
 
@@ -7077,7 +7073,7 @@ function scripts.soldier_tower_demon_pit.update(this, store)
 	end
 
 	while true do
-		if this.health.dead or (this.reinforcement.duration and store.tick_ts - this.reinforcement.ts > this.reinforcement.duration) or ni < -20 or (not U.valid_rally_node_nearby(this.pos)) then
+		if this.health.dead or (this.reinforcement.duration and store.tick_ts - this.reinforcement.ts > this.reinforcement.duration) or ni < -20 or (not U.U.valid_rally_node_nearby(this.pos)) then
 			if this.health.hp > 0 then
 				this.reinforcement.hp_before_timeout = this.health.hp
 			end
@@ -8081,24 +8077,26 @@ function scripts.mod_tower_necromancer_curse.remove(this, store)
 		if can_spawn then
 			target.death_spawns = nil
 
-			local s = E:create_entity(target._necromancer_entity_name)
+			if U.has_valid_rally_node_nearby(target.pos) then
+				local s = E:create_entity(target._necromancer_entity_name)
 
-			s.pos = vclone(target.pos)
-			s.source = target
+				s.pos = vclone(target.pos)
+				s.source = target
 
-			if s.render and s.render.sprites[1] and target.render and target.render.sprites[1] then
-				s.render.sprites[1].flip_x = target.render.sprites[1].flip_x
+				if s.render and s.render.sprites[1] and target.render and target.render.sprites[1] then
+					s.render.sprites[1].flip_x = target.render.sprites[1].flip_x
+				end
+
+				if s.nav_path then
+					s.nav_path.pi = this.nav_path.pi
+					s.nav_path.spi = this.nav_path.spi
+					s.nav_path.ni = this.nav_path.ni + 2
+				end
+
+				s.unit.damage_factor = s.unit.damage_factor * m.damage_factor
+
+				queue_insert(store, s)
 			end
-
-			if s.nav_path then
-				s.nav_path.pi = this.nav_path.pi
-				s.nav_path.spi = this.nav_path.spi
-				s.nav_path.ni = this.nav_path.ni + 2
-			end
-
-			s.unit.damage_factor = s.unit.damage_factor * m.damage_factor
-
-			queue_insert(store, s)
 
 			local bullet = E:create_entity("bullet_tower_necromancer_deathspawn")
 			local b = bullet.bullet
