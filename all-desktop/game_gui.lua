@@ -3025,7 +3025,7 @@ function HudBottomView:initialize(sw, sh, ui_scale)
 
 	local powers = GG9View:new("bg_bottom_left", V.v(247, 36), V.r(140, 36, 10, 1))
 
-	powers.anchor = v(0, powers.size.y * ui_scale)
+	powers.anchor = v(0, powers.size.y)
 	powers.pos = v(105, sh)
 	powers.scale = v(ui_scale, ui_scale)
 	self.powers = powers
@@ -3116,7 +3116,8 @@ function HudBottomView:show()
 end
 
 function HudBottomView:update_bars_pos()
-	local x_center = math.floor((game_gui.sw - self.powers.size.x - self.powers.pos.x) * 0.5) + self.powers.pos.x + self.powers.size.x
+	local powers_scaled_width = self.powers.size.x * self.powers.scale.x
+	local x_center = math.floor((game_gui.sw - powers_scaled_width - self.powers.pos.x) * 0.5) + self.powers.pos.x + powers_scaled_width
 	self.infobar.pos.x = x_center - 12
 
 	self.bg_center.pos.x = x_center
@@ -3130,7 +3131,7 @@ function HudBottomView:add_hero(hero_entity)
 	self.herobar:add_child(hero)
 
 	if #self.herobar.children > 1 then
-		self.powers.pos.x = 175
+		self.powers.pos.x = 175 * self.powers.scale.x
 
 		local last = self.herobar.children[1]
 
@@ -3155,7 +3156,7 @@ function HudBottomView:add_hero(hero_entity)
 		self.herobar:add_child(separator)
 	else
 		hero.pos = v(15, 0)
-		self.powers.pos.x = 105
+		self.powers.pos.x = 105 * self.powers.scale.x
 	end
 
 	game_gui.hud_bottom:update_bars_pos()
