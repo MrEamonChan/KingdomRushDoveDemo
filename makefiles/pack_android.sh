@@ -106,9 +106,12 @@ mapfile -d '' dds_files < <(find "$DDS_ASSETS_DIR" -type f -name "*.dds" -print0
 dds_count=${#dds_files[@]}
 
 if [ "$rebuild_love" -eq 1 ]; then
+    # 生成 Android 专用渲染排序库，避免与 Linux 同名库混用
+    bash makefiles/build_render_sort_android.sh
+
     echo "Creating base archive (excluding PNGs) -> $ARCHIVE_DIR"
     # 先打包项目中除 png 和 .versions 的文件（避免把 archive 自己打进去）
-    zip -r "$ARCHIVE_DIR" . -x "*.dds" -x ".versions/*" -x "tmp/*" -x "*.exe" -x ".git/*" -x "KingdomRushDoveUpdater" -x "client.log" -x "client" -x "https.dll" -x "https.so" -x "run.bat" -x "launch.bat" -x "存档位置.lnk" -x "dlfmt" -x ".dlfmt_cache.json" -x "update.lua" -x ".gdb_history" -x "aidoc/*" -x ".plugins/*" -x "mods/local/*" -q
+    zip -r "$ARCHIVE_DIR" . -x "*.dds" -x ".versions/*" -x "tmp/*" -x "*.exe" -x ".git/*" -x "KingdomRushDoveUpdater" -x "client.log" -x "client" -x "https.dll" -x "https.so" -x "run.bat" -x "launch.bat" -x "存档位置.lnk" -x "dlfmt" -x ".dlfmt_cache.json" -x "update.lua" -x ".gdb_history" -x "aidoc/*" -x ".plugins/*" -x "mods/local/*" -x "all/librender_sort.so" -x "all/librender_sort.dll" -q
 
     # 分析图像大小，生成缩放映射
     echo "Analyzing image sizes from Lua definitions..."
@@ -141,16 +144,16 @@ if [ "$rebuild_love" -eq 1 ]; then
                         *) return 0 ;;
                     esac
                 fi
-                
+
                 # 从 resize_map 读取
                 local result=$(grep "^${filename}.dds=" "$RESIZE_MAP_FILE" 2>/dev/null | cut -d= -f2)
                 [ "$result" = "1" ]
             }
-            
+
             src="$1"
             rel="${src#./}"
             base_name="${rel%.dds}"
-            
+
             # 决定输出格式：优先 ASTC 4x4，其次 PNG
             if [ "$HAVE_ASTCENC" -eq 1 ]; then
                 output_ext="astc"
@@ -159,9 +162,9 @@ if [ "$rebuild_love" -eq 1 ]; then
                 output_ext="png"
                 cache_file="$CACHE_DIR/${base_name}.png"
             fi
-            
+
             dest="$tempdir/${base_name}.${output_ext}"
-            
+
             mkdir -p "$(dirname "$dest")"
             mkdir -p "$(dirname "$cache_file")"
 
@@ -172,14 +175,14 @@ if [ "$rebuild_love" -eq 1 ]; then
                 if [ "$output_ext" = "astc" ]; then
                     # DDS -> PNG（临时中间格式）-> ASTC 6x6 sRGB
                     temp_png="/tmp/temp_${RANDOM}.png"
-                    
+
                     # 根据 resize_map 判断是否缩放
                     if should_resize "$base_name"; then
                         "$IM_CMD" "$src" -resize 50% -strip "png:$temp_png" 2>/dev/null
                     else
                         "$IM_CMD" "$src" -strip "png:$temp_png" 2>/dev/null
                     fi
-                    
+
                     # astcenc -cs <input.png> <output.astc> <blocksize> <quality>
                     # -cs: sRGB LDR 压缩, 6x6: 块大小, -fast: 快速压缩质量, -silent: 无日志
                     if astcenc -cs "$temp_png" "$cache_file" 6x6 -fast -silent 2>/dev/null; then
@@ -203,7 +206,7 @@ if [ "$rebuild_love" -eq 1 ]; then
                 cp -f "$cache_file" "$dest"
             fi
         ' _ {}
-        
+
         # 处理 PNG 文件（直接转 ASTC，不缩放）
         if [ "$HAVE_ASTCENC" -eq 1 ]; then
             png_files_count=$(find "$DDS_ASSETS_DIR" -type f -name "*.png" 2>/dev/null | wc -l || echo 0)
@@ -213,13 +216,13 @@ if [ "$rebuild_love" -eq 1 ]; then
                     src="$1"
                     rel="${src#./}"
                     base_name="${rel%.png}"
-                    
+
                     cache_file="$CACHE_DIR/${base_name}.astc"
                     dest="$tempdir/${base_name}.astc"
-                    
+
                     mkdir -p "$(dirname "$dest")"
                     mkdir -p "$(dirname "$cache_file")"
-                    
+
                     if [ -f "$cache_file" ] && [ "$cache_file" -nt "$src" ]; then
                         cp -f "$cache_file" "$dest"
                     else
@@ -283,6 +286,11 @@ cd $LOVE_ANDROID
 ./gradlew assembleEmbedNoRecordRelease
 
 mv "$OUTPUT_RAW" "$OUTPUT_FINAL"
+
+if [ "${1:-}" = "no-upload" ]; then
+    echo "Build complete, skipping upload as per argument."
+    exit 0
+fi
 
 # 如果传入了参数 quick，则使用内网 scp 传输
 if [ "${1:-}" = "quick" ]; then

@@ -51,9 +51,10 @@ KingdomRushDove/
 │   ├── script_utils.lua      # 脚本工具（SU）
 │   ├── level_utils.lua       # 关卡工具（LU）
 │   ├── i18n.lua              # 国际化
-│   ├── render_sort.c         # 渲染排序 C 源码（FFI 编译成 .so/.dll）
-│   ├── librender_sort.so     # Linux 渲染排序库
-│   └── librender_sort.dll    # Windows 渲染排序库
+│   ├── render_sort.c                # 渲染排序 C 源码（FFI 编译成平台 .so/.dll）
+│   ├── librender_sort.so            # Linux 渲染排序库
+│   ├── librender_sort_android.so    # Android 渲染排序库
+│   └── librender_sort.dll           # Windows 渲染排序库
 ├── all-desktop/              # 桌面端专用覆盖代码
 │   ├── game_gui.lua          # 桌面版游戏内 HUD
 │   ├── screen_map.lua        # 地图选关屏幕
@@ -229,7 +230,7 @@ Z_GUI_DECALS=2000, Z_OBJECTS=3000, Z_BULLET_PARTICLES=3200,
 Z_EFFECTS=3300, Z_BULLETS=3400, Z_SCREEN_FIXED=3900, Z_GUI=4000
 ```
 
-非 Android 平台使用 FFI C 归并排序（`librender_sort.so/.dll`）。
+Windows/Linux/Android 分别使用 `librender_sort.dll`、`librender_sort.so`、`librender_sort_android.so`。
 
 ### sys.last_hook — 分类索引维护
 
