@@ -6444,10 +6444,10 @@ local towers = {
 				cooldown = {8, 8},
 				range = {180, 200},
 				damage_levels = {{
-					max = 32,
+					max = 35,
 					min = 26
 				}, {
-					max = 65,
+					max = 70,
 					min = 52
 				}},
 				damage_type = DAMAGE_TRUE,
@@ -6464,16 +6464,6 @@ local towers = {
 				nodes_offset_max = {-20, -20},
 				nodes_offset_min = {-24, -24}
 			}
-		},
-		-- not in use
-		thunder = {
-			price = {150, 200}
-		},
-		hat = {
-			price = {150, 200}
-		},
-		teleport = {
-			price = {150, 200}
 		}
 	},
 	dragons = {
@@ -6499,9 +6489,9 @@ local towers = {
 			damage_max_area = {30, 60, 100}
 		},
 		massive_fear = {
-			price = {200, 300},
-			cooldown = {17.6, 17.6},
-			stun_duration = {2.5, 4},
+			price = {200, 225},
+			cooldown = {15, 12},
+			stun_duration = {3, 4},
 			range_factor = 180 / 275,
 			min_targets = 3,
 			max_targets = 15
