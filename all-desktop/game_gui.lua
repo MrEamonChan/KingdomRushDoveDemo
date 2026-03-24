@@ -45,7 +45,7 @@ local EL = require("kr1.data.endless")
 local perf = require("dove_modules.perf.perf")
 local is_android = love.system.getOS() == "Android"
 -- DEBUG USE
--- is_android = true
+is_android = true
 local function ISW(...)
 	return i18n.sw(i18n, ...)
 end
@@ -317,6 +317,16 @@ function game_gui:init(w, h, game)
 	GGLabel.static.font_scale = scale
 	GGLabel.static.ref_h = self.ref_h
 
+	local hud_scale = 1
+	if is_android then
+		-- 这里要通过长宽比来判断，因为有些安卓设备虽然是移动平台但屏幕比较大，适合用桌面版的 HUD 布局和大小
+		local aspect_ratio = self.sw / self.sh
+		if aspect_ratio > GUI_REF_W / GUI_REF_H then
+			-- 屏幕更宽的设备使用放大 HUD，屏幕更窄的设备使用桌面的 HUD
+			hud_scale = 1.3
+		end
+	end
+
 	local pickview = PickView:new(sw, sh)
 
 	pickview.pos = v(0, 0)
@@ -382,8 +392,7 @@ function game_gui:init(w, h, game)
 	rallyflag.hidden = true
 	rallyflag.anchor = v(rallyflag.size.x * 0.5, rallyflag.size.y * 0.5)
 
-	local hud_bottom_scale = is_android and 1.3 or 1
-	local hud_bottom = HudBottomView:new(sw, sh, hud_bottom_scale)
+	local hud_bottom = HudBottomView:new(sw, sh, hud_scale)
 
 	local hud_counters = HudCountersView:new(self.game.simulation.store.level_mode)
 
@@ -403,7 +412,7 @@ function game_gui:init(w, h, game)
 
 	hud_pause.anchor = v(hud_pause.size.x, 0)
 	hud_pause.pos = v(sw + -37, -21)
-	hud_pause.scale = is_android and v(1.3, 1.3) or v(0.9, 0.9)
+	hud_pause.scale = v(0.9 * hud_scale, 0.9 * hud_scale)
 
 	local pauseview = PauseView:new()
 
@@ -2757,6 +2766,7 @@ function InfoBar:initialize()
 		sv.propagate_on_down = true
 		sv.propagate_on_click = true
 		sv.scale.x = 0.8
+		sv.scale.y = 0.8
 		self.stats_views[vn] = sv
 
 		local off_x = 0
@@ -2798,9 +2808,11 @@ function InfoBar:initialize()
 	end
 
 	v_portrait.scale.x = 0.8
+	v_portrait.scale.y = 0.8
 	portrait_bo.scale.x = 0.8
+	portrait_bo.scale.y = 0.8
 	l_name.scale.x = 0.8
-
+	l_name.scale.y = 0.8
 end
 
 function InfoBar:show()
