@@ -3484,51 +3484,18 @@ tt.render.sprites[2].loop = false
 tt.render.sprites[2].animated = true
 tt.render.sprites[2].hide_after_runs = 1
 --#endregion
---#region tower_paladin_covenant_lvl1
-tt = RT("tower_paladin_covenant_lvl1", "tower")
-AC(tt, "barrack", "vis")
-tt.tower.type = "paladin_covenant"
-tt.tower.kind = TOWER_KIND_BARRACK
-tt.tower.level = 1
-tt.tower.price = b.price[1]
-tt.tower.menu_offset = v(0, 20)
-tt.info.i18n_key = "TOWER_PALADIN_COVENANT_1"
-tt.info.portrait = "kr5_portraits_towers_0001"
-tt.info.enc_icon = 5
-tt.render.sprites[1].animated = false
-tt.render.sprites[1].name = "terrain_barrack_%04i"
-tt.render.sprites[1].offset = v(0, 15)
-tt.render.sprites[2] = CC("sprite")
-tt.render.sprites[2].animated = false
-tt.render.sprites[2].name = "paladin_covenant_lvl1"
-tt.render.sprites[2].offset = v(0, 9)
-tt.render.sprites[3] = CC("sprite")
-tt.render.sprites[3].prefix = "paladin_covenant_lvl123_door"
-tt.render.sprites[3].name = "close"
-tt.render.sprites[3].loop = false
-tt.render.sprites[3].offset = v(0, 7)
-tt.barrack.soldier_type = "tower_paladin_covenant_soldier_lvl1"
-tt.barrack.rally_range = b.rally_range
-tt.barrack.respawn_offset = v(0, 9)
-tt.barrack.max_soldiers = b.max_soldiers
-tt.info.fn = scripts.tower_barrack.get_info
-tt.main_script.insert = scripts.tower_barrack.insert
-tt.main_script.update = scripts.tower_barrack.update
-tt.main_script.remove = scripts.tower_barrack.remove
-tt.sound_events.insert = "TowerPaladinCovenantTaunt"
-tt.sound_events.change_rally_point = "TowerPaladinCovenantTaunt"
-tt.sound_events.tower_room_select = "TowerPaladinCovenantTauntSelect"
-tt.ui.click_rect = r(-40, 0, 80, 70)
---#endregion
---#region tower_paladin_covenant_lvl4
-tt = RT("tower_paladin_covenant_lvl4", "tower_paladin_covenant_lvl1")
-AC(tt, "powers")
+
+tt = RT("tower_paladin_covenant_lvl4", "tower")
+AC(tt, "powers", "barrack")
 tt.info.portrait = "kr5_portraits_towers_0001"
 tt.info.room_portrait = "quickmenu_main_icons_main_icons_0001_0001"
 tt.info.enc_icon = 8
 tt.info.i18n_key = "TOWER_PALADIN_COVENANT_4"
+tt.info.fn = scripts.tower_barrack.get_info
 tt.tower.price = b.price[4]
 tt.tower.level = 1
+tt.tower.type = "paladin_covenant"
+tt.tower.kind = TOWER_KIND_BARRACK
 tt.tower.menu_offset = v(0, 25)
 tt.powers.lead = CC("power")
 tt.powers.lead.price_base = b.lead.price[1]
@@ -3541,17 +3508,29 @@ tt.powers.healing_prayer.price_inc = b.healing_prayer.price[3]
 tt.powers.healing_prayer.enc_icon = 1
 tt.barrack.soldier_type = "tower_paladin_covenant_soldier_lvl4"
 tt.barrack.rally_range = b.rally_range
+tt.barrack.respawn_offset = v(0, 9)
+tt.barrack.max_soldiers = b.max_soldiers
+tt.render.sprites[1].animated = false
+tt.render.sprites[1].name = "terrain_barrack_%04i"
+tt.render.sprites[1].offset = v(0, 15)
+tt.render.sprites[2] = CC("sprite")
+tt.render.sprites[2].animated = false
 tt.render.sprites[2].name = "paladin_covenant_lvl4"
+tt.render.sprites[2].offset = v(0, 9)
+tt.render.sprites[3] = CC("sprite")
 tt.render.sprites[3].prefix = "paladin_covenant_lvl4_door"
 tt.render.sprites[3].offset = v(0, 10)
+tt.render.sprites[3].name = "close"
+tt.render.sprites[3].loop = false
 tt.render.sprites[4] = CC("sprite")
 tt.render.sprites[4].name = "paladin_covenant_lvl4_flag"
 tt.render.sprites[4].offset = v(0, 9)
 tt.sound_events.insert = "TowerPaladinCovenantTaunt"
 tt.sound_events.change_rally_point = "TowerPaladinCovenantTaunt"
+tt.main_script.insert = scripts.tower_barrack.insert
+tt.main_script.update = scripts.tower_barrack.update
+tt.main_script.remove = scripts.tower_barrack.remove
 tt.ui.click_rect = r(-42, 0, 84, 90)
-
---#endregion
 
 tt = E:register_t("tower_arborean_sentinels", "tower")
 b = balance.specials.towers.arborean_sentinels
