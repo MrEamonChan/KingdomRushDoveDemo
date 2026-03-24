@@ -385,9 +385,7 @@ tt.main_script.update = scripts.arrow_missile.update
 --#endregion
 --#region ps_arrow_multishot_hero_alleria
 tt = RT("ps_arrow_multishot_hero_alleria")
-
 AC(tt, "pos", "particle_system")
-
 tt.particle_system.name = "hero_archer_arrow_particle"
 tt.particle_system.animated = false
 tt.particle_system.alphas = {255, 0}
@@ -398,9 +396,9 @@ tt.particle_system.z = Z_BULLETS
 --#endregion
 --#region ps_arrow_hero_alleria_missile
 tt = RT("ps_arrow_hero_alleria_missile", "ps_arrow_multishot_hero_alleria")
-tt.particle_system.particle_lifetime = {0.3, 0.3}
-tt.particle_system.scales_y = {0.6, 0.2}
-tt.particle_system.scales_x = {1.2, 0.3}
+tt.particle_system.particle_lifetime = {0.6, 0.6}
+tt.particle_system.scales_y = {0.8, 0.2}
+tt.particle_system.scales_x = {1.5, 0.3}
 tt.particle_system.emission_rate = 60
 --#endregion
 --#region soldier_alleria_wildcat

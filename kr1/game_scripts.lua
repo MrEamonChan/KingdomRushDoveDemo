@@ -59985,42 +59985,34 @@ function scripts.mod_bull_king_stun.insert(this, store)
 	end
 
 	if target.vis and not U.flags_pass(target.vis, this.modifier) then
-		log.paranoid("mod %s cannot be applied to entity %s:%s because of vis flags/bans", this.template_name, target.id, target.template_name)
-
 		return false
 	end
 
-	if target and target.unit and this.render then
-		for i = 1, #this.render.sprites do
-			local s = this.render.sprites[i]
+	for i = 1, #this.render.sprites do
+		local s = this.render.sprites[i]
 
-			if not s.keep_flip_x then
-				s.flip_x = target.render.sprites[1].flip_x
-			end
+		if not s.keep_flip_x then
+			s.flip_x = target.render.sprites[1].flip_x
+		end
 
-			if s.size_names then
-				s.prefix = s.prefix .. "_" .. s.size_names[target.unit.size]
-			end
+		if s.size_anchors then
+			s.anchor = s.size_anchors[target.unit.size]
+		end
 
-			if s.size_anchors then
-				s.anchor = s.size_anchors[target.unit.size]
-			end
+		if m.custom_scales then
+			s.scale = V.vclone(m.custom_scales[target.template_name] or m.custom_scales.default)
+		end
 
-			if m.custom_scales then
-				s.scale = V.vclone(m.custom_scales[target.template_name] or m.custom_scales.default)
-			end
+		if m.custom_offsets then
+			s.offset = V.vclone(m.custom_offsets[target.template_name] or m.custom_offsets.default)
+			s.offset.x = s.offset.x * (s.flip_x and -1 or 1)
+		elseif m.health_bar_offset then
+			local hb = target.health_bar.offset
+			local hbo = m.health_bar_offset
 
-			if m.custom_offsets then
-				s.offset = V.vclone(m.custom_offsets[target.template_name] or m.custom_offsets.default)
-				s.offset.x = s.offset.x * (s.flip_x and -1 or 1)
-			elseif m.health_bar_offset then
-				local hb = target.health_bar.offset
-				local hbo = m.health_bar_offset
-
-				s.offset.x, s.offset.y = hb.x + hbo.x, hb.y + hbo.y
-			elseif m.use_mod_offset and target.unit.mod_offset then
-				s.offset.x, s.offset.y = target.unit.mod_offset.x, target.unit.mod_offset.y
-			end
+			s.offset.x, s.offset.y = hb.x + hbo.x, hb.y + hbo.y
+		elseif m.use_mod_offset and target.unit.mod_offset then
+			s.offset.x, s.offset.y = target.unit.mod_offset.x, target.unit.mod_offset.y
 		end
 	end
 
@@ -60031,10 +60023,8 @@ function scripts.mod_bull_king_stun.insert(this, store)
 	end
 
 	SU.stun_inc(target)
+	U.bans_add(target.vis, F_ALL)
 
-	this._pushed_bans = U.push_bans(target.vis, F_ALL)
-
-	log.paranoid("mod_bull_king_stun.insert (%s)-%s for target (%s)-%s", this.id, this.template_name, target.id, target.template_name)
 	signal.emit("mod-applied", this, target)
 
 	return true
@@ -60046,15 +60036,7 @@ function scripts.mod_bull_king_stun.remove(this, store)
 	if target then
 		SU.stun_dec(target)
 
-		if this._pushed_bans then
-			U.pop_bans(target.vis, this._pushed_bans)
-
-			this._pushed_bans = nil
-		end
-
-		log.paranoid("mod_bull_king_stun.remove (%s)-%s for target (%s)-%s", this.id, this.template_name, target.id, target.template_name)
-	else
-		log.paranoid("mod_bull_king_stun.remove target is nil for id %s", this.modifier.target_id)
+		U.bans_remove(target.vis, F_ALL)
 	end
 
 	return true

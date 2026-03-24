@@ -21439,11 +21439,10 @@ tt.timed_attacks.list[1].vis_bans = 0
 tt.timed_attacks.list[1].vis_flags_stun = bor(F_AREA)
 tt.timed_attacks.list[1].vis_bans_stun = bor(F_FLYING)
 tt.sound_death = "Stage35BossBullKingDeath"
+
 tt = E:register_t("mod_bull_king_tower_debuff", "mod_hide_tower")
 b = balance.enemies.wukong.boss_bull_king.area_attack
-
 E:add_comps(tt, "render")
-
 tt.main_script.update = scripts.mod_bull_king_tower_debuff.update
 tt.main_script.remove = nil
 tt.modifier.duration = b.stun_tower_duration
@@ -21461,9 +21460,7 @@ tt.offset_y_per_tower = {
 }
 tt = RT("mod_bull_king_stun", "mod_stun")
 b = balance.enemies.wukong.boss_bull_king.area_attack
-
 E:add_comps(tt, "render")
-
 tt.modifier.duration = b.stun_duration
 tt.main_script.insert = scripts.mod_bull_king_stun.insert
 tt.main_script.remove = scripts.mod_bull_king_stun.remove
