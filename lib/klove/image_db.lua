@@ -500,7 +500,13 @@ function image_db:preload_atlas(ref_scale, path, name)
 				elseif is_file(path .. "/" .. png_name) then
 					v.a_name = png_name
 				end
-			-- 都不存在则保留 .dds，后续会报错
+			elseif v.a_name:match("%.png$") then
+				local astc_name = v.a_name:gsub("%.png$", ".astc")
+
+				if is_file(path .. "/" .. astc_name) then
+					v.a_name = astc_name
+				end
+			-- 都不存在则保留 .dds 或 .png，后续会报错
 			end
 		end
 
