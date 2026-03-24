@@ -6221,7 +6221,7 @@ local towers = {
 		}
 	},
 	dark_elf = {
-		rally_range = 145,
+		rally_range = 170,
 		stats = {
 			cooldown = 2,
 			range = 9,
@@ -6229,15 +6229,15 @@ local towers = {
 		},
 		soldier = {
 			dead_lifetime = 10,
-			speed = 75,
-			armor = {0.25, 0.25, 0.25},
-			hp = {78, 117, 156},
+			speed = 95,
+			armor = {0.2, 0.25, 0.3},
+			hp = {50, 115, 180},
 			regen_hp = {6, 9, 12},
 			basic_attack = {
 				range = 70,
 				cooldown = 1,
-				damage_min = {15, 20, 28},
-				damage_max = {20, 31, 44},
+				damage_min = {5, 10, 15},
+				damage_max = {8, 16, 24},
 				damage_type = DAMAGE_PHYSICAL
 			},
 			dodge_chance = {0.6, 0.6, 0.6}
@@ -6251,7 +6251,7 @@ local towers = {
 			damage_type = DAMAGE_PHYSICAL
 		},
 		skill_soldiers = {
-			price = {150, 150, 150},
+			price = {100, 125, 125},
 			cooldown = {1, 1, 1}
 		},
 		skill_buff = {

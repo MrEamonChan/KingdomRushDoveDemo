@@ -622,9 +622,7 @@ tt.modifier.duration = 0.75
 --#endregion
 --#region soldier_barrack_1
 tt = RT("soldier_barrack_1", "soldier_militia")
-
 AC(tt, "revive")
-
 image_y = 46
 anchor_y = 11 / image_y
 tt.health.armor = 0.3

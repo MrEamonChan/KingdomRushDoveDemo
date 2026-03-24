@@ -1951,13 +1951,12 @@ tt.modifier.duration = fts(b.stun_time)
 tt.modifier.vis_flags = bor(F_MOD, F_STUN)
 tt.modifier.vis_bans = bor(F_BOSS)
 -- 喷火器 END
--- 酒桶 BEGIN
 --#endregion
+
+-- 酒桶 BEGIN
 --#region tower_barrel_lvl4
 tt = RT("tower_barrel_lvl4", "tower")
-
 AC(tt, "attacks", "vis", "powers", "barrack")
-
 b = balance.towers.barrel
 tt.tower.type = "barrel"
 tt.tower.kind = TOWER_KIND_ENGINEER
@@ -1968,7 +1967,6 @@ tt.info.portrait = "kr5_portraits_towers_0017"
 tt.info.room_portrait = "quickmenu_main_icons_main_icons_0016_0001"
 tt.info.enc_icon = 1
 tt.info.i18n_key = "TOWER_BARREL_4"
-tt.info.stat_range = b.stats.range
 tt.main_script.insert = scripts.tower_barrel.insert
 tt.main_script.update = scripts.tower_barrel.update
 tt.attacks.range = b.basic_attack.range[4]
@@ -2122,9 +2120,7 @@ tt.ui.click_rect = r(-20, -5, 40, 50)
 --#endregion
 --#region bullet_tower_barrel_lvl4
 tt = RT("bullet_tower_barrel_lvl4", "bomb")
-
 local b = balance.towers.barrel.basic_attack
-
 tt.bullet.damage_radius = b.damage_radius
 tt.bullet.flight_time = fts(25)
 tt.bullet.hit_fx = "fx_bullet_tower_barrel"
@@ -2132,7 +2128,6 @@ tt.bullet.hit_decal = "decal_bullet_tower_barrel"
 tt.bullet.pop_chance = 0.5
 tt.bullet.particles_name = "ps_bullet_tower_barrel"
 tt.bullet.align_with_trajectory = false
-tt.bullet.mod = "mod_bullet_tower_barrel_lvl1"
 tt.bullet.rotation_speed = 0
 tt.sound_events.hit_water = nil
 tt.sound_events.hit = "TowerBarrelBasicAttackImpact"
@@ -2170,9 +2165,7 @@ tt.render.sprites[1].r = 0
 --#endregion
 --#region aura_bullet_tower_barrel_skill_barrel
 tt = RT("aura_bullet_tower_barrel_skill_barrel", "aura")
-
 AC(tt, "render", "tween")
-
 b = balance.towers.barrel.skill_barrel
 tt.aura.duration = b.duration
 tt.aura.duration_inc = nil
@@ -2218,16 +2211,16 @@ tt.explosion_vis_flags = bor(F_AREA)
 tt.explosion_sfx = "TowerBarrelBadBatchExplosion"
 tt.sid_barrel = 2
 --#endregion
+
 --#region mod_tower_barrel_skill_barrel_attract
 tt = RT("mod_tower_barrel_skill_barrel_attract", "mod_attract")
 tt.attract_radius = 45
 --#endregion
+
 --#region mod_bullet_tower_barrel_lvl4
 tt = RT("mod_bullet_tower_barrel_lvl4", "modifier")
 b = balance.towers.barrel.basic_attack.debuff
-
 AC(tt, "render")
-
 tt.modifier.vis_flags = F_MOD
 tt.modifier.type = MOD_TYPE_POISON
 tt.modifier.resets_same = true
@@ -2243,6 +2236,7 @@ tt.modifier.level = 4
 tt.modifier.duration = b.duration[4]
 tt.damage_reduction = b.damage_reduction[4]
 --#endregion
+
 --#region mod_tower_barrel_skill_barrel_poison
 tt = RT("mod_tower_barrel_skill_barrel_poison", "mod_poison")
 b = balance.towers.barrel.skill_barrel.poison
