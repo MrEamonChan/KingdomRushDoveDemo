@@ -1363,6 +1363,18 @@ tt.render.sprites[1].name = "forestKeeper_proy_0001-f"
 tt.render.sprites[1].anchor.x = 0.8260869565217391
 tt.sound_events.insert = "TowerForestKeeperNormalSpear"
 --#endregion
+tt = RT("ps_spear_forest_oak")
+AC(tt, "pos", "particle_system")
+tt.particle_system.name = "hero_archer_arrow_particle"
+tt.particle_system.animated = false
+tt.particle_system.alphas = {255, 0}
+tt.particle_system.particle_lifetime = {0.5, 0.5}
+tt.particle_system.emission_rate = 30
+tt.particle_system.scales_x = {3, 1}
+tt.particle_system.scales_y = {3, 1}
+tt.particle_system.track_rotation = true
+tt.particle_system.z = Z_BULLETS
+
 --#region spear_forest_oak
 tt = RT("spear_forest_oak", "spear_forest")
 tt.bullet.damage_max = 55
@@ -1371,6 +1383,11 @@ tt.bullet.damage_inc = 35
 tt.bullet.damage_type = DAMAGE_TRUE
 tt.bullet.miss_decal = "forestKeeper_proySpecial_0002-f"
 tt.bullet.hit_fx = "fx_spear_forest_oak_hit"
+tt.bullet.particles_name = "ps_spear_forest_oak"
+tt.bullet.min_speed = 400
+tt.bullet.max_speed = 700
+tt.bullet.acceleration_factor = 0.15
+tt.main_script.update = scripts.arrow_missile.update
 tt.render.sprites[1].name = "forestKeeper_proySpecial_0001-f"
 tt.sound_events.insert = "TowerForestKeeperAncientSpear"
 --#endregion
