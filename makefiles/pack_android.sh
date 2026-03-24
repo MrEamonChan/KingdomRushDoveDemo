@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 优化选项：是否删除非必需文件以减小包体积
-
-VERSION_FILE="./version.lua"
-# 可通过 VERSION_FILE 环境变量指定版本文件（可选）
-# VERSION_FILE=${VERSION_FILE:-}
-if [ -n "${VERSION_FILE:-}" ] && [ -f "$VERSION_FILE" ]; then
-    # 仅匹配行首的 `id = "..."`，避免匹配到 bundle_id
-    current_id=$(awk -F'"' '/^[[:space:]]*id[[:space:]]*=/ {print $2; exit}' "$VERSION_FILE")
-    current_id=${current_id:-$(date +%s)}
-else
-    current_id=$(date +%s)
-fi
-
-mkdir -p ".versions"
-ARCHIVE_DIR=".versions/KingdomRushDove-Android-v${current_id}.zip"
-LOVE_FILE="../Application/love-android/app/src/embed/assets/game.love"
-LOVE_ANDROID="../Application/love-android"
-OUTPUT_RAW="app/build/outputs/apk/embedNoRecord/release/app-embed-noRecord-release.apk"
-OUTPUT_FINAL="app/build/outputs/apk/embedNoRecord/release/KingdomRushDove-Android-v${current_id}.apk"
-LOVE_FINGERPRINT_FILE=".versions/.love_input_fingerprint"
-
 # 依赖检查
 if ! command -v zip >/dev/null 2>&1; then
     echo "ERROR: zip not found" >&2
@@ -44,16 +23,54 @@ if ! command -v astcenc >/dev/null 2>&1; then
     exit 1
 fi
 
+VERSION_FILE="./version.lua"
+# 可通过 VERSION_FILE 环境变量指定版本文件（可选）
+# VERSION_FILE=${VERSION_FILE:-}
+if [ -n "${VERSION_FILE:-}" ] && [ -f "$VERSION_FILE" ]; then
+    # 仅匹配行首的 `id = "..."`，避免匹配到 bundle_id
+    current_id=$(awk -F'"' '/^[[:space:]]*id[[:space:]]*=/ {print $2; exit}' "$VERSION_FILE")
+    current_id=${current_id:-$(date +%s)}
+else
+    current_id=$(date +%s)
+fi
+
 # 并行任务数（可通过环境变量 JOBS 调整）
 JOBS=${JOBS:-$(nproc 2>/dev/null || echo 4)}
 
 DDS_ASSETS_DIR="./_assets/kr1-desktop/images/fullhd"
+mkdir -p ".versions"
 
-# 增量缓存目录（加速 DDS -> ASTC/PNG）
-CACHE_DIR=".versions/.android_image_cache"
+# 把 .versions 转化成绝对目录
+VERSION_DIR="$(cd .versions && pwd)"
+
+HD_MODE=0
+QUICK_MODE=0
+NO_UPLOAD_MODE=0
+for arg in "$@"; do
+    case "$arg" in
+        hd) HD_MODE=1 ;;
+        quick) QUICK_MODE=1 ;;
+        no-upload) NO_UPLOAD_MODE=1 ;; # 保持原有 no-upload 逻辑
+    esac
+done
+
+if [ "$HD_MODE" -eq 1 ]; then
+    ARCHIVE_DIR=".versions/KingdomRushDove-Android-HD-v${current_id}.zip"
+    OUTPUT_FINAL=$VERSION_DIR/KingdomRushDove-Android-HD-v${current_id}.apk
+    CACHE_DIR=".versions/.android_image_cache_hd"
+    CACHE_KEY="resize=100%|strip=1|astc=1|tool=$IM_CMD"
+else
+    ARCHIVE_DIR=".versions/KingdomRushDove-Android-v${current_id}.zip"
+    OUTPUT_FINAL=$VERSION_DIR/KingdomRushDove-Android-v${current_id}.apk
+    CACHE_DIR=".versions/.android_image_cache"
+    CACHE_KEY="resize=50%|strip=1|astc=1|tool=$IM_CMD"
+fi
+
 CACHE_KEY_FILE="$CACHE_DIR/.cache_key"
-# 转换参数变化时更新该 key，可自动失效缓存
-CACHE_KEY="resize=50%|strip=1|astc=1|tool=$IM_CMD"
+LOVE_FILE="../Application/love-android/app/src/embed/assets/game.love"
+LOVE_ANDROID="../Application/love-android"
+OUTPUT_RAW="app/build/outputs/apk/embedNoRecord/release/app-embed-noRecord-release.apk"
+LOVE_FINGERPRINT_FILE=".versions/.love_input_fingerprint"
 
 mkdir -p "$CACHE_DIR"
 if [ ! -f "$CACHE_KEY_FILE" ] || [ "$(cat "$CACHE_KEY_FILE" 2>/dev/null || true)" != "$CACHE_KEY" ]; then
@@ -133,12 +150,15 @@ if [ "$rebuild_love" -eq 1 ]; then
     else
         echo "Processing $dds_count DDS files with $JOBS jobs (incremental cache enabled)..."
 
-        export IM_CMD tempdir CACHE_DIR RESIZE_MAP_FILE
+        export IM_CMD tempdir CACHE_DIR RESIZE_MAP_FILE HD_MODE
 
         # 并行增量处理 DDS -> ASTC
         # 命中缓存：直接拷贝缓存结果；未命中：转换后写入缓存并拷贝
         printf "%s\0" "${dds_files[@]}" | xargs -0 -P "$JOBS" -I {} bash -c '
             should_resize() {
+                if [ "$HD_MODE" = "1" ]; then
+                    return 1 # 不缩放
+                fi
                 local filename="$1"
                 # 从 resize_map 读取（只用文件名匹配，不含路径）
                 local result=$(grep "^${filename}.dds=" "$RESIZE_MAP_FILE" 2>/dev/null | cut -d= -f2)
@@ -149,7 +169,7 @@ if [ "$rebuild_love" -eq 1 ]; then
             rel="${src#./}"
             base_name="${rel%.dds}"
             base_name_only="$(basename "$base_name")"
-            
+
             cache_file="$CACHE_DIR/${base_name}.astc"
             dest="$tempdir/${base_name}.astc"
 
@@ -160,13 +180,13 @@ if [ "$rebuild_love" -eq 1 ]; then
                 cp -f "$cache_file" "$dest"
             else
                 temp_png="/tmp/temp_${RANDOM}.png"
-                
+
                 if should_resize "$base_name_only"; then
                     "$IM_CMD" "$src" -resize 50% -strip "png:$temp_png" 2>/dev/null
                 else
                     "$IM_CMD" "$src" -strip "png:$temp_png" 2>/dev/null
                 fi
-                
+
                 astcenc -cs "$temp_png" "$cache_file" 8x8 -fast -silent 2>/dev/null
                 rm -f "$temp_png"
                 cp -f "$cache_file" "$dest"
@@ -181,7 +201,7 @@ if [ "$rebuild_love" -eq 1 ]; then
                 src="$1"
                 rel="${src#./}"
                 base_name="${rel%.png}"
-                
+
                 cache_file="$CACHE_DIR/${base_name}.astc"
                 dest="$tempdir/${base_name}.astc"
 
@@ -233,7 +253,7 @@ if [ "$rebuild_love" -eq 1 ]; then
     fi
 
     # 生成 .love 文件（复制以保留 zip 备份）
-    cp -f "$ARCHIVE_DIR" "$LOVE_FILE"
+    mv "$ARCHIVE_DIR" "$LOVE_FILE"
     printf "%s" "$new_fingerprint" > "$LOVE_FINGERPRINT_FILE"
     echo "Packed -> $LOVE_FILE"
 else
@@ -246,13 +266,13 @@ cd $LOVE_ANDROID
 
 mv "$OUTPUT_RAW" "$OUTPUT_FINAL"
 
-if [ "${1:-}" = "no-upload" ]; then
+if [ "$NO_UPLOAD_MODE" = "1" ]; then
     echo "Build complete, skipping upload as per argument."
     exit 0
 fi
 
 # 如果传入了参数 quick，则使用内网 scp 传输
-if [ "${1:-}" = "quick" ]; then
+if [ "$QUICK_MODE" = "1" ]; then
     scp -P 60001 "$OUTPUT_FINAL" dove@10.112.99.5:/srv/files/王国保卫战Dove版-安卓端/
 else
     scp -P 60001 "$OUTPUT_FINAL" dove@krdovedownload6.crazyspotteddove.top:/srv/files/王国保卫战Dove版-安卓端/
