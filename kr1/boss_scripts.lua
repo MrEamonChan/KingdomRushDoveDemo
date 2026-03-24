@@ -239,6 +239,10 @@ function scripts.eb_jt.on_damage(this, store, damage)
 	return true
 end
 
+function scripts.eb_jt.heal(this, store, attack, target)
+	U.heal(this, 100)
+end
+
 function scripts.eb_jt.update(this, store)
 	local fa = this.timed_attacks.list[1]
 
