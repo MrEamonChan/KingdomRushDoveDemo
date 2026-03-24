@@ -6039,7 +6039,7 @@ local towers = {
 		skill_warrior = {
 			range = 240,
 			min_targets = 1,
-			price = {200, 120, 120},
+			price = {175, 125, 125},
 			cooldown = {15, 12, 9},
 			entity = {
 				range = 72,
@@ -6049,7 +6049,7 @@ local towers = {
 				damage_min = {26, 40, 54},
 				damage_max = {38, 60, 82},
 				damage_type = DAMAGE_PHYSICAL,
-				hp_max = {130, 156, 182},
+				hp_max = {150, 200, 250},
 				armor = {0, 0, 0}
 			}
 		},
