@@ -3,7 +3,7 @@ local v = (arg[2] == "debug" or arg[2] == "release") and "DEBUG" or "RELEASE"
 local version = {
 	identity = "kingdom_rush_dove",
 	title = "王国保卫战 dove 版",
-	string = "kr1-desktop-5.6.12",
+	string = "CYCLE 0",
 	string_short = "5.6.12",
 	bundle_id = "com.ironhidegames.kingdomrush.standalone",
 	vc = "kr1-desktop-5.6.12",

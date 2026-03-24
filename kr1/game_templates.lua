@@ -16407,7 +16407,6 @@ tt.melee.attacks[1].cooldown = b.basic_attack.cooldown
 tt.melee.attacks[1].damage_min = b.basic_attack.damage_min
 tt.melee.attacks[1].damage_max = b.basic_attack.damage_max
 tt.melee.attacks[1].hit_time = fts(12)
-tt.soldier.melee_slot_spread = v(-8, -8)
 tt.sound_events.insert = "TowerElvenBarrackUnitTaunt"
 tt.sound_events.death = "TowerPaladinCovenantUnitDeath"
 tt.ui.click_rect = r(-13, -2, 26, 28)

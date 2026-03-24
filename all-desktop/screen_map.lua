@@ -98,51 +98,6 @@ end
 
 screen_map.signal_handlers = {}
 
--- 处理移动端的触摸事件，实现地图滚动
-local touch_start_y = 0
-local touch_scrolling = true
-function screen_map:touchpressed(id, x, y, dx, dy, pressure)
-	touch_start_y = y
-	touch_scrolling = true
-end
-
-function screen_map:touchmoved(id, x, y, dx, dy, pressure)
-	if touch_scrolling then
-		local delta_y = touch_start_y - y
-		if delta_y > 0 then
-			local target_y = self.map_view.screen_h - self.map_view.size.y
-			if self.map_view.pos.y ~= target_y then
-				if self.map_tween_handle then
-					timer:cancel(self.map_tween_handle)
-				end
-				self.map_view.scrolling_dir = 0
-				local target_y = self.map_view.screen_h - self.map_view.size.y
-				self.map_tween_handle = timer:tween(0.6, self.map_view.pos, {
-					y = target_y
-				}, "out-quad")
-			end
-		else
-			if self.map_view.pos.y ~= 0 then
-				if self.map_tween_handle then
-					timer:cancel(self.map_tween_handle)
-				end
-				self.map_view.scrolling_dir = 0
-				self.map_tween_handle = timer:tween(0.6, self.map_view.pos, {
-					y = 0
-				}, "out-quad")
-			end
-		end
-	end
-end
-
-function screen_map:touchreleased(id, x, y, dx, dy, pressure)
-	touch_scrolling = false
-end
-
-function screen_map:textinput(t)
-	self.window:textinput(t)
-end
-
 function screen_map:init(w, h, done_callback)
 	self.done_callback = done_callback
 	self.original_w, self.original_h = w, h
@@ -1150,6 +1105,51 @@ function screen_map:mousereleased(x, y, button)
 	self.window:mousereleased(x, y, button)
 end
 
+-- 处理移动端的触摸事件，实现地图滚动
+local touch_start_y = 0
+local touch_scrolling = true
+function screen_map:touchpressed(id, x, y, dx, dy, pressure)
+	touch_start_y = y
+	touch_scrolling = true
+end
+
+function screen_map:touchmoved(id, x, y, dx, dy, pressure)
+	if touch_scrolling then
+		local delta_y = touch_start_y - y
+		if delta_y > 0 then
+			local target_y = self.map_view.screen_h - self.map_view.size.y
+			if self.map_view.pos.y ~= target_y then
+				if self.map_tween_handle then
+					timer:cancel(self.map_tween_handle)
+				end
+				self.map_view.scrolling_dir = 0
+				local target_y = self.map_view.screen_h - self.map_view.size.y
+				self.map_tween_handle = timer:tween(0.6, self.map_view.pos, {
+					y = target_y
+				}, "out-quad")
+			end
+		else
+			if self.map_view.pos.y ~= 0 then
+				if self.map_tween_handle then
+					timer:cancel(self.map_tween_handle)
+				end
+				self.map_view.scrolling_dir = 0
+				self.map_tween_handle = timer:tween(0.6, self.map_view.pos, {
+					y = 0
+				}, "out-quad")
+			end
+		end
+	end
+end
+
+function screen_map:touchreleased(id, x, y, dx, dy, pressure)
+	touch_scrolling = false
+end
+
+function screen_map:textinput(t)
+	self.window:textinput(t)
+end
+
 function screen_map:start_level(level_idx, level_mode)
 	local user_data = storage:load_slot()
 
@@ -1217,8 +1217,6 @@ function MapView:initialize(screen_w, screen_h)
 	local last_flag = screen_map.map_points.flags[last_flag_idx]
 
 	if last_flag and last_flag.pos then
-		log.debug("scroll to show level idx:%s", last_flag_idx)
-
 		local vl, vr = -1 * self.pos.x, -1 * self.pos.x + self.screen_w
 
 		if vl > last_flag.pos.x or vr < last_flag.pos.x then

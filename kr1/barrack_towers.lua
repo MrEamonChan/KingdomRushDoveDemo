@@ -2218,7 +2218,6 @@ tt.unit.mod_offset = v(0, 13)
 tt.unit.level = 4
 tt.unit.fade_time_after_death = nil
 tt.unit.hide_after_death = true
-tt.soldier.melee_slot_spread = v(-13, -13)
 tt.soldier.melee_slot_offset = v(10, 0)
 tt.vis.bans = bor(tt.vis.bans, F_SKELETON, F_EAT)
 tt.health.hp_max = b.soldier.hp[4]
@@ -2555,7 +2554,6 @@ tt.unit.level = 1
 tt.unit.death_animation = "death_air"
 tt.unit.show_blood_pool = false
 tt.unit.hide_after_death = true
-tt.soldier.melee_slot_spread = vec_2(-10, -10)
 tt.soldier.melee_slot_offset = vec_2(10, 0)
 tt.vis.bans = 0
 tt.vis_bans_before_take_off = F_ALL
@@ -2930,7 +2928,6 @@ tt.unit.mod_offset = v(0, 13)
 tt._jump_explosion = "decal_tower_dwarf_jump_explosion"
 tt._jump_asset_name = "tower_dwarf_dwarf_jump_lvl_4"
 tt.unit.level = 4
-tt.soldier.melee_slot_spread = v(-10, -10)
 tt.soldier.melee_slot_offset = v(10, 0)
 tt.vis.bans = 0
 tt.health.hp_max = b.hp[4]
@@ -3089,7 +3086,6 @@ tt.melee.attacks[1].hit_time = fts(16)
 tt.melee.attacks[1].damage_type = b.soldier.basic_attack.damage_type
 tt.melee.attacks[1].hit_decal = "decal_soldier_tower_ghost_hit"
 tt.melee.attacks[1].hit_offset = v(30, 20)
-tt.soldier.melee_slot_spread = v(-8, -8)
 tt.sound_events.death = "TowerGhostSoulAttackTravel"
 tt.ui.click_rect = r(-12, 2, 24, 30)
 tt.soul = "soul_soldier_tower_ghost_lvl4"
@@ -3326,49 +3322,29 @@ tt.main_script.remove = scripts.tower_ghost_hover_controller.remove
 
 -- 幽冥 END
 -- 圣殿 START
---#region tower_paladin_covenant_soldier_lvl1
-tt = RT("tower_paladin_covenant_soldier_lvl1", "soldier_militia")
-
-AC(tt, "nav_grid")
-
+--#region tower_paladin_covenant_soldier_lvl4
+tt = RT("tower_paladin_covenant_soldier_lvl4", "soldier_militia")
+AC(tt, "powers", "timed_attacks", "nav_grid")
 b = balance.towers.paladin_covenant
 tt.info.portrait = "kr5_info_portraits_soldiers_0001"
 tt.info.random_name_count = 18
 tt.info.random_name_format = "SOLDIER_PALADINS_%i_NAME"
 tt.main_script.update = scripts.tower_paladin_covenant.soldier_update
 tt.main_script.insert = scripts.tower_paladin_covenant.soldier_insert
-tt.render.sprites[1].prefix = "paladin_soldiers_lvl1"
+tt.render.sprites[1].prefix = "paladin_soldier_lvl4"
 tt.render.sprites[1].anchor = v(0.5, 0.5)
+tt.render.sprites[1].angles.walk = {"walk"}
 tt.unit.hit_offset = v(0, 12)
 tt.unit.mod_offset = v(0, 13)
-tt.health.hp_max = b.soldier.hp[1]
-tt.health.armor = b.soldier.armor[1]
-tt.health_bar.offset = v(0, 30)
-tt.health.dead_lifetime = b.soldier.dead_lifetime
-tt.motion.max_speed = b.soldier.speed
-tt.melee.range = b.soldier.basic_attack.range
-tt.melee.attacks[1].cooldown = b.soldier.basic_attack.cooldown
-tt.melee.attacks[1].damage_min = b.soldier.basic_attack.damage_min[1]
-tt.melee.attacks[1].damage_max = b.soldier.basic_attack.damage_max[1]
-tt.melee.attacks[1].hit_time = fts(10)
-tt.soldier.melee_slot_spread = v(-8, -8)
-tt.sound_events.death = "TowerPaladinCovenantUnitDeath"
-tt.ui.click_rect = r(-10, -2, 20, 25)
---#endregion
---#region tower_paladin_covenant_soldier_lvl4
-tt = RT("tower_paladin_covenant_soldier_lvl4", "tower_paladin_covenant_soldier_lvl1")
-AC(tt, "powers", "timed_attacks")
-b = balance.towers.paladin_covenant
-tt.info.portrait = "kr5_info_portraits_soldiers_0001"
-tt.render.sprites[1].prefix = "paladin_soldier_lvl4"
-tt.render.sprites[1].angles.walk = {"walk"}
 tt.idle_flip.animations = {"idle"}
 tt.health.hp_max = b.soldier.hp[4]
 tt.health.armor = b.soldier.armor[4]
 tt.health.magic_armor = b.soldier.magic_armor[4]
 tt.health_bar.offset = v(0, 35)
 tt.health.on_damage = scripts.tower_paladin_covenant.soldier_on_damage
+tt.health.dead_lifetime = b.soldier.dead_lifetime
 tt.motion.max_speed = b.soldier.speed
+tt.sound_events.death = "TowerPaladinCovenantUnitDeath"
 tt.ui.click_rect = r(-15, -2, 30, 35)
 tt.powers.lead = CC("power")
 tt.powers.lead.b = b.lead.soldier_veteran

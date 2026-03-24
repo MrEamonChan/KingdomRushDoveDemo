@@ -1250,7 +1250,6 @@ tt.melee.attacks[2] = table.deepclone(tt.melee.attacks[1])
 tt.melee.attacks[2].animation = "attack2"
 tt.melee.attacks[2].shared_cooldown = true
 tt.melee.attacks[2].chance = 0.5
-tt.soldier.melee_slot_spread = vec_2(-8, -8)
 tt.dodge.chance = b.soldier.dodge_chance[1]
 tt.dodge.animation = "evade"
 tt.dodge.time_before_hit = fts(5)
