@@ -4168,7 +4168,6 @@ function MousePointer:initialize()
 			default = p3b
 		}
 	}
-
 end
 
 function MousePointer:update_pointer(mode)

@@ -107,7 +107,7 @@ dds_count=${#dds_files[@]}
 
 if [ "$rebuild_love" -eq 1 ]; then
     # 生成 Android 专用渲染排序库，避免与 Linux 同名库混用
-    bash makefiles/build_render_sort_android.sh
+    # bash makefiles/build_render_sort_android.sh
 
     echo "Creating base archive (excluding PNGs) -> $ARCHIVE_DIR"
     # 先打包项目中除 png 和 .versions 的文件（避免把 archive 自己打进去）

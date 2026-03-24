@@ -497,19 +497,34 @@ function path_db:get_valid_nodes(pi, flags)
 	return node_idxs
 end
 
+-- function path_db:valid_node_nearby(x, y, path_width_factor, flags)
+-- 	path_width_factor = path_width_factor or 1
+
+-- 	local nodes = self:nearest_nodes(x, y)
+
+-- 	for _, n in pairs(nodes) do
+-- 		local pi, spi, ni, dist = unpack(n)
+
+-- 		if dist < path_width_factor * self:path_width(pi, spi, ni) and self:is_node_valid(pi, ni, flags) then
+-- 			return true
+-- 		end
+-- 	end
+
+-- 	return false
+-- end
+
 function path_db:valid_node_nearby(x, y, path_width_factor, flags)
 	path_width_factor = path_width_factor or 1
-
-	local nodes = self:nearest_nodes(x, y)
-
-	for _, n in pairs(nodes) do
-		local pi, spi, ni, dist = unpack(n)
-
-		if dist < path_width_factor * self:path_width(pi, spi, ni) and self:is_node_valid(pi, ni, flags) then
-			return true
+	for pi = 1, #self.paths do
+		local path = self.paths[pi][1]
+		for ni = 1, #path do
+			local node = path[ni]
+			local dist = V.dist(node.x, node.y, x, y)
+			if dist < path_width_factor * self:path_width(pi, 1, ni) and self:is_node_valid(pi, ni, flags) then
+				return true
+			end
 		end
 	end
-
 	return false
 end
 
