@@ -1355,7 +1355,7 @@ function game_gui:select_entity(e)
 	end
 
 	if game_gui.mode == GUI_MODE_SWAP_TOWER then
-		game_gui.swap_tower()
+		game_gui.swap_tower(e)
 	end
 
 	if self.selected_entity and e ~= self.selected_entity then
@@ -1719,8 +1719,8 @@ function game_gui:block_random_power(duration, style)
 	end
 end
 
-function game_gui.swap_tower()
-	local e = game_gui.last_tower_hover
+function game_gui.swap_tower(target_tower)
+	local e = target_tower or game_gui.last_tower_hover
 	local tower_selected = game_gui.swap_entity
 
 	if not e or not e.ui or not tower_selected then
