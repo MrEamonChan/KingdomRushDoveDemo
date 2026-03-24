@@ -164,7 +164,7 @@ function game:init(screen_w, screen_h, done_callback)
 	self.camera.wb = (visible_h - v_bottom) * self.game_scale
 	self.camera.zoom = 1
 	self.camera.min_zoom = aspect > 1.7777777777777777 and math.min(screen_w, MAX_SCREEN_ASPECT * screen_h) / (visible_w * self.game_scale) or 1
-	self.camera.max_zoom = 2
+	self.camera.max_zoom = 2.5
 
 	-- 打印所有 window, camera 参数
 	-- print( "screen_w:", screen_w, "screen_h:", screen_h, "game_scale:", self.game_scale)
