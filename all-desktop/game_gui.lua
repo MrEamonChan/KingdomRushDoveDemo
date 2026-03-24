@@ -45,7 +45,7 @@ local EL = require("kr1.data.endless")
 local perf = require("dove_modules.perf.perf")
 local is_android = love.system.getOS() == "Android"
 -- DEBUG USE
-is_android = true
+-- is_android = true
 local function ISW(...)
 	return i18n.sw(i18n, ...)
 end

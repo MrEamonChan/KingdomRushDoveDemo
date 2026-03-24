@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
+# 优化选项：是否删除非必需文件以减小包体积
+
 VERSION_FILE="./version.lua"
 # 可通过 VERSION_FILE 环境变量指定版本文件（可选）
 # VERSION_FILE=${VERSION_FILE:-}
@@ -110,8 +113,9 @@ if [ "$rebuild_love" -eq 1 ]; then
     # bash makefiles/build_render_sort_android.sh
 
     echo "Creating base archive (excluding PNGs) -> $ARCHIVE_DIR"
-    # 先打包项目中除 png 和 .versions 的文件（避免把 archive 自己打进去）
-    zip -r "$ARCHIVE_DIR" . -x "*.dds" -x ".versions/*" -x "tmp/*" -x "*.exe" -x ".git/*" -x "KingdomRushDoveUpdater" -x "client.log" -x "client" -x "https.dll" -x "https.so" -x "run.bat" -x "launch.bat" -x "存档位置.lnk" -x "dlfmt" -x ".dlfmt_cache.json" -x "update.lua" -x ".gdb_history" -x "aidoc/*" -x ".plugins/*" -x "mods/local/*" -x "all/librender_sort.so" -x "all/librender_sort.dll" -q
+
+    # 先打包项目中除 dds 和 .versions 的文件（避免把 archive 自己打进去）
+    zip -r "$ARCHIVE_DIR" . -x "*.dds" -x ".versions/*" -x "tmp/*" -x "*.exe" -x ".git/*" -x "KingdomRushDoveUpdater" -x "client.log" -x "client" -x "https.dll" -x "https.so" -x "run.bat" -x "launch.bat" -x "存档位置.lnk" -x "dlfmt" -x ".dlfmt_cache.json" -x "update.lua" -x ".gdb_history" -x "aidoc/*" -x ".plugins/*" -x "mods/local/*" -x "all/librender_sort.so" -x "all/librender_sort.dll" -x "love_env/*" -x ".vscode/*" -x "Makefile" -x "makefiles/*" -x "scripts/*" -x "dlfmt_task.json" -x "run.bat" -x "README.md" -x "launch.bat" -x "KingdomRushDove版启动器.exe" -x "current_version_commit_hash.txt" -x ".gitignore" -x "游玩必读说明，务必阅读.url" -q
 
     # 分析图像大小，生成缩放映射
     echo "Analyzing image sizes from Lua definitions..."
@@ -257,16 +261,16 @@ if [ "$rebuild_love" -eq 1 ]; then
     echo "Minifying fonts for Android..."
     if bash makefiles/minify_font.sh; then
         echo "Replacing fonts in archive with minified versions..."
-        # 替换压缩包中的字体文件为压缩版本
-        # 使用 -u 更新模式，需要临时建立目录结构来保持正确的路径
-        (cd tmp && zip -u "$OLDPWD/$ARCHIVE_DIR" msyh_minify.ttc -q)
-        (cd tmp && zip -u "$OLDPWD/$ARCHIVE_DIR" msyhbd_minify.ttc -q)
-        # 删除原文件并重新添加 minified 版本（使用正确的路径名）
-        zip -d "$ARCHIVE_DIR" "_assets/all-desktop/fonts/msyh.ttc" -q 2>/dev/null || true
-        zip -d "$ARCHIVE_DIR" "_assets/all-desktop/fonts/msyhbd.ttc" -q 2>/dev/null || true
+        # 在临时目录中创建正确的目录结构
         mkdir -p "$ARCHIVE_DIR.tmp/_assets/all-desktop/fonts"
         cp tmp/msyh_minify.ttc "$ARCHIVE_DIR.tmp/_assets/all-desktop/fonts/msyh.ttc"
         cp tmp/msyhbd_minify.ttc "$ARCHIVE_DIR.tmp/_assets/all-desktop/fonts/msyhbd.ttc"
+        
+        # 从 zip 中删除原始字体文件
+        zip -d "$ARCHIVE_DIR" "_assets/all-desktop/fonts/msyh.ttc" -q 2>/dev/null || true
+        zip -d "$ARCHIVE_DIR" "_assets/all-desktop/fonts/msyhbd.ttc" -q 2>/dev/null || true
+        
+        # 添加新的字体文件到正确的位置
         (cd "$ARCHIVE_DIR.tmp" && zip -r "$OLDPWD/$ARCHIVE_DIR" _assets/all-desktop/fonts -q)
         rm -rf "$ARCHIVE_DIR.tmp"
     else
