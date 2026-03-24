@@ -19706,6 +19706,10 @@ function scripts.tower_paladin_covenant.soldier_insert(this, store)
 end
 
 function scripts.tower_paladin_covenant.soldier_on_damage(this, store, damage)
+	-- 圣巢不可以免疫吞噬效果
+	if damage.damage_type == DAMAGE_EAT then
+		return true
+	end
 	local a_h = this.timed_attacks.list[1]
 	if not a_h.disabled and store.tick_ts - a_h.ts > a_h.cooldown then
 		local actual_damage = U.predict_damage(this, damage)
