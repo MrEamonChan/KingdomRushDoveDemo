@@ -323,7 +323,7 @@ function game_gui:init(w, h, game)
 		local aspect_ratio = self.sw / self.sh
 		if aspect_ratio > GUI_REF_W / GUI_REF_H then
 			-- 屏幕更宽的设备使用放大 HUD，屏幕更窄的设备使用桌面的 HUD
-			hud_scale = 1.3
+			hud_scale = 1.35
 		end
 	end
 
@@ -6784,9 +6784,19 @@ function TowerMenu:button_exit(button, item, entity, mouse_button)
 		entity.ui.hover_active = nil
 		entity.ui.args = nil
 	end
+
+	if is_android then
+		button._android_checked = nil
+	end
 end
 
 function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
+	if is_android then
+		if not button._android_checked then
+			button._android_checked = true
+			return
+		end
+	end
 	button:disable()
 
 	local inhibit_sounds = false
@@ -6937,6 +6947,10 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 		for _, sid in pairs(item.sounds) do
 			S:queue(sid)
 		end
+	end
+
+	if is_android then
+		button._android_checked = nil
 	end
 end
 
@@ -7603,11 +7617,19 @@ function WaveFlag:initialize(flying, duration, report, path_index, world_pos)
 end
 
 function WaveFlag:on_click()
-	log.debug(">>> sending next wave...")
+	if is_android then
+		if not self._android_checked then
+			self._android_checked = true
+			return
+		end
+	end
 	self:disable()
 
 	self.clicked = true
 	game_gui.game.store.send_next_wave = true
+	if is_android then
+		self._android_checked = nil
+	end
 end
 
 function WaveFlag:on_enter()
@@ -7623,6 +7645,9 @@ function WaveFlag:on_exit()
 	game.shown_path = nil
 
 	game_gui.incoming_tooltip:hide()
+	if is_android then
+		self._android_checked = nil
+	end
 end
 
 function WaveFlag:hide()
