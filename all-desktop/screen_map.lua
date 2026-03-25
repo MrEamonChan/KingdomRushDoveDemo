@@ -98,6 +98,8 @@ end
 
 screen_map.signal_handlers = {}
 
+local scroll_hotpot_width = 100
+
 function screen_map:init(w, h, done_callback)
 	self.done_callback = done_callback
 	self.original_w, self.original_h = w, h
@@ -266,7 +268,7 @@ function screen_map:init(w, h, done_callback)
 
 	self.window:add_child(vign)
 
-	local map_scroll_hotspots_l = KView:new(V.v(100, sh))
+	local map_scroll_hotspots_l = KView:new(V.v(scroll_hotpot_width, sh))
 
 	map_scroll_hotspots_l.propagate_on_click = true
 	map_scroll_hotspots_l.anchor = v(0, sh / 2)
@@ -283,10 +285,10 @@ function screen_map:init(w, h, done_callback)
 	self.window:add_child(map_scroll_hotspots_l)
 	map_scroll_hotspots_l:order_below(self.map_view)
 
-	local map_scroll_hotspots_r = KView:new(V.v(100, sh - 184))
+	local map_scroll_hotspots_r = KView:new(V.v(scroll_hotpot_width, sh))
 
 	map_scroll_hotspots_r.propagate_on_click = true
-	map_scroll_hotspots_r.anchor = v(100, sh / 2)
+	map_scroll_hotspots_r.anchor = v(scroll_hotpot_width, sh / 2)
 	map_scroll_hotspots_r.pos = v(sw, sh / 2)
 
 	function map_scroll_hotspots_r.on_enter()
@@ -301,7 +303,7 @@ function screen_map:init(w, h, done_callback)
 	map_scroll_hotspots_r:order_below(self.map_view)
 
 	--上下, copy from FL
-	local map_scroll_hotspots_u = KView:new(V.v(sw, 100))
+	local map_scroll_hotspots_u = KView:new(V.v(sw, scroll_hotpot_width))
 
 	map_scroll_hotspots_u.propagate_on_click = true
 	map_scroll_hotspots_u.anchor = v(sw / 2, 0)
@@ -318,10 +320,10 @@ function screen_map:init(w, h, done_callback)
 	self.window:add_child(map_scroll_hotspots_u)
 	map_scroll_hotspots_u:order_below(self.map_view)
 
-	local map_scroll_hotspots_d = KView:new(V.v(sw - 184, 100))
+	local map_scroll_hotspots_d = KView:new(V.v(sw, scroll_hotpot_width))
 
 	map_scroll_hotspots_d.propagate_on_click = true
-	map_scroll_hotspots_d.anchor = v(sw / 2, 100)
+	map_scroll_hotspots_d.anchor = v(sw / 2, scroll_hotpot_width)
 	map_scroll_hotspots_d.pos = v(sw / 2, sh)
 
 	function map_scroll_hotspots_d.on_enter()
@@ -1109,6 +1111,10 @@ end
 local touch_start_y = 0
 local touch_scrolling = true
 function screen_map:touchpressed(id, x, y, dx, dy, pressure)
+	if x < scroll_hotpot_width or x > self.sw - scroll_hotpot_width or y < scroll_hotpot_width or y > self.sh - scroll_hotpot_width then
+		-- 在滚动热点区域内，交付给滚动热点处理
+		return
+	end
 	touch_start_y = y
 	touch_scrolling = true
 end
