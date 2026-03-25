@@ -1,5 +1,5 @@
 -- chunkname: @./mods/all/mod_utils.lua
-local log = require("klua.log"):new("mod_utils")
+local log = require("lib.klua.log"):new("mod_utils")
 local FS = love.filesystem
 local hook_utils = require("hook_utils")
 local mod_main_config = require("mods.local.mod_main_config")

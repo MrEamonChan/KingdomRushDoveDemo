@@ -1,5 +1,5 @@
 -- chunkname: @./all/exoskeleton.lua
-local log = require("klua.log"):new("exoskeleton")
+local log = require("lib.klua.log"):new("exoskeleton")
 local FS = love.filesystem
 local A = require("animation_db")
 local EXO = {}

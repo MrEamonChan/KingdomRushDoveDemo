@@ -1,5 +1,5 @@
 -- chunkname: @./mods/mod_hook.lua
-local log = require("klua.log"):new("mod_hook")
+local log = require("lib.klua.log"):new("mod_hook")
 local I = require("lib.klove.image_db")
 local S = require("sound_db")
 local LU = require("level_utils")
