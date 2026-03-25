@@ -5876,7 +5876,7 @@ function scripts.tower_dark_elf.update(this, store)
 			for i = 2, #targets do
 				local t = targets[i]
 
-				if U.predict_damage(t, d) >= t.health.hp then
+				if band(t.health.immune_to, d.damage_type) == 0 and U.predict_damage(t, d) >= t.health.hp then
 					if t.health.hp > target_to_kill_hp then
 						local flying = band(t.vis.flags, F_FLYING) ~= 0
 
