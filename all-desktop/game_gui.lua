@@ -6031,8 +6031,7 @@ function CriketMenu:button_callback(button, item, entity, mouse_button, x, y)
 			end
 
 			if v.tower.terrain_style then
-				new_tower.tower.terrain_style = v.tower.terrain_style
-				new_tower.render.sprites[1].name = string.format(new_tower.render.sprites[1].name, v.tower.terrain_style)
+				U.set_terrain_style(new_tower, v.tower.terrain_style)
 			end
 
 			if new_tower.ui and v.ui then
@@ -6812,6 +6811,11 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 		self:hide()
 	elseif item.action == "tw_upgrade" or item.action == "tw_unblock" then
 		entity.tower.upgrade_to = item.action_arg
+
+		if item.action == "tw_unblock" then
+			entity.tower.upgrade_to = entity.tower.terrain_style
+		end
+
 		if item.action_arg == "tower_random_foundamental" then
 			entity.tower.upgrade_to = table.random({"tower_archer_1", "tower_mage_1", "tower_engineer_1", "tower_barrack_1"})
 		elseif item.action_arg == "tower_random_advanced_archer" then

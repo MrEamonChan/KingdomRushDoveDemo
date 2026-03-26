@@ -251,9 +251,9 @@ function LU.insert_entities(store, items, store_back_references)
 				if (e.editor and e.editor.game_mode ~= 0 and (e.editor.game_mode ~= store.level_mode)) or (item.editor_game_mode and item.editor_game_mode ~= store.level_mode) then
 					log.debug("skipping item %s. game mode mismatch", e.template_name)
 				else
-					if e.tower and e.tower.terrain_style then
-						e.render.sprites[1].name = string.format(e.render.sprites[1].name, e.tower.terrain_style)
-					end
+					-- if e.tower and e.tower.terrain_style then
+					-- 	e.render.sprites[1].name = string.format(e.render.sprites[1].name, e.tower.terrain_style)
+					-- end
 
 					if e.sound_events and e.sound_events.mute_on_level_insert then
 						e.sound_events.insert = nil
@@ -317,14 +317,12 @@ function LU.insert_holders(store, holders, templates)
 end
 
 function LU.insert_tower(store, template, style, pos, rally_pos, spent, holder_id)
-	local e = E:create_entity(template)
+	local e = E:create_entity(TERRAIN_STYLES[style])
 
 	e.pos = V.v(pos.x, pos.y)
 	e.tower.spent = spent and spent or 0
-	e.tower.terrain_style = TERRAIN_STYLES[style]
 	e.tower.default_rally_pos = V.v(rally_pos.x, rally_pos.y)
 	e.tower.holder_id = holder_id
-	e.render.sprites[1].name = string.format(e.render.sprites[1].name, e.tower.terrain_style)
 
 	if e.barrack then
 		e.barrack.rally_pos = V.vclone(e.tower.default_rally_pos)

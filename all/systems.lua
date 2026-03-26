@@ -227,10 +227,9 @@ function sys.level:init(store)
 
 				tower.tower.flip_x = tower_data.flip_x
 
-				if tower_data.terrain_style then
-					tower.tower.terrain_style = tower_data.terrain_style
-					tower.render.sprites[1].name = string.format(tower.render.sprites[1].name, tower.tower.terrain_style)
-				end
+				-- if tower_data.terrain_style then
+				-- 	U.set_terrain_style(tower, tower_data.terrain_style)
+				-- end
 
 				-- 恢复技能等级
 				if tower_data.powers and tower.powers then
@@ -1253,7 +1252,7 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 				end
 			end
 
-			local th = E:create_entity("tower_holder")
+			local th = E:create_entity(e.tower.terrain_style)
 
 			th.pos = V.vclone(e.pos)
 			th.tower.holder_id = e.tower.holder_id
@@ -1261,11 +1260,6 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 
 			if e.tower.default_rally_pos then
 				th.tower.default_rally_pos = e.tower.default_rally_pos
-			end
-
-			if e.tower.terrain_style then
-				th.tower.terrain_style = e.tower.terrain_style
-				th.render.sprites[1].name = string.format(th.render.sprites[1].name, e.tower.terrain_style)
 			end
 
 			if th.ui and e.ui then
@@ -1307,7 +1301,6 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 
 			if e.tower.terrain_style then
 				ne.tower.terrain_style = e.tower.terrain_style
-				ne.render.sprites[1].name = string.format(ne.render.sprites[1].name, e.tower.terrain_style)
 			end
 
 			if ne.ui and e.ui then

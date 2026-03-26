@@ -2543,83 +2543,7 @@ tt.min_delay = 15
 tt.max_delay = 20
 tt.sounds = {"UndergroundAmbienceSound"}
 --#endregion
---#region tower_holder_blocked
-tt = RT("tower_holder_blocked")
-AC(tt, "tower", "tower_holder", "pos", "render", "ui", "sound_events")
-tt.tower.level = 1
-tt.tower.can_be_mod = false
-tt.tower_holder.blocked = true
-tt.render.sprites[1].animated = false
-tt.render.sprites[1].name = "build_terrain_blocked_%04i"
-tt.render.sprites[1].offset = vec_2(0, 17)
-tt.render.sprites[1].z = Z_DECALS
-tt.ui.click_rect = r(-40, -12, 80, 46)
-tt.sound_events.remove = "GUITowerSell"
---#endregion
 
-tt = RT("tower_holder_blocked_2", "tower_holder_blocked")
-AC(tt, "editor")
---#region tower_holder_blocked_jungle
-tt = RT("tower_holder_blocked_jungle", "tower_holder_blocked")
-tt.tower.type = "holder_blocked_jungle"
-tt.tower_holder.unblock_price = 100
---#endregion
---#region tower_holder_blocked_underground
-tt = RT("tower_holder_blocked_underground", "tower_holder_blocked")
-tt.tower.type = "holder_blocked_underground"
-tt.tower_holder.unblock_price = 200
---#endregion
-
-tt = E:register_t("tower_holder_blocked_sea_of_trees", "tower_holder_blocked_2")
-b = balance.specials.trees.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0001_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0001_flag_blocked"
---tt.render.sprites[2].hidden = false
-tt = E:register_t("tower_holder_blocked_sea_of_trees_2", "tower_holder_blocked_2")
-b = balance.specials.trees.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0003_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0003_flag_blocked"
---tt.render.sprites[2].hidden = false
-tt = E:register_t("tower_holder_blocked_terrain_2", "tower_holder_blocked_2")
-b = balance.specials.terrain_2.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0004_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0004_flag_blocked"
---tt.render.sprites[2].hidden = false
-tt = E:register_t("tower_holder_blocked_terrain_3", "tower_holder_blocked_2")
-b = balance.specials.terrain_3.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0005_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0005_flag_blocked"
---tt.render.sprites[2].hidden = false
-tt = E:register_t("tower_holder_blocked_terrain_4", "tower_holder_blocked_2")
-b = balance.specials.trees.blocked_holders
--- E:add_comps(tt, "main_script")
--- tt.main_script.remove = scripts.tower_holder_animated.remove
-tt.tower.type = "holder_blocked_halloween"
-tt.tower_holder.unblock_price = b.price
--- tt.tower_holder.unblock_fx = "fx_tower_holder_unblock_terrain_4"
--- tt.render.sprites[1].name = "terrains_holders_0006_blocked"
--- tt.render.sprites[2].name = "UpdateHalloween_terrain_anim_0001"
-
-tt = E:register_t("tower_holder_blocked_terrain_6", "tower_holder_blocked_2")
-b = balance.specials.terrain_6.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0008_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0008_flag_blocked"
-tt = E:register_t("tower_holder_blocked_terrain_6_2", "tower_holder_blocked_2")
-b = balance.specials.terrain_6.blocked_holders
-tt.tower.type = "holder_blocked_sea_of_trees"
-tt.tower_holder.unblock_price = b.price
--- tt.render.sprites[1].name = "terrains_holders_0009_blocked"
--- tt.render.sprites[2].name = "terrains_holders_0009_flag_blocked"
 --#region carnivorous_plant
 tt = RT("carnivorous_plant", "decal_scripted")
 
@@ -5021,36 +4945,6 @@ tt.tween.props[1].keys = {{0, 255}, {"this.duration", 255}, {"this.duration+0.3"
 --#region decal_crystal_arcane_freeze_2
 tt = RT("decal_crystal_arcane_freeze_2", "decal_crystal_arcane_freeze_1")
 tt.render.sprites[1].name = "decal_crystal_arcane_freeze_2"
---#endregion
---#region tower_holder_elven_woods
-tt = RT("tower_holder_elven_woods", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_ELVEN_WOODS
-tt.render.sprites[1].name = "build_terrain_0001"
---#endregion
---#region tower_holder_faerie_grove
-tt = RT("tower_holder_faerie_grove", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_FAERIE_GROVE
-tt.render.sprites[1].name = "build_terrain_0002"
---#endregion
---#region tower_holder_ancient_metropolis
-tt = RT("tower_holder_ancient_metropolis", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_ANCIENT_METROPOLIS
-tt.render.sprites[1].name = "build_terrain_0007"
---#endregion
---#region tower_holder_hulking_rage
-tt = RT("tower_holder_hulking_rage", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_HULKING_RAGE
-tt.render.sprites[1].name = "build_terrain_0004"
---#endregion
---#region tower_holder_bittering_rancor
-tt = RT("tower_holder_bittering_rancor", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_BITTERING_RANCOR
-tt.render.sprites[1].name = "build_terrain_0005"
---#endregion
---#region tower_holder_forgotten_treasures
-tt = RT("tower_holder_forgotten_treasures", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_FORGOTTEN_TREASURES
-tt.render.sprites[1].name = "build_terrain_0006"
 --#endregion
 --#region tower_bastion_holder
 tt = RT("tower_bastion_holder")
@@ -20181,7 +20075,21 @@ tt.render.sprites[1].offset = v(23, 50)
 tt.tween.props[1].keys = {{0, 0}, {fts(15), 255}, {fts(45), 255}, {fts(60), 0}}
 tt.tween.remove = true
 
-tt = E:register_t("tower_holder_blocked_spiders", "tower_holder_blocked_2")
+--#region tower_holder_blocked_terrain_4
+tt = E:register_t("tower_holder_blocked_terrain_4", "tower_holder_blocked")
+b = balance.specials.trees.blocked_holders
+
+E:add_comps(tt, "main_script")
+
+-- tt.main_script.remove = scripts.tower_holder_animated.remove
+tt.tower.type = "blocked_holder"
+tt.tower_holder.unblock_price = b.price
+tt.tower_holder.unblock_fx = "fx_tower_holder_unblock_terrain_4"
+tt.render.sprites[1].name = "kr5_terrains_holders_blocked_0006"
+tt.render.sprites[2].name = "UpdateHalloween_terrain_anim_0001"
+--#endregion
+
+tt = E:register_t("tower_holder_blocked_spiders", "tower_holder_blocked")
 E:add_comps(tt, "main_script")
 b = balance.specials.stage29_holder_block.blocked_holders
 tt.main_script.insert = scripts.tower_holder_blocked_spiders.insert
@@ -23145,7 +23053,7 @@ tt.main_script.update = scripts.stage_33_spawner.update
 tt.spawn_data = nil
 tt.spawner.eternal = true
 
-tt = E:register_t("tower_holder_blocked_stage_33_house_1", "tower_holder_blocked_2")
+tt = E:register_t("tower_holder_blocked_stage_33_house_1", "tower_holder_blocked")
 tt.pre_destroy_thunders = scripts.stage_33_house_holder.pre_destroy_thunders
 tt.destroy_house = scripts.stage_33_house_holder.destroy_house
 tt.render.sprites[1] = E:clone_c("sprite")
@@ -23238,13 +23146,13 @@ tt.pre_destroy_thunders_list = {{
 	delay = 2,
 	pos = v(692, 248)
 }}
-tt = E:register_t("tower_holder_blocked_stage_33_invisible", "tower_holder_blocked_2")
+tt = E:register_t("tower_holder_blocked_stage_33_invisible", "tower_holder_blocked")
 tt.appear = scripts.tower_holder_blocked_stage_33_invisible.appear
 tt.render.sprites[1].hidden = true
 tt.render.sprites[2] = nil
 tt.ui.can_click = false
 tt.ui.can_select = false
-tt = E:register_t("tower_holder_blocked_stage_35_house_1", "tower_holder_blocked_2")
+tt = E:register_t("tower_holder_blocked_stage_35_house_1", "tower_holder_blocked")
 tt.pre_destroy = scripts.stage_35_house_holder.pre_destroy
 tt.destroy_house = scripts.stage_35_house_holder.destroy_house
 tt.render.sprites[1] = E:clone_c("sprite")
