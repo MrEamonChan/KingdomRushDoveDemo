@@ -28,9 +28,7 @@ require("game_templates_utils")
 
 --#region tower_holder
 tt = RT("tower_holder")
-
 AC(tt, "tower", "tower_holder", "pos", "render", "ui", "editor", "editor_script", "main_script")
-
 tt.ui.click_rect = r(-40, -12, 80, 46)
 tt.ui.has_nav_mesh = true
 tt.tower.level = 1
@@ -43,7 +41,9 @@ tt.tower_holder.preview_ids = {
 	mage = 4
 }
 tt.render.sprites[1].animated = false
-tt.render.sprites[1].name = "build_terrain_%04i"
+-- tt.render.sprites[1].name = "build_terrain_%04i"
+-- default fallback
+tt.render.sprites[1].name = "build_terrain_0001"
 tt.render.sprites[1].offset = vec_2(0, 17)
 tt.render.sprites[1].z = Z_DECALS
 tt.render.sprites[2] = CC("sprite")
@@ -102,7 +102,7 @@ local holder_template_names = {
 	tower_holder_sea_of_trees_17 = TERRAIN_STYLE_SEA_OF_TREES_17,
 	tower_holder_sea_of_trees_18 = TERRAIN_STYLE_SEA_OF_TREES_18,
 	tower_holder_sea_of_trees_19 = TERRAIN_STYLE_SEA_OF_TREES_19,
-	tower_holder_sea_of_trees_20 = TERRAIN_STYLE_SEA_OF_TREES_20,
+	tower_holder_sea_of_trees_20 = TERRAIN_STYLE_SEA_OF_TREES_20
 }
 
 -- 注册所有模板

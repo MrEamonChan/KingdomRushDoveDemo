@@ -209,7 +209,7 @@ TERRAIN_STYLE_SPRITE_DICT = {
 	[TERRAIN_STYLE_SEA_OF_TREES_17] = "kr5_build_terrain_0017",
 	[TERRAIN_STYLE_SEA_OF_TREES_18] = "kr5_build_terrain_0018",
 	[TERRAIN_STYLE_SEA_OF_TREES_19] = "kr5_build_terrain_0019",
-	[TERRAIN_STYLE_SEA_OF_TREES_20] = "kr5_build_terrain_0020",
+	[TERRAIN_STYLE_SEA_OF_TREES_20] = "kr5_build_terrain_0020"
 }
 TERRAIN_STYLES = {
 	grass = TERRAIN_STYLE_GRASS,

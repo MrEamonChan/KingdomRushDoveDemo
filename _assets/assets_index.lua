@@ -2411,14 +2411,6 @@ return {
 		size = 1398276,
 		hash = "a0991621"
 	},
-	["kr1-desktop/images/fullhd/kr4_kr5_encyclopedia-1.dds"] = {
-		size = 1398276,
-		hash = "a9e92ef9"
-	},
-	["kr1-desktop/images/fullhd/kr4_kr5_encyclopedia_creeps-1.dds"] = {
-		size = 22369796,
-		hash = "3e9af108"
-	},
 	["kr1-desktop/images/fullhd/kr4_mercenary_troll_hut-1.dds"] = {
 		size = 349700,
 		hash = "f11db1e4"
@@ -2622,6 +2614,10 @@ return {
 	["kr1-desktop/images/fullhd/stars_container-1.dds"] = {
 		size = 65152,
 		hash = "8ad25250"
+	},
+	["kr1-desktop/images/fullhd/tower_holders-1.dds"] = {
+		size = 1432036,
+		hash = "7d9e8cc8"
 	},
 	["kr1-desktop/images/fullhd/upgrades-1.dds"] = {
 		size = 1484688,
