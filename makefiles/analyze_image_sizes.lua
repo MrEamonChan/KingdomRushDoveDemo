@@ -121,6 +121,7 @@ for entry in lfs.dir(IMAGES_DIR) do
 			else
 				-- 没有 Lua 定义，标记为不缩放
 				resize_map[filename] = 0
+				print("Warning: No Lua definition for " .. filename .. ", defaulting to no resize.")
 			end
 		end
 	end

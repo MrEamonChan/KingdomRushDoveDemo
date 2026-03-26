@@ -1116,7 +1116,7 @@ if is_android then
 	local touch_scrolling = false
 	local touch_total_delta = 0
 	local TOUCH_SCROLL_THRESHOLD = 15 -- 滑动阈值，像素
-	local TOUCH_SCROLL_SENSITIVITY = 1.5 -- 灵敏度系数，0.5~1.0之间
+	local TOUCH_SCROLL_SENSITIVITY = 2.25 -- 灵敏度系数，0.5~1.0之间
 
 	function screen_map:touchpressed(id, x, y, dx, dy, pressure)
 		touch_last_y = y
