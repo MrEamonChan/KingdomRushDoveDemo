@@ -27642,6 +27642,32 @@ function scripts.controller_stage_09_spawn_nightmares.insert(this, store)
 	return true
 end
 
+scripts.aura_stage_09_spawn_nightmare_convert_spawn_fx = {}
+
+function scripts.aura_stage_09_spawn_nightmare_convert_spawn_fx.update(this, store)
+	local enemies_spawned = {}
+
+	while true do
+		local targets = U.find_enemies_in_range(store.entities, this.pos, 0, this.aura.radius, this.aura.vis_flags, this.aura.vis_bans, function(e)
+			return table.contains(this.include_templates, e.template_name)
+		end)
+
+		if targets and #targets > 0 then
+			for _, e in ipairs(targets) do
+				if not table.contains(enemies_spawned, e.id) then
+					e.can_be_converted = true
+
+					table.insert(enemies_spawned, e.id)
+
+					this.portal.enemy_spawned = true
+				end
+			end
+		end
+
+		coroutine.yield()
+	end
+end
+
 function scripts.controller_stage_09_spawn_nightmares.update(this, store)
 	local portal_spawned = this.portal_spawned
 
@@ -27805,8 +27831,7 @@ function scripts.aura_stage_09_spawn_nightmare_convert.update(this, store)
 					entity.nav_path = nav_path
 
 					local original_speed = entity.motion.max_speed
-
-					entity.motion.max_speed = 0
+					U.update_max_speed(entity, 0)
 					entity.source_id = this.id
 
 					queue_insert(store, entity)
@@ -27814,7 +27839,7 @@ function scripts.aura_stage_09_spawn_nightmare_convert.update(this, store)
 					S:queue(this.sound_spawn)
 					U.y_wait(store, fts(5))
 
-					entity.motion.max_speed = original_speed
+					U.update_max_speed(entity, original_speed)
 					this.entities_spawned = this.entities_spawned + 1
 				end
 			end
@@ -35895,7 +35920,7 @@ function scripts.enemy_armored_nightmare.update(this, store)
 				show_blood_pool(this, terrain_type)
 
 				this.unit.hide_during_death = true
-			elseif band(this.health.last_damage_types, bor(DAMAGE_DISINTEGRATE)) ~= 0 and this.unit.can_disintegrate and this.unit.disintegrate_fx then
+			elseif (band(this.health.last_damage_types, bor(DAMAGE_DISINTEGRATE)) ~= 0 or this.unit.disintegrate_when_silenced_death and not this.enemy.can_do_magic) and this.unit.can_disintegrate and this.unit.disintegrate_fx then
 				local fx = E:create_entity(this.unit.disintegrate_fx)
 
 				fx.pos.x, fx.pos.y = this.pos.x, this.pos.y

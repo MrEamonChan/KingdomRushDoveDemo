@@ -406,9 +406,7 @@ function LU.insert_hero(store, name, pos, force_full_level)
 		return
 	end
 
-	local template_names
-
-	template_names = store.selected_hero and store.selected_hero or GS.default_hero and {GS.default_hero}
+	local template_names = store.selected_hero
 
 	if not template_names then
 		store.level.locked_hero = true

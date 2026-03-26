@@ -12161,11 +12161,10 @@ tt.pos_guard = v(490, 550)
 tt.pos_chain = v(448, 541)
 tt.pos_elf_slave = v(428, 540)
 tt.spawn_cooldown = b.spawn_cooldown
+
 tt = E:register_t("controller_stage_09_spawn_nightmares")
 b = balance.specials.stage09_spawn_nightmares
-
 E:add_comps(tt, "editor", "pos", "main_script")
-
 tt.main_script.insert = scripts.controller_stage_09_spawn_nightmares.insert
 tt.main_script.update = scripts.controller_stage_09_spawn_nightmares.update
 tt.wave_config = b.wave_config

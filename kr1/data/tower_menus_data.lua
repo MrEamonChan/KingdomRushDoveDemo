@@ -928,10 +928,10 @@ return {
 			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_1")
 		}, {
 			tt_title = _("TOWER_DWAARP_DRILL_NAME_2"),
-			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_2_NOFMT")
+			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_2")
 		}, {
 			tt_title = _("TOWER_DWAARP_DRILL_NAME_3"),
-			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_3_NOFMT")
+			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_3")
 		}}
 	}), M(tpl.upgrade_power, {
 		action_arg = "lava",
@@ -974,13 +974,13 @@ return {
 		tt_phrase = _("TOWER_MECH_WASTE_NOTE"),
 		tt_list = {{
 			tt_title = _("TOWER_MECH_WASTE_NAME_1"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_1_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_1")
 		}, {
 			tt_title = _("TOWER_MECH_WASTE_NAME_2"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_2_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_2")
 		}, {
 			tt_title = _("TOWER_MECH_WASTE_NAME_3"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_3_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_3")
 		}}
 	}), tpl.rally, tpl.sell}},
 	paladin = {{M(tpl.upgrade_power, {
