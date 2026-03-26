@@ -2095,10 +2095,6 @@ return {
 		size = 349700,
 		hash = "b52a6e94"
 	},
-	["kr1-desktop/images/fullhd/go_towers_dark_elf.dds"] = {
-		size = 22369776,
-		hash = "ee7d82d1"
-	},
 	["kr1-desktop/images/fullhd/go_towers_demon_pit-1.dds"] = {
 		size = 5592580,
 		hash = "c1e826b8"
