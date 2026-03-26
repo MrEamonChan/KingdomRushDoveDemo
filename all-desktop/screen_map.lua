@@ -1109,10 +1109,11 @@ end
 
 -- 处理移动端的触摸事件，实现地图滚动
 local touch_start_y = 0
-local touch_scrolling = true
+local touch_scrolling = false
 function screen_map:touchpressed(id, x, y, dx, dy, pressure)
 	if x < scroll_hotpot_width or x > self.sw - scroll_hotpot_width or y < scroll_hotpot_width or y > self.sh - scroll_hotpot_width then
 		-- 在滚动热点区域内，交付给滚动热点处理
+		touch_scrolling = false
 		return
 	end
 	touch_start_y = y

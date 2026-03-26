@@ -6790,9 +6790,11 @@ function TowerMenu:button_exit(button, item, entity, mouse_button)
 	end
 end
 
+local actions_needing_confirmation_in_android = table.to_map({"tw_upgrade", "tw_unblock", "upgrade_power,", "tw_sell", "tw_buy_soldier", "tw_buy_attack", "tw_change_mode", "tw_free_action", "tw_repair"})
+
 function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 	if is_android then
-		if not button._android_checked then
+		if actions_needing_confirmation_in_android[item.action] and not button._android_checked then
 			button._android_checked = true
 			return
 		end
@@ -6949,7 +6951,7 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 		end
 	end
 
-	if is_android then
+	if is_android and actions_needing_confirmation_in_android[item.action] then
 		button._android_checked = nil
 	end
 end
