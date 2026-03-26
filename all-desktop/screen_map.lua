@@ -3670,6 +3670,10 @@ function UpgradeButtons:ungrey_me()
 end
 
 function UpgradeButtons:on_click(button, x, y)
+	if is_android and not self._android_checked then
+		self._android_checked = true
+		return
+	end
 	if not self.grey_out and not self.bought and screen_map.upgrades:rest_stars(self.data_values.price) then
 		S:queue("GUIBuyUpgrade")
 		screen_map.upgrades:hide_tip_panel()
@@ -3697,6 +3701,9 @@ function UpgradeButtons:on_click(button, x, y)
 		screen_map.upgrades:hide_tip_panel()
 		self:ungrey_me()
 		screen_map.upgrades:upgrade_bought(self.data_values.class, self.data_values.level - 1, self.data_values.price)
+	end
+	if is_android then
+		self._android_checked = nil
 	end
 end
 
