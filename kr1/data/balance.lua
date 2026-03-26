@@ -6258,7 +6258,8 @@ local towers = {
 			extra_damage_min = 1,
 			extra_damage_max = 1,
 			max_times = {20, 50, 999999},
-			s_extra_damage_total = 1
+			s_extra_damage_total = 1,
+            price = {250, 125}
 		}
 	},
 	hermit_toad = {
