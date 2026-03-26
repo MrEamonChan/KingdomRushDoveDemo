@@ -323,53 +323,53 @@ return {
 		size = 5592560,
 		hash = "1b16c1dd"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_sea_of_trees-1.png"] = {
-		size = 5678090,
-		hash = "bb185080"
+	["kr1-desktop/images/fullhd/go_enemies_sea_of_trees-1.dds"] = {
+		size = 22369796,
+		hash = "be738329"
 	},
 	["kr1-desktop/images/fullhd/go_enemies_storm-1.dds"] = {
 		size = 5592560,
 		hash = "c7dfbf74"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_2-1.png"] = {
-		size = 5626492,
-		hash = "1ccb5bc8"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_2-1.dds"] = {
+		size = 22369796,
+		hash = "267c2f4c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_3-1.png"] = {
-		size = 5986456,
-		hash = "fa8f1bbc"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_3-1.dds"] = {
+		size = 22369796,
+		hash = "77b886c1"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_3-2.png"] = {
-		size = 592219,
-		hash = "2e340db4"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_3-2.dds"] = {
+		size = 22369796,
+		hash = "12dca9df"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_4-1.png"] = {
-		size = 4887771,
-		hash = "0f123bc8"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_4-1.dds"] = {
+		size = 22369796,
+		hash = "003d6548"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_5-1.png"] = {
-		size = 5016260,
-		hash = "d887b108"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_5-1.dds"] = {
+		size = 22369796,
+		hash = "8cf4443c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_5-2.png"] = {
-		size = 362953,
-		hash = "49466888"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_5-2.dds"] = {
+		size = 22369796,
+		hash = "9842a69b"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_6-1.png"] = {
-		size = 5923086,
-		hash = "2fbfa064"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_6-1.dds"] = {
+		size = 22369796,
+		hash = "296b33cc"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_6-2.png"] = {
-		size = 789329,
-		hash = "73a9897c"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_6-2.dds"] = {
+		size = 22369796,
+		hash = "57bb48c5"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_7-1.png"] = {
-		size = 4719599,
-		hash = "3fdf49b3"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_7-1.dds"] = {
+		size = 22369796,
+		hash = "08f88d8c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_7_spider_web-1.png"] = {
-		size = 268202,
-		hash = "a71d66e0"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_7_spider_web-1.dds"] = {
+		size = 22369796,
+		hash = "b0eaddc4"
 	},
 	["kr1-desktop/images/fullhd/go_enemies_terrain_8_1_a-1.dds"] = {
 		size = 7496768,
@@ -2047,21 +2047,21 @@ return {
 		size = 1398256,
 		hash = "f78908f8"
 	},
-	["kr1-desktop/images/fullhd/go_stages_sea_of_trees-1.png"] = {
-		size = 142759,
-		hash = "42c5d618"
+	["kr1-desktop/images/fullhd/go_stages_sea_of_trees-1.dds"] = {
+		size = 22369796,
+		hash = "b5447404"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain2-1.png"] = {
-		size = 27459,
-		hash = "7eff8ce0"
+	["kr1-desktop/images/fullhd/go_stages_terrain2-1.dds"] = {
+		size = 22369796,
+		hash = "62435578"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain3-1.png"] = {
-		size = 1189516,
-		hash = "15719d48"
+	["kr1-desktop/images/fullhd/go_stages_terrain3-1.dds"] = {
+		size = 22369796,
+		hash = "632bd1f0"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain4-1.png"] = {
-		size = 535452,
-		hash = "7efb5cdb"
+	["kr1-desktop/images/fullhd/go_stages_terrain4-1.dds"] = {
+		size = 22369796,
+		hash = "52736c39"
 	},
 	["kr1-desktop/images/fullhd/go_stages_underground-1.dds"] = {
 		size = 349700,
