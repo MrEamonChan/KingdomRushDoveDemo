@@ -9027,11 +9027,10 @@ tt.timed_attacks.list[1].sound = "EnemyShacklerBlockTowerBlock"
 tt.timed_attacks.list[1].sound_out = "EnemyShacklerBlockTowerUnblock"
 tt.vis.bans_on_shackles = bor(F_STUN, F_TELEPORT)
 tt.sound_events.death = "EnemyShacklerDeath"
+
 tt = E:register_t("enemy_armored_nightmare", "enemy")
 b = balance.enemies.cult_of_the_overseer.armored_nightmare
-
 E:add_comps(tt, "melee", "death_spawns")
-
 tt.enemy.gold = b.gold
 tt.enemy.melee_slot = v(32, 0)
 tt.health.hp_max = b.hp
@@ -9071,6 +9070,7 @@ tt.unit.hit_offset = v(0, 15)
 tt.unit.head_offset = v(0, 15)
 tt.unit.mod_offset = v(0, 15)
 tt.unit.blood_color = BLOOD_NONE
+tt.unit.disintegrate_when_silenced_death = true
 tt.sound_events.death = "EnemyBoundNightmareDeath"
 tt = E:register_t("enemy_corrupted_stalker", "enemy")
 
@@ -11080,6 +11080,7 @@ tt.aura.radius = 80
 tt.aura.vis_bans = bor(F_FLYING, F_FRIEND)
 tt.aura.vis_flags = F_RANGED
 tt.include_templates = {"enemy_lesser_sister_nightmare"}
+tt.main_script.update = scripts.aura_stage_09_spawn_nightmare_convert_spawn_fx.update
 
 tt = E:register_t("enemy_darksteel_guardian", "enemy")
 b = balance.enemies.hammer_and_anvil.darksteel_guardian
