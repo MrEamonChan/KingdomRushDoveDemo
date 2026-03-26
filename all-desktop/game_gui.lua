@@ -6812,7 +6812,7 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 	elseif item.action == "tw_upgrade" or item.action == "tw_unblock" then
 		entity.tower.upgrade_to = item.action_arg
 
-		if item.action == "tw_unblock" then
+		if item.action == "tw_unblock" and entity.tower.type == "blocked_holder" then
 			entity.tower.upgrade_to = entity.tower.terrain_style
 		end
 

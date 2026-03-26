@@ -114,7 +114,7 @@ end
 
 --#region tower_holder_blocked
 tt = RT("tower_holder_blocked")
-AC(tt, "tower", "tower_holder", "pos", "render", "ui", "sound_events")
+AC(tt, "tower", "tower_holder", "pos", "render", "ui", "sound_events", "editor")
 tt.tower.level = 1
 tt.tower.can_be_mod = false
 tt.tower.type = "blocked_holder"
@@ -962,6 +962,7 @@ tt.render.sprites[tt.render.sid_gradiente].exo = true
 tt.render.sprites[tt.render.sid_gradiente].name = "buy"
 tt.render.sprites[tt.render.sid_gradiente].animated = true
 tt.render.sprites[tt.render.sid_gradiente].offset = v(-60, 85)
+-- tt.render.sprites[tt.render.sid_gradiente].hidden = true
 tt.render.sprites[tt.render.sid_dragon] = E:clone_c("sprite")
 tt.render.sprites[tt.render.sid_dragon].prefix = "stage31_wood_holder_dragonDef"
 tt.render.sprites[tt.render.sid_dragon].exo = true

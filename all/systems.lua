@@ -227,9 +227,9 @@ function sys.level:init(store)
 
 				tower.tower.flip_x = tower_data.flip_x
 
-				-- if tower_data.terrain_style then
-				-- 	U.set_terrain_style(tower, tower_data.terrain_style)
-				-- end
+				if tower_data.terrain_style then
+					U.set_terrain_style(tower, tower_data.terrain_style)
+				end
 
 				-- 恢复技能等级
 				if tower_data.powers and tower.powers then
@@ -1258,6 +1258,10 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 			th.tower.holder_id = e.tower.holder_id
 			th.tower.flip_x = e.tower.flip_x
 
+			if e.tower.terrain_style then
+				U.set_terrain_style(th, e.tower.terrain_style)
+			end
+
 			if e.tower.default_rally_pos then
 				th.tower.default_rally_pos = e.tower.default_rally_pos
 			end
@@ -1300,7 +1304,7 @@ function sys.tower_upgrade:on_update(dt, ts, store)
 			end
 
 			if e.tower.terrain_style then
-				ne.tower.terrain_style = e.tower.terrain_style
+				U.set_terrain_style(ne, e.tower.terrain_style)
 			end
 
 			if ne.ui and e.ui then

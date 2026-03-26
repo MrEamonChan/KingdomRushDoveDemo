@@ -23436,7 +23436,7 @@ function scripts.tower_holder_elemental.remove(this, store)
 
 	return true
 end
-
+-- 
 function scripts.tower_holder_elemental.update(this, store)
 	local start_anim_gradiente = false
 
