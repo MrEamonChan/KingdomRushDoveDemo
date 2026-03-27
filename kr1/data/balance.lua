@@ -5944,13 +5944,13 @@ local towers = {
 		skill_bomb = {
 			max_range = 250,
 			min_range = 80,
-			min_targets = 2,
+			min_targets = 1,
 			node_prediction = 40,
 			damage_radius = 70,
-			price = {200, 200, 200},
-			cooldown = {24, 20, 16},
-			damage_min = {82, 118, 142},
-			damage_max = {124, 176, 214},
+			price = {150, 175, 175},
+			cooldown = {20, 17, 14},
+			damage_min = {60, 80, 100},
+			damage_max = {90, 120, 150},
 			duration = {6, 6, 6},
 			damage_type = DAMAGE_EXPLOSION
 		}
@@ -6039,7 +6039,7 @@ local towers = {
 		skill_warrior = {
 			range = 240,
 			min_targets = 1,
-			price = {200, 120, 120},
+			price = {175, 125, 125},
 			cooldown = {15, 12, 9},
 			entity = {
 				range = 72,
@@ -6049,7 +6049,7 @@ local towers = {
 				damage_min = {26, 40, 54},
 				damage_max = {38, 60, 82},
 				damage_type = DAMAGE_PHYSICAL,
-				hp_max = {130, 156, 182},
+				hp_max = {150, 200, 250},
 				armor = {0, 0, 0}
 			}
 		},
@@ -6221,7 +6221,7 @@ local towers = {
 		}
 	},
 	dark_elf = {
-		rally_range = 145,
+		rally_range = 170,
 		stats = {
 			cooldown = 2,
 			range = 9,
@@ -6229,15 +6229,15 @@ local towers = {
 		},
 		soldier = {
 			dead_lifetime = 10,
-			speed = 75,
-			armor = {0.25, 0.25, 0.25},
-			hp = {78, 117, 156},
+			speed = 95,
+			armor = {0.2, 0.25, 0.3},
+			hp = {50, 115, 180},
 			regen_hp = {6, 9, 12},
 			basic_attack = {
 				range = 70,
 				cooldown = 1,
-				damage_min = {15, 20, 28},
-				damage_max = {20, 31, 44},
+				damage_min = {5, 10, 15},
+				damage_max = {8, 16, 24},
 				damage_type = DAMAGE_PHYSICAL
 			},
 			dodge_chance = {0.6, 0.6, 0.6}
@@ -6251,14 +6251,15 @@ local towers = {
 			damage_type = DAMAGE_PHYSICAL
 		},
 		skill_soldiers = {
-			price = {150, 150, 150},
+			price = {100, 125, 125},
 			cooldown = {1, 1, 1}
 		},
 		skill_buff = {
 			extra_damage_min = 1,
 			extra_damage_max = 1,
 			max_times = {20, 50, 999999},
-			s_extra_damage_total = 1
+			s_extra_damage_total = 1,
+			price = {250, 125}
 		}
 	},
 	hermit_toad = {
@@ -6444,10 +6445,10 @@ local towers = {
 				cooldown = {8, 8},
 				range = {180, 200},
 				damage_levels = {{
-					max = 32,
+					max = 35,
 					min = 26
 				}, {
-					max = 65,
+					max = 70,
 					min = 52
 				}},
 				damage_type = DAMAGE_TRUE,
@@ -6464,16 +6465,6 @@ local towers = {
 				nodes_offset_max = {-20, -20},
 				nodes_offset_min = {-24, -24}
 			}
-		},
-		-- not in use
-		thunder = {
-			price = {150, 200}
-		},
-		hat = {
-			price = {150, 200}
-		},
-		teleport = {
-			price = {150, 200}
 		}
 	},
 	dragons = {
@@ -6499,9 +6490,9 @@ local towers = {
 			damage_max_area = {30, 60, 100}
 		},
 		massive_fear = {
-			price = {200, 300},
-			cooldown = {17.6, 17.6},
-			stun_duration = {2.5, 4},
+			price = {200, 225},
+			cooldown = {15, 12},
+			stun_duration = {3, 4},
 			range_factor = 180 / 275,
 			min_targets = 3,
 			max_targets = 15

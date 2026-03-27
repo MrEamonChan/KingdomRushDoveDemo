@@ -323,53 +323,53 @@ return {
 		size = 5592560,
 		hash = "1b16c1dd"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_sea_of_trees-1.png"] = {
-		size = 5678090,
-		hash = "bb185080"
+	["kr1-desktop/images/fullhd/go_enemies_sea_of_trees-1.dds"] = {
+		size = 22369796,
+		hash = "be738329"
 	},
 	["kr1-desktop/images/fullhd/go_enemies_storm-1.dds"] = {
 		size = 5592560,
 		hash = "c7dfbf74"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_2-1.png"] = {
-		size = 5626492,
-		hash = "1ccb5bc8"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_2-1.dds"] = {
+		size = 22369796,
+		hash = "267c2f4c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_3-1.png"] = {
-		size = 5986456,
-		hash = "fa8f1bbc"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_3-1.dds"] = {
+		size = 22369796,
+		hash = "77b886c1"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_3-2.png"] = {
-		size = 592219,
-		hash = "2e340db4"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_3-2.dds"] = {
+		size = 22369796,
+		hash = "12dca9df"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_4-1.png"] = {
-		size = 4887771,
-		hash = "0f123bc8"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_4-1.dds"] = {
+		size = 22369796,
+		hash = "003d6548"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_5-1.png"] = {
-		size = 5016260,
-		hash = "d887b108"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_5-1.dds"] = {
+		size = 22369796,
+		hash = "8cf4443c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_5-2.png"] = {
-		size = 362953,
-		hash = "49466888"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_5-2.dds"] = {
+		size = 22369796,
+		hash = "9842a69b"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_6-1.png"] = {
-		size = 5923086,
-		hash = "2fbfa064"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_6-1.dds"] = {
+		size = 22369796,
+		hash = "296b33cc"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_6-2.png"] = {
-		size = 789329,
-		hash = "73a9897c"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_6-2.dds"] = {
+		size = 22369796,
+		hash = "57bb48c5"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_7-1.png"] = {
-		size = 4719599,
-		hash = "3fdf49b3"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_7-1.dds"] = {
+		size = 22369796,
+		hash = "08f88d8c"
 	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_7_spider_web-1.png"] = {
-		size = 268202,
-		hash = "a71d66e0"
+	["kr1-desktop/images/fullhd/go_enemies_terrain_7_spider_web-1.dds"] = {
+		size = 22369796,
+		hash = "b0eaddc4"
 	},
 	["kr1-desktop/images/fullhd/go_enemies_terrain_8_1_a-1.dds"] = {
 		size = 7496768,
@@ -402,14 +402,6 @@ return {
 	["kr1-desktop/images/fullhd/go_enemies_terrain_8_4-1.dds"] = {
 		size = 2993024,
 		hash = "172a022c"
-	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_8_4_palace_guard-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
-	},
-	["kr1-desktop/images/fullhd/go_enemies_terrain_8_4_wukong_terracotta_grande-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
 	},
 	["kr1-desktop/images/fullhd/go_enemies_terrain_9_1-1.dds"] = {
 		size = 10837392,
@@ -578,10 +570,6 @@ return {
 	["kr1-desktop/images/fullhd/go_hero_dragon_arb-1.dds"] = {
 		size = 22369796,
 		hash = "4e47ac28"
-	},
-	["kr1-desktop/images/fullhd/go_hero_dragon_arb_transformation-1.dds"] = {
-		size = 89478640,
-		hash = "c832ccc1"
 	},
 	["kr1-desktop/images/fullhd/go_hero_dragon_bone-1.dds"] = {
 		size = 5592580,
@@ -767,17 +755,9 @@ return {
 		size = 349700,
 		hash = "136793c8"
 	},
-	["kr1-desktop/images/fullhd/go_hero_space_elf.dds"] = {
-		size = 22369776,
-		hash = "5006468c"
-	},
 	["kr1-desktop/images/fullhd/go_hero_spider-1.dds"] = {
 		size = 22369796,
 		hash = "08195cdc"
-	},
-	["kr1-desktop/images/fullhd/go_hero_spider-2.dds"] = {
-		size = 89478640,
-		hash = "bd65c9bc"
 	},
 	["kr1-desktop/images/fullhd/go_hero_thor-1.dds"] = {
 		size = 5592560,
@@ -826,10 +806,6 @@ return {
 	["kr1-desktop/images/fullhd/go_hero_wukong-1.dds"] = {
 		size = 22369796,
 		hash = "9f34b008"
-	},
-	["kr1-desktop/images/fullhd/go_hero_wukong.dds"] = {
-		size = 22369796,
-		hash = "668ad0c8"
 	},
 	["kr1-desktop/images/fullhd/go_hero_xin-1.dds"] = {
 		size = 22369776,
@@ -1039,10 +1015,6 @@ return {
 		size = 4300928,
 		hash = "5ba8df3f"
 	},
-	["kr1-desktop/images/fullhd/go_stage112_strangerthings-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
-	},
 	["kr1-desktop/images/fullhd/go_stage113-1.dds"] = {
 		size = 2662528,
 		hash = "3f9534dc"
@@ -1131,10 +1103,6 @@ return {
 		size = 4300928,
 		hash = "a6b6e305"
 	},
-	["kr1-desktop/images/fullhd/go_stage120_stage_layers-1.dds"] = {
-		size = 4300928,
-		hash = "764deb0c"
-	},
 	["kr1-desktop/images/fullhd/go_stage121-1.dds"] = {
 		size = 8388736,
 		hash = "810a68f2"
@@ -1142,10 +1110,6 @@ return {
 	["kr1-desktop/images/fullhd/go_stage121_bg-1.dds"] = {
 		size = 4300928,
 		hash = "ab4c5534"
-	},
-	["kr1-desktop/images/fullhd/go_stage121_fx_water-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
 	},
 	["kr1-desktop/images/fullhd/go_stage122-1.dds"] = {
 		size = 16777344,
@@ -1160,22 +1124,6 @@ return {
 		hash = "60195360"
 	},
 	["kr1-desktop/images/fullhd/go_stage122_bg-2.dds"] = {
-		size = 4300928,
-		hash = "9e8c2ffc"
-	},
-	["kr1-desktop/images/fullhd/go_stage122_croc_boss_2-1.dds"] = {
-		size = 4194432,
-		hash = "7f1006ec"
-	},
-	["kr1-desktop/images/fullhd/go_stage122_croc_boss_2-2.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
-	},
-	["kr1-desktop/images/fullhd/go_stage122_fx_water-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
-	},
-	["kr1-desktop/images/fullhd/go_stage122_stage_layers-1.dds"] = {
 		size = 4300928,
 		hash = "9e8c2ffc"
 	},
@@ -1258,10 +1206,6 @@ return {
 	["kr1-desktop/images/fullhd/go_stage130_bg-1.dds"] = {
 		size = 4300928,
 		hash = "f2d631b6"
-	},
-	["kr1-desktop/images/fullhd/go_stage130_boss-1.dds"] = {
-		size = 4194432,
-		hash = "4e435590"
 	},
 	["kr1-desktop/images/fullhd/go_stage131-1.dds"] = {
 		size = 14946080,
@@ -1430,10 +1374,6 @@ return {
 	["kr1-desktop/images/fullhd/go_stage140_bossfight-2.dds"] = {
 		size = 12446912,
 		hash = "7c342194"
-	},
-	["kr1-desktop/images/fullhd/go_stage140_bossfight_cannon_exo-1.dds"] = {
-		size = 1373712,
-		hash = "6f35e174"
 	},
 	["kr1-desktop/images/fullhd/go_stage14_bg-1.dds"] = {
 		size = 1036928,
@@ -1879,10 +1819,6 @@ return {
 		size = 1069328,
 		hash = "df40c0cf"
 	},
-	["kr1-desktop/images/fullhd/go_stage57_land_covers-1.dds"] = {
-		size = 1398256,
-		hash = "9a2c42ec"
-	},
 	["kr1-desktop/images/fullhd/go_stage58-1.dds"] = {
 		size = 1398256,
 		hash = "b9cf59f8"
@@ -2047,21 +1983,21 @@ return {
 		size = 1398256,
 		hash = "f78908f8"
 	},
-	["kr1-desktop/images/fullhd/go_stages_sea_of_trees-1.png"] = {
-		size = 142759,
-		hash = "42c5d618"
+	["kr1-desktop/images/fullhd/go_stages_sea_of_trees-1.dds"] = {
+		size = 22369796,
+		hash = "b5447404"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain2-1.png"] = {
-		size = 27459,
-		hash = "7eff8ce0"
+	["kr1-desktop/images/fullhd/go_stages_terrain2-1.dds"] = {
+		size = 22369796,
+		hash = "62435578"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain3-1.png"] = {
-		size = 1189516,
-		hash = "15719d48"
+	["kr1-desktop/images/fullhd/go_stages_terrain3-1.dds"] = {
+		size = 22369796,
+		hash = "632bd1f0"
 	},
-	["kr1-desktop/images/fullhd/go_stages_terrain4-1.png"] = {
-		size = 535452,
-		hash = "7efb5cdb"
+	["kr1-desktop/images/fullhd/go_stages_terrain4-1.dds"] = {
+		size = 22369796,
+		hash = "52736c39"
 	},
 	["kr1-desktop/images/fullhd/go_stages_underground-1.dds"] = {
 		size = 349700,
@@ -2094,10 +2030,6 @@ return {
 	["kr1-desktop/images/fullhd/go_towers_dark_elf-2.dds"] = {
 		size = 349700,
 		hash = "b52a6e94"
-	},
-	["kr1-desktop/images/fullhd/go_towers_dark_elf.dds"] = {
-		size = 22369776,
-		hash = "ee7d82d1"
 	},
 	["kr1-desktop/images/fullhd/go_towers_demon_pit-1.dds"] = {
 		size = 5592580,
@@ -2235,10 +2167,6 @@ return {
 		size = 2102756,
 		hash = "a46aaacb"
 	},
-	["kr1-desktop/images/fullhd/gui_ico-2.dds"] = {
-		size = 1398276,
-		hash = "91f90214"
-	},
 	["kr1-desktop/images/fullhd/gui_notifications-1.dds"] = {
 		size = 3956420,
 		hash = "7a3ff7e4"
@@ -2250,10 +2178,6 @@ return {
 	["kr1-desktop/images/fullhd/gui_portraits-1.dds"] = {
 		size = 6189348,
 		hash = "c7ab262c"
-	},
-	["kr1-desktop/images/fullhd/gui_portraits-2.dds"] = {
-		size = 1398276,
-		hash = "bf3155b4"
 	},
 	["kr1-desktop/images/fullhd/gui_tutorial-1.dds"] = {
 		size = 1525568,
@@ -2487,14 +2411,6 @@ return {
 		size = 1398276,
 		hash = "a0991621"
 	},
-	["kr1-desktop/images/fullhd/kr4_kr5_encyclopedia-1.dds"] = {
-		size = 1398276,
-		hash = "a9e92ef9"
-	},
-	["kr1-desktop/images/fullhd/kr4_kr5_encyclopedia_creeps-1.dds"] = {
-		size = 22369796,
-		hash = "3e9af108"
-	},
 	["kr1-desktop/images/fullhd/kr4_mercenary_troll_hut-1.dds"] = {
 		size = 349700,
 		hash = "f11db1e4"
@@ -2698,6 +2614,10 @@ return {
 	["kr1-desktop/images/fullhd/stars_container-1.dds"] = {
 		size = 65152,
 		hash = "8ad25250"
+	},
+	["kr1-desktop/images/fullhd/tower_holders-1.dds"] = {
+		size = 1432036,
+		hash = "7d9e8cc8"
 	},
 	["kr1-desktop/images/fullhd/upgrades-1.dds"] = {
 		size = 1484688,

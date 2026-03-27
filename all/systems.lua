@@ -229,8 +229,7 @@ function sys.level:init(store)
 				tower.tower.flip_x = tower_data.flip_x
 
 				if tower_data.terrain_style then
-					tower.tower.terrain_style = tower_data.terrain_style
-					tower.render.sprites[1].name = string.format(tower.render.sprites[1].name, tower.tower.terrain_style)
+					U.set_terrain_style(tower, tower_data.terrain_style)
 				end
 
 				-- 恢复技能等级

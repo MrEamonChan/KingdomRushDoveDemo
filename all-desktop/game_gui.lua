@@ -317,6 +317,16 @@ function game_gui:init(w, h, game)
 	GGLabel.static.font_scale = scale
 	GGLabel.static.ref_h = self.ref_h
 
+	local hud_scale = 1
+	if is_android then
+		-- 这里要通过长宽比来判断，因为有些安卓设备虽然是移动平台但屏幕比较大，适合用桌面版的 HUD 布局和大小
+		local aspect_ratio = self.sw / self.sh
+		if aspect_ratio > GUI_REF_W / GUI_REF_H then
+			-- 屏幕更宽的设备使用放大 HUD，屏幕更窄的设备使用桌面的 HUD
+			hud_scale = 1.35
+		end
+	end
+
 	local pickview = PickView:new(sw, sh)
 
 	pickview.pos = v(0, 0)
@@ -382,8 +392,7 @@ function game_gui:init(w, h, game)
 	rallyflag.hidden = true
 	rallyflag.anchor = v(rallyflag.size.x * 0.5, rallyflag.size.y * 0.5)
 
-	local hud_bottom_scale = is_android and 1.3 or 1
-	local hud_bottom = HudBottomView:new(sw, sh, hud_bottom_scale)
+	local hud_bottom = HudBottomView:new(sw, sh, hud_scale)
 
 	local hud_counters = HudCountersView:new(self.game.simulation.store.level_mode)
 
@@ -403,7 +412,7 @@ function game_gui:init(w, h, game)
 
 	hud_pause.anchor = v(hud_pause.size.x, 0)
 	hud_pause.pos = v(sw + -37, -21)
-	hud_pause.scale = is_android and v(1.3, 1.3) or v(0.9, 0.9)
+	hud_pause.scale = v(0.9 * hud_scale, 0.9 * hud_scale)
 
 	local pauseview = PauseView:new()
 
@@ -1346,7 +1355,7 @@ function game_gui:select_entity(e)
 	end
 
 	if game_gui.mode == GUI_MODE_SWAP_TOWER then
-		game_gui.swap_tower()
+		game_gui.swap_tower(e)
 	end
 
 	if self.selected_entity and e ~= self.selected_entity then
@@ -1710,8 +1719,8 @@ function game_gui:block_random_power(duration, style)
 	end
 end
 
-function game_gui.swap_tower()
-	local e = game_gui.last_tower_hover
+function game_gui.swap_tower(target_tower)
+	local e = target_tower or game_gui.last_tower_hover
 	local tower_selected = game_gui.swap_entity
 
 	if not e or not e.ui or not tower_selected then
@@ -2757,6 +2766,7 @@ function InfoBar:initialize()
 		sv.propagate_on_down = true
 		sv.propagate_on_click = true
 		sv.scale.x = 0.8
+		sv.scale.y = 0.8
 		self.stats_views[vn] = sv
 
 		local off_x = 0
@@ -2798,9 +2808,11 @@ function InfoBar:initialize()
 	end
 
 	v_portrait.scale.x = 0.8
+	v_portrait.scale.y = 0.8
 	portrait_bo.scale.x = 0.8
+	portrait_bo.scale.y = 0.8
 	l_name.scale.x = 0.8
-
+	l_name.scale.y = 0.8
 end
 
 function InfoBar:show()
@@ -4168,7 +4180,6 @@ function MousePointer:initialize()
 			default = p3b
 		}
 	}
-
 end
 
 function MousePointer:update_pointer(mode)
@@ -6020,8 +6031,7 @@ function CriketMenu:button_callback(button, item, entity, mouse_button, x, y)
 			end
 
 			if v.tower.terrain_style then
-				new_tower.tower.terrain_style = v.tower.terrain_style
-				new_tower.render.sprites[1].name = string.format(new_tower.render.sprites[1].name, v.tower.terrain_style)
+				U.set_terrain_style(new_tower, v.tower.terrain_style)
 			end
 
 			if new_tower.ui and v.ui then
@@ -6773,9 +6783,21 @@ function TowerMenu:button_exit(button, item, entity, mouse_button)
 		entity.ui.hover_active = nil
 		entity.ui.args = nil
 	end
+
+	if is_android then
+		button._android_checked = nil
+	end
 end
 
+local actions_needing_confirmation_in_android = table.to_map({"tw_upgrade", "tw_unblock", "upgrade_power,", "tw_sell", "tw_buy_soldier", "tw_buy_attack", "tw_change_mode", "tw_free_action", "tw_repair"})
+
 function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
+	if is_android then
+		if actions_needing_confirmation_in_android[item.action] and not button._android_checked then
+			button._android_checked = true
+			return
+		end
+	end
 	button:disable()
 
 	local inhibit_sounds = false
@@ -6801,6 +6823,11 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 		self:hide()
 	elseif item.action == "tw_upgrade" or item.action == "tw_unblock" then
 		entity.tower.upgrade_to = item.action_arg
+
+		if item.action == "tw_unblock" and entity.tower.type == "blocked_holder" then
+			entity.tower.upgrade_to = entity.tower.terrain_style
+		end
+
 		if item.action_arg == "tower_random_foundamental" then
 			entity.tower.upgrade_to = table.random({"tower_archer_1", "tower_mage_1", "tower_engineer_1", "tower_barrack_1"})
 		elseif item.action_arg == "tower_random_advanced_archer" then
@@ -6926,6 +6953,10 @@ function TowerMenu:button_callback(button, item, entity, mouse_button, x, y)
 		for _, sid in pairs(item.sounds) do
 			S:queue(sid)
 		end
+	end
+
+	if is_android and actions_needing_confirmation_in_android[item.action] then
+		button._android_checked = nil
 	end
 end
 
@@ -7592,11 +7623,19 @@ function WaveFlag:initialize(flying, duration, report, path_index, world_pos)
 end
 
 function WaveFlag:on_click()
-	log.debug(">>> sending next wave...")
+	if is_android then
+		if not self._android_checked then
+			self._android_checked = true
+			return
+		end
+	end
 	self:disable()
 
 	self.clicked = true
 	game_gui.game.store.send_next_wave = true
+	if is_android then
+		self._android_checked = nil
+	end
 end
 
 function WaveFlag:on_enter()
@@ -7612,6 +7651,9 @@ function WaveFlag:on_exit()
 	game.shown_path = nil
 
 	game_gui.incoming_tooltip:hide()
+	if is_android then
+		self._android_checked = nil
+	end
 end
 
 function WaveFlag:hide()

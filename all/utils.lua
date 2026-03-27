@@ -2462,7 +2462,7 @@ end
 ---@return string 处理后的字符串
 function U.splicing_from_kr(from_kr, str)
 	if from_kr and from_kr ~= 1 then
-		return "kr" .. from_kr .. "_" .. str
+		return string.format("kr%d_%s", from_kr, str)
 	end
 
 	return str
@@ -2981,6 +2981,14 @@ function U.is_soldiers_around_need_heal(soldiers, center, trigger_hp_factor, ran
 		end
 	end
 	return false
+end
+
+--- 设置塔位地形样式
+--- @param e table 实体
+--- @param terrain_style string 塔位地形样式
+function U.set_terrain_style(e, terrain_style)
+	e.tower.terrain_style = terrain_style
+	e.render.sprites[1].name = TERRAIN_STYLE_SPRITE_DICT[terrain_style]
 end
 
 return U

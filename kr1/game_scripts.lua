@@ -23436,7 +23436,7 @@ function scripts.tower_holder_elemental.remove(this, store)
 
 	return true
 end
-
+-- 
 function scripts.tower_holder_elemental.update(this, store)
 	local start_anim_gradiente = false
 
@@ -27642,6 +27642,32 @@ function scripts.controller_stage_09_spawn_nightmares.insert(this, store)
 	return true
 end
 
+scripts.aura_stage_09_spawn_nightmare_convert_spawn_fx = {}
+
+function scripts.aura_stage_09_spawn_nightmare_convert_spawn_fx.update(this, store)
+	local enemies_spawned = {}
+
+	while true do
+		local targets = U.find_enemies_in_range(store.entities, this.pos, 0, this.aura.radius, this.aura.vis_flags, this.aura.vis_bans, function(e)
+			return table.contains(this.include_templates, e.template_name)
+		end)
+
+		if targets and #targets > 0 then
+			for _, e in ipairs(targets) do
+				if not table.contains(enemies_spawned, e.id) then
+					e.can_be_converted = true
+
+					table.insert(enemies_spawned, e.id)
+
+					this.portal.enemy_spawned = true
+				end
+			end
+		end
+
+		coroutine.yield()
+	end
+end
+
 function scripts.controller_stage_09_spawn_nightmares.update(this, store)
 	local portal_spawned = this.portal_spawned
 
@@ -27805,8 +27831,7 @@ function scripts.aura_stage_09_spawn_nightmare_convert.update(this, store)
 					entity.nav_path = nav_path
 
 					local original_speed = entity.motion.max_speed
-
-					entity.motion.max_speed = 0
+					U.update_max_speed(entity, 0)
 					entity.source_id = this.id
 
 					queue_insert(store, entity)
@@ -27814,7 +27839,7 @@ function scripts.aura_stage_09_spawn_nightmare_convert.update(this, store)
 					S:queue(this.sound_spawn)
 					U.y_wait(store, fts(5))
 
-					entity.motion.max_speed = original_speed
+					U.update_max_speed(entity, original_speed)
 					this.entities_spawned = this.entities_spawned + 1
 				end
 			end
@@ -35895,7 +35920,7 @@ function scripts.enemy_armored_nightmare.update(this, store)
 				show_blood_pool(this, terrain_type)
 
 				this.unit.hide_during_death = true
-			elseif band(this.health.last_damage_types, bor(DAMAGE_DISINTEGRATE)) ~= 0 and this.unit.can_disintegrate and this.unit.disintegrate_fx then
+			elseif (band(this.health.last_damage_types, bor(DAMAGE_DISINTEGRATE)) ~= 0 or this.unit.disintegrate_when_silenced_death and not this.enemy.can_do_magic) and this.unit.can_disintegrate and this.unit.disintegrate_fx then
 				local fx = E:create_entity(this.unit.disintegrate_fx)
 
 				fx.pos.x, fx.pos.y = this.pos.x, this.pos.y
@@ -41734,8 +41759,7 @@ function scripts.tower_stage_17_weirdwood.update(this, store)
 						th.tower.default_rally_pos = this.tower.default_rally_pos
 					end
 
-					th.tower.terrain_style = this.tower.terrain_style
-					th.render.sprites[1].name = string.format(th.render.sprites[1].name, this.tower.terrain_style)
+					U.set_terrain_style(th, this.tower.terrain_style)
 
 					if th.ui and this.ui then
 						th.ui.nav_mesh_id = this.ui.nav_mesh_id
@@ -59985,42 +60009,34 @@ function scripts.mod_bull_king_stun.insert(this, store)
 	end
 
 	if target.vis and not U.flags_pass(target.vis, this.modifier) then
-		log.paranoid("mod %s cannot be applied to entity %s:%s because of vis flags/bans", this.template_name, target.id, target.template_name)
-
 		return false
 	end
 
-	if target and target.unit and this.render then
-		for i = 1, #this.render.sprites do
-			local s = this.render.sprites[i]
+	for i = 1, #this.render.sprites do
+		local s = this.render.sprites[i]
 
-			if not s.keep_flip_x then
-				s.flip_x = target.render.sprites[1].flip_x
-			end
+		if not s.keep_flip_x then
+			s.flip_x = target.render.sprites[1].flip_x
+		end
 
-			if s.size_names then
-				s.prefix = s.prefix .. "_" .. s.size_names[target.unit.size]
-			end
+		if s.size_anchors then
+			s.anchor = s.size_anchors[target.unit.size]
+		end
 
-			if s.size_anchors then
-				s.anchor = s.size_anchors[target.unit.size]
-			end
+		if m.custom_scales then
+			s.scale = V.vclone(m.custom_scales[target.template_name] or m.custom_scales.default)
+		end
 
-			if m.custom_scales then
-				s.scale = V.vclone(m.custom_scales[target.template_name] or m.custom_scales.default)
-			end
+		if m.custom_offsets then
+			s.offset = V.vclone(m.custom_offsets[target.template_name] or m.custom_offsets.default)
+			s.offset.x = s.offset.x * (s.flip_x and -1 or 1)
+		elseif m.health_bar_offset then
+			local hb = target.health_bar.offset
+			local hbo = m.health_bar_offset
 
-			if m.custom_offsets then
-				s.offset = V.vclone(m.custom_offsets[target.template_name] or m.custom_offsets.default)
-				s.offset.x = s.offset.x * (s.flip_x and -1 or 1)
-			elseif m.health_bar_offset then
-				local hb = target.health_bar.offset
-				local hbo = m.health_bar_offset
-
-				s.offset.x, s.offset.y = hb.x + hbo.x, hb.y + hbo.y
-			elseif m.use_mod_offset and target.unit.mod_offset then
-				s.offset.x, s.offset.y = target.unit.mod_offset.x, target.unit.mod_offset.y
-			end
+			s.offset.x, s.offset.y = hb.x + hbo.x, hb.y + hbo.y
+		elseif m.use_mod_offset and target.unit.mod_offset then
+			s.offset.x, s.offset.y = target.unit.mod_offset.x, target.unit.mod_offset.y
 		end
 	end
 
@@ -60031,10 +60047,8 @@ function scripts.mod_bull_king_stun.insert(this, store)
 	end
 
 	SU.stun_inc(target)
+	U.bans_add(target.vis, F_ALL)
 
-	this._pushed_bans = U.push_bans(target.vis, F_ALL)
-
-	log.paranoid("mod_bull_king_stun.insert (%s)-%s for target (%s)-%s", this.id, this.template_name, target.id, target.template_name)
 	signal.emit("mod-applied", this, target)
 
 	return true
@@ -60046,15 +60060,7 @@ function scripts.mod_bull_king_stun.remove(this, store)
 	if target then
 		SU.stun_dec(target)
 
-		if this._pushed_bans then
-			U.pop_bans(target.vis, this._pushed_bans)
-
-			this._pushed_bans = nil
-		end
-
-		log.paranoid("mod_bull_king_stun.remove (%s)-%s for target (%s)-%s", this.id, this.template_name, target.id, target.template_name)
-	else
-		log.paranoid("mod_bull_king_stun.remove target is nil for id %s", this.modifier.target_id)
+		U.bans_remove(target.vis, F_ALL)
 	end
 
 	return true

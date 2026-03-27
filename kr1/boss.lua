@@ -247,9 +247,7 @@ tt.melee.attacks[1].sound = "JtEat"
 tt.melee.attacks[1].sound_args = {
 	delay = fts(6)
 }
-tt.melee.attacks[1].side_effect = function(this, store, attack, target)
-	U.heal(this, 100)
-end
+tt.melee.attacks[1].side_effect = scripts.eb_jt.heal
 tt.timed_attacks.list[1] = CC("custom_attack")
 tt.timed_attacks.list[1].cooldown = 10 + fts(29)
 tt.timed_attacks.list[1].count = 4

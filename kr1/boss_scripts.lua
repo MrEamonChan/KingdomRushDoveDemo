@@ -239,6 +239,10 @@ function scripts.eb_jt.on_damage(this, store, damage)
 	return true
 end
 
+function scripts.eb_jt.heal(this, store, attack, target)
+	U.heal(this, 100)
+end
+
 function scripts.eb_jt.update(this, store)
 	local fa = this.timed_attacks.list[1]
 
@@ -6020,6 +6024,7 @@ function scripts.eb_jack_spawner_aura.update(this, store)
 				e.nav_path.pi = pi
 				e.nav_path.spi = math.random(1, 3)
 				e.nav_path.ni = km.clamp(P:get_start_node(pi), P:get_end_node(pi), ni + math.random(-10, 10))
+				e.render.sprites[1].name = "raise"
 				e.enemy.gold = 0
 
 				queue_insert(store, e)

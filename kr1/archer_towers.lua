@@ -1141,8 +1141,8 @@ tt.tower_upgrade_persistent_data.max_current_mode = 1
 tt.tower_upgrade_persistent_data.souls_extra_damage_min = 0
 tt.tower_upgrade_persistent_data.souls_extra_damage_max = 0
 tt.powers.skill_soldiers = CC("power")
-tt.powers.skill_soldiers.price_base = 225
-tt.powers.skill_soldiers.price_inc = 100
+tt.powers.skill_soldiers.price_base = b.skill_soldiers.price[1]
+tt.powers.skill_soldiers.price_inc = b.skill_soldiers.price[2]
 tt.powers.skill_soldiers.cooldown = b.skill_soldiers.cooldown
 tt.powers.skill_soldiers.hp = b.soldier.hp
 tt.powers.skill_soldiers.damage_min = b.soldier.basic_attack.damage_min
@@ -1151,8 +1151,8 @@ tt.powers.skill_soldiers.dodge_chance = b.soldier.dodge_chance
 tt.powers.skill_soldiers.enc_icon = 31
 tt.powers.skill_soldiers.show_rally = true
 tt.powers.skill_buff = CC("power")
-tt.powers.skill_buff.price_base = 250
-tt.powers.skill_buff.price_inc = 125
+tt.powers.skill_buff.price_base = b.skill_buff.price[1]
+tt.powers.skill_buff.price_inc = b.skill_buff.price[2]
 tt.powers.skill_buff.enc_icon = 32
 tt.powers.skill_buff.damage_min = b.skill_buff.extra_damage_min
 tt.powers.skill_buff.damage_max = b.skill_buff.extra_damage_max
@@ -1216,12 +1216,10 @@ tt.sound_events.change_rally_point = "TowerDarkElfUnitTaunt"
 tt.sound_events.insert = "TowerDarkElfTaunt"
 tt.ui.click_rect = r(-38, -10, 70, 60)
 --#endregion
+
 --#region soldier_tower_dark_elf
 tt = RT("soldier_tower_dark_elf", "soldier_militia")
-
 AC(tt, "nav_grid", "dodge")
-
-tt.is_kr5 = true
 tt.info.portrait = "kr5_info_portraits_soldiers_0017"
 tt.info.random_name_count = 9
 tt.info.random_name_format = "SOLDIER_TOWER_DARK_ELF_%i_NAME"
@@ -1250,7 +1248,6 @@ tt.melee.attacks[2] = table.deepclone(tt.melee.attacks[1])
 tt.melee.attacks[2].animation = "attack2"
 tt.melee.attacks[2].shared_cooldown = true
 tt.melee.attacks[2].chance = 0.5
-tt.soldier.melee_slot_spread = vec_2(-8, -8)
 tt.dodge.chance = b.soldier.dodge_chance[1]
 tt.dodge.animation = "evade"
 tt.dodge.time_before_hit = fts(5)

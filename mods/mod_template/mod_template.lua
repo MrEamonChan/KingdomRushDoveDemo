@@ -1,4 +1,4 @@
-local log = require("klua.log"):new("mod_template")
+local log = require("lib.klua.log"):new("mod_template")
 local mod_utils = require("mod_utils")
 local hook_utils = require("hook_utils")
 local HOOK = hook_utils.HOOK

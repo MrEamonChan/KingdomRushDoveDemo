@@ -1,4 +1,4 @@
-local log = require("klua.log"):new("mod_template_scripts")
+local log = require("lib.klua.log"):new("mod_template_scripts")
 local scripts = require("scripts")
 local S = require("sound_db")
 local P = require("path_db")

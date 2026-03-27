@@ -5876,7 +5876,7 @@ function scripts.tower_dark_elf.update(this, store)
 			for i = 2, #targets do
 				local t = targets[i]
 
-				if U.predict_damage(t, d) >= t.health.hp then
+				if band(t.health.immune_to, d.damage_type) == 0 and U.predict_damage(t, d) >= t.health.hp then
 					if t.health.hp > target_to_kill_hp then
 						local flying = band(t.vis.flags, F_FLYING) ~= 0
 
@@ -7073,7 +7073,7 @@ function scripts.soldier_tower_demon_pit.update(this, store)
 	end
 
 	while true do
-		if this.health.dead or (this.reinforcement.duration and store.tick_ts - this.reinforcement.ts > this.reinforcement.duration) or ni < -20 or (not U.U.valid_rally_node_nearby(this.pos)) then
+		if this.health.dead or (this.reinforcement.duration and store.tick_ts - this.reinforcement.ts > this.reinforcement.duration) or ni < -20 or (not U.has_valid_rally_node_nearby(this.pos)) then
 			if this.health.hp > 0 then
 				this.reinforcement.hp_before_timeout = this.health.hp
 			end
@@ -19716,6 +19716,10 @@ function scripts.tower_paladin_covenant.soldier_insert(this, store)
 end
 
 function scripts.tower_paladin_covenant.soldier_on_damage(this, store, damage)
+	-- 圣巢不可以免疫吞噬效果
+	if damage.damage_type == DAMAGE_EAT then
+		return true
+	end
 	local a_h = this.timed_attacks.list[1]
 	if not a_h.disabled and store.tick_ts - a_h.ts > a_h.cooldown then
 		local actual_damage = U.predict_damage(this, damage)

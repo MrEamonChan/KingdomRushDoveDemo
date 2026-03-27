@@ -70,23 +70,10 @@ return {
 		tt_title = _("TOWER_RANDOM_ADVANCED_BARRACK_NAME"),
 		tt_desc = _("TOWER_RANDOM_ADVANCED_BARRACK_DESCRIPTION")
 	}), tpl.rally, tpl.sell}},
-	holder_blocked_jungle = {{M(tpl.unblock, {
-		action_arg = "tower_holder",
-		image = "main_icons_0037",
-		tt_title = _("SPECIAL_REPAIR_HOLDER_JUNGLE_NAME"),
-		tt_desc = _("SPECIAL_REPAIR_HOLDER_JUNGLE_DESCRIPTION")
-	})}},
-	holder_blocked_underground = {{M(tpl.unblock, {
-		action_arg = "tower_holder",
+	blocked_holder = {{M(tpl.unblock, {
 		image = "main_icons_0037",
 		tt_title = _("SPECIAL_REPAIR_HOLDER_UNDERGROUND_NAME"),
 		tt_desc = _("SPECIAL_REPAIR_HOLDER_UNDERGROUND_DESCRIPTION")
-	})}},
-	holder_blocked_sea_of_trees = {{M(tpl.unblock, {
-		action_arg = "tower_holder",
-		image = "main_icons_0037",
-		tt_title = _("SPECIAL_REPAIR_HOLDER_SEA_OF_TREES_NAME"),
-		tt_desc = _("SPECIAL_REPAIR_HOLDER_SEA_OF_TREES_DESCRIPTION")
 	})}},
 	-- 法师塔
 	mage = {{M(tpl.common_upgrade, {
@@ -941,10 +928,10 @@ return {
 			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_1")
 		}, {
 			tt_title = _("TOWER_DWAARP_DRILL_NAME_2"),
-			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_2_NOFMT")
+			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_2")
 		}, {
 			tt_title = _("TOWER_DWAARP_DRILL_NAME_3"),
-			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_3_NOFMT")
+			tt_desc = _("TOWER_DWAARP_DRILL_DESCRIPTION_3")
 		}}
 	}), M(tpl.upgrade_power, {
 		action_arg = "lava",
@@ -987,13 +974,13 @@ return {
 		tt_phrase = _("TOWER_MECH_WASTE_NOTE"),
 		tt_list = {{
 			tt_title = _("TOWER_MECH_WASTE_NAME_1"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_1_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_1")
 		}, {
 			tt_title = _("TOWER_MECH_WASTE_NAME_2"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_2_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_2")
 		}, {
 			tt_title = _("TOWER_MECH_WASTE_NAME_3"),
-			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_3_NOFMT")
+			tt_desc = _("TOWER_MECH_WASTE_DESCRIPTION_3")
 		}}
 	}), tpl.rally, tpl.sell}},
 	paladin = {{M(tpl.upgrade_power, {

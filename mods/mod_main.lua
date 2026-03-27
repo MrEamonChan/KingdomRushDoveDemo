@@ -1,5 +1,5 @@
 -- chunkname: @./mods/mod_main.lua
-local log = require("klua.log"):new("mod_main")
+local log = require("lib.klua.log"):new("mod_main")
 local FS = love.filesystem
 local additional_paths = {"mods/?.lua", "mods/all/?.lua"}
 

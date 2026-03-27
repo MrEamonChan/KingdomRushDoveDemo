@@ -98,9 +98,7 @@ end
 
 screen_map.signal_handlers = {}
 
-function screen_map:textinput(t)
-	self.window:textinput(t)
-end
+local scroll_hotpot_width = 100
 
 function screen_map:init(w, h, done_callback)
 	self.done_callback = done_callback
@@ -270,74 +268,77 @@ function screen_map:init(w, h, done_callback)
 
 	self.window:add_child(vign)
 
-	local map_scroll_hotspots_l = KView:new(V.v(100, sh))
+	-- 电脑端滚动焦点逻辑
+	if not is_android then
+		local map_scroll_hotspots_l = KView:new(V.v(scroll_hotpot_width, sh))
 
-	map_scroll_hotspots_l.propagate_on_click = true
-	map_scroll_hotspots_l.anchor = v(0, sh / 2)
-	map_scroll_hotspots_l.pos = v(0, sh / 2)
+		map_scroll_hotspots_l.propagate_on_click = true
+		map_scroll_hotspots_l.anchor = v(0, sh / 2)
+		map_scroll_hotspots_l.pos = v(0, sh / 2)
 
-	function map_scroll_hotspots_l.on_enter()
-		map.scrolling_dir = 1
+		function map_scroll_hotspots_l.on_enter()
+			map.scrolling_dir = 1
+		end
+
+		function map_scroll_hotspots_l.on_exit()
+			map.scrolling_dir = 0
+		end
+
+		self.window:add_child(map_scroll_hotspots_l)
+		map_scroll_hotspots_l:order_below(self.map_view)
+
+		local map_scroll_hotspots_r = KView:new(V.v(scroll_hotpot_width, sh))
+
+		map_scroll_hotspots_r.propagate_on_click = true
+		map_scroll_hotspots_r.anchor = v(scroll_hotpot_width, sh / 2)
+		map_scroll_hotspots_r.pos = v(sw, sh / 2)
+
+		function map_scroll_hotspots_r.on_enter()
+			map.scrolling_dir = -1
+		end
+
+		function map_scroll_hotspots_r.on_exit()
+			map.scrolling_dir = 0
+		end
+
+		self.window:add_child(map_scroll_hotspots_r)
+		map_scroll_hotspots_r:order_below(self.map_view)
+
+		--上下, copy from FL
+		local map_scroll_hotspots_u = KView:new(V.v(sw, scroll_hotpot_width))
+
+		map_scroll_hotspots_u.propagate_on_click = true
+		map_scroll_hotspots_u.anchor = v(sw / 2, 0)
+		map_scroll_hotspots_u.pos = v(sw / 2, 0)
+
+		function map_scroll_hotspots_u.on_enter()
+			map.scrolling_dir = 2
+		end
+
+		function map_scroll_hotspots_u.on_exit()
+			map.scrolling_dir = 0
+		end
+
+		self.window:add_child(map_scroll_hotspots_u)
+		map_scroll_hotspots_u:order_below(self.map_view)
+
+		local map_scroll_hotspots_d = KView:new(V.v(sw, scroll_hotpot_width))
+
+		map_scroll_hotspots_d.propagate_on_click = true
+		map_scroll_hotspots_d.anchor = v(sw / 2, scroll_hotpot_width)
+		map_scroll_hotspots_d.pos = v(sw / 2, sh)
+
+		function map_scroll_hotspots_d.on_enter()
+			map.scrolling_dir = -2
+		end
+
+		function map_scroll_hotspots_d.on_exit()
+			map.scrolling_dir = 0
+		end
+
+		self.window:add_child(map_scroll_hotspots_d)
+		map_scroll_hotspots_d:order_below(self.map_view)
 	end
-
-	function map_scroll_hotspots_l.on_exit()
-		map.scrolling_dir = 0
-	end
-
-	self.window:add_child(map_scroll_hotspots_l)
-	map_scroll_hotspots_l:order_below(self.map_view)
-
-	local map_scroll_hotspots_r = KView:new(V.v(100, sh - 184))
-
-	map_scroll_hotspots_r.propagate_on_click = true
-	map_scroll_hotspots_r.anchor = v(100, sh / 2)
-	map_scroll_hotspots_r.pos = v(sw, sh / 2)
-
-	function map_scroll_hotspots_r.on_enter()
-		map.scrolling_dir = -1
-	end
-
-	function map_scroll_hotspots_r.on_exit()
-		map.scrolling_dir = 0
-	end
-
-	self.window:add_child(map_scroll_hotspots_r)
-	map_scroll_hotspots_r:order_below(self.map_view)
-
-	--上下, copy from FL
-	local map_scroll_hotspots_u = KView:new(V.v(sw, 100))
-
-	map_scroll_hotspots_u.propagate_on_click = true
-	map_scroll_hotspots_u.anchor = v(sw / 2, 0)
-	map_scroll_hotspots_u.pos = v(sw / 2, 0)
-
-	function map_scroll_hotspots_u.on_enter()
-		map.scrolling_dir = 2
-	end
-
-	function map_scroll_hotspots_u.on_exit()
-		map.scrolling_dir = 0
-	end
-
-	self.window:add_child(map_scroll_hotspots_u)
-	map_scroll_hotspots_u:order_below(self.map_view)
-
-	local map_scroll_hotspots_d = KView:new(V.v(sw - 184, 100))
-
-	map_scroll_hotspots_d.propagate_on_click = true
-	map_scroll_hotspots_d.anchor = v(sw / 2, 100)
-	map_scroll_hotspots_d.pos = v(sw / 2, sh)
-
-	function map_scroll_hotspots_d.on_enter()
-		map.scrolling_dir = -2
-	end
-
-	function map_scroll_hotspots_d.on_exit()
-		map.scrolling_dir = 0
-	end
-
-	self.window:add_child(map_scroll_hotspots_d)
-	map_scroll_hotspots_d:order_below(self.map_view)
 
 	local o_button = KImageButton:new("map_configBtn_0001", "map_configBtn_0002", "map_configBtn_0003")
 
@@ -1109,6 +1110,51 @@ function screen_map:mousereleased(x, y, button)
 	self.window:mousereleased(x, y, button)
 end
 
+-- 处理移动端的触摸事件，实现地图跟手滚动且不灵敏
+if is_android then
+	local touch_last_y = 0
+	local touch_scrolling = false
+	local touch_total_delta = 0
+	local TOUCH_SCROLL_THRESHOLD = 15 -- 滑动阈值，像素
+	local TOUCH_SCROLL_SENSITIVITY = 2.25 -- 灵敏度系数，0.5~1.0之间
+
+	function screen_map:touchpressed(id, x, y, dx, dy, pressure)
+		touch_last_y = y
+		touch_scrolling = true
+		touch_total_delta = 0
+	end
+
+	function screen_map:touchmoved(id, x, y, dx, dy, pressure)
+		if touch_scrolling then
+			local delta_y = y - touch_last_y
+			touch_last_y = y
+			touch_total_delta = touch_total_delta + math.abs(delta_y)
+			if touch_total_delta > TOUCH_SCROLL_THRESHOLD then
+				-- 只有累计滑动超过阈值才开始移动地图
+				local move_y = delta_y * TOUCH_SCROLL_SENSITIVITY
+				local new_y = self.map_view.pos.y + move_y
+				local min_y = self.map_view.screen_h - self.map_view.size.y
+				local max_y = 0
+				if new_y < min_y then
+					new_y = min_y
+				end
+				if new_y > max_y then
+					new_y = max_y
+				end
+				self.map_view.pos.y = new_y
+			end
+		end
+	end
+
+	function screen_map:touchreleased(id, x, y, dx, dy, pressure)
+		touch_scrolling = false
+	end
+end
+
+function screen_map:textinput(t)
+	self.window:textinput(t)
+end
+
 function screen_map:start_level(level_idx, level_mode)
 	local user_data = storage:load_slot()
 
@@ -1176,8 +1222,6 @@ function MapView:initialize(screen_w, screen_h)
 	local last_flag = screen_map.map_points.flags[last_flag_idx]
 
 	if last_flag and last_flag.pos then
-		log.debug("scroll to show level idx:%s", last_flag_idx)
-
 		local vl, vr = -1 * self.pos.x, -1 * self.pos.x + self.screen_w
 
 		if vl > last_flag.pos.x or vr < last_flag.pos.x then
@@ -2624,6 +2668,14 @@ function LevelSelectView:initialize(sw, sh, level_num, stars, heroic, iron, slot
 
 	self.back.alpha = 0
 
+	-- 安卓设备上适当缩放界面以适配不同分辨率
+	if is_android then
+		local scale = math.min(sw / self.back.size.x, sh / self.back.size.y) * 0.85
+
+		self.scale = v(scale, scale)
+		self.pos = v(sw * (1 - scale) / 2, sh * (1 - scale) / 2)
+	end
+
 	local close_button = KImageButton:new("levelSelect_closeBtn_0001", "levelSelect_closeBtn_0002", "levelSelect_closeBtn_0003")
 
 	close_button.pos = v(self.back.size.x - 50, 30)
@@ -3624,6 +3676,10 @@ function UpgradeButtons:ungrey_me()
 end
 
 function UpgradeButtons:on_click(button, x, y)
+	if is_android and not self._android_checked then
+		self._android_checked = true
+		return
+	end
 	if not self.grey_out and not self.bought and screen_map.upgrades:rest_stars(self.data_values.price) then
 		S:queue("GUIBuyUpgrade")
 		screen_map.upgrades:hide_tip_panel()
@@ -3651,6 +3707,9 @@ function UpgradeButtons:on_click(button, x, y)
 		screen_map.upgrades:hide_tip_panel()
 		self:ungrey_me()
 		screen_map.upgrades:upgrade_bought(self.data_values.class, self.data_values.level - 1, self.data_values.price)
+	end
+	if is_android then
+		self._android_checked = nil
 	end
 end
 

@@ -1,6 +1,6 @@
 -- chunkname: @./lib/klua/tsv.lua
 
-local log = require("klua.log"):new("klog.tsv")
+local log = require("lib.klua.log"):new("klog.tsv")
 local FS = love.filesystem
 
 require("klua.string")

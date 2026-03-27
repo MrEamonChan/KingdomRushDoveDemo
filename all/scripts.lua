@@ -7320,10 +7320,6 @@ end
 scripts.editor_tower = {}
 
 function scripts.editor_tower.insert(this, store)
-	if this.render and string.find(this.render.sprites[1].name, "%%") then
-		this.render.sprites[1].name = string.format(this.render.sprites[1].name, store.level_terrain_type or 1)
-	end
-
 	local r = E:create_entity("editor_rally_point")
 
 	queue_insert(store, r)
@@ -9596,7 +9592,7 @@ function scripts.aura_tower_holder_capture.update(this, store)
 		if conquered_amount >= this.capture_duration then
 			local h = E:create_entity(holder.tower_holder_on_capture)
 
-			h.render.sprites[1].name = string.format(h.render.sprites[1].name, h.tower.terrain_style)
+			U.set_terrain_style(h, h.tower.terrain_style)
 			h.pos = V.vclone(holder.pos)
 
 			queue_insert(store, h)

@@ -176,7 +176,6 @@ for _, range in ipairs(GS.level_ranges5) do
 	end
 end
 
-GS.default_hero = nil
 GS.hero_xp_thresholds = {300, 900, 2000, 4000, 8000, 12000, 16000, 20000, 26000}
 
 GS.encyclopedia_enemies = {
@@ -1226,6 +1225,8 @@ GS.wraith = {
 	soldier_dracolich_golem = true,
 	soldier_frankenstein = true,
 	hero_vampiress = true,
+	hero_dracolich = true,
+	hero_dragon_bone = true,
 	soldier_death_rider = true,
 	soldier_tower_necromancer_skeleton_lvl4 = true,
 	soldier_tower_necromancer_skeleton_golem_lvl4 = true,

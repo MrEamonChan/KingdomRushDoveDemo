@@ -1363,6 +1363,18 @@ tt.render.sprites[1].name = "forestKeeper_proy_0001-f"
 tt.render.sprites[1].anchor.x = 0.8260869565217391
 tt.sound_events.insert = "TowerForestKeeperNormalSpear"
 --#endregion
+tt = RT("ps_spear_forest_oak")
+AC(tt, "pos", "particle_system")
+tt.particle_system.name = "hero_archer_arrow_particle"
+tt.particle_system.animated = false
+tt.particle_system.alphas = {255, 0}
+tt.particle_system.particle_lifetime = {0.5, 0.5}
+tt.particle_system.emission_rate = 30
+tt.particle_system.scales_x = {3, 1}
+tt.particle_system.scales_y = {3, 1}
+tt.particle_system.track_rotation = true
+tt.particle_system.z = Z_BULLETS
+
 --#region spear_forest_oak
 tt = RT("spear_forest_oak", "spear_forest")
 tt.bullet.damage_max = 55
@@ -1371,6 +1383,11 @@ tt.bullet.damage_inc = 35
 tt.bullet.damage_type = DAMAGE_TRUE
 tt.bullet.miss_decal = "forestKeeper_proySpecial_0002-f"
 tt.bullet.hit_fx = "fx_spear_forest_oak_hit"
+tt.bullet.particles_name = "ps_spear_forest_oak"
+tt.bullet.min_speed = 400
+tt.bullet.max_speed = 700
+tt.bullet.acceleration_factor = 0.15
+tt.main_script.update = scripts.arrow_missile.update
 tt.render.sprites[1].name = "forestKeeper_proySpecial_0001-f"
 tt.sound_events.insert = "TowerForestKeeperAncientSpear"
 --#endregion
@@ -2218,7 +2235,6 @@ tt.unit.mod_offset = v(0, 13)
 tt.unit.level = 4
 tt.unit.fade_time_after_death = nil
 tt.unit.hide_after_death = true
-tt.soldier.melee_slot_spread = v(-13, -13)
 tt.soldier.melee_slot_offset = v(10, 0)
 tt.vis.bans = bor(tt.vis.bans, F_SKELETON, F_EAT)
 tt.health.hp_max = b.soldier.hp[4]
@@ -2555,7 +2571,6 @@ tt.unit.level = 1
 tt.unit.death_animation = "death_air"
 tt.unit.show_blood_pool = false
 tt.unit.hide_after_death = true
-tt.soldier.melee_slot_spread = vec_2(-10, -10)
 tt.soldier.melee_slot_offset = vec_2(10, 0)
 tt.vis.bans = 0
 tt.vis_bans_before_take_off = F_ALL
@@ -2930,7 +2945,6 @@ tt.unit.mod_offset = v(0, 13)
 tt._jump_explosion = "decal_tower_dwarf_jump_explosion"
 tt._jump_asset_name = "tower_dwarf_dwarf_jump_lvl_4"
 tt.unit.level = 4
-tt.soldier.melee_slot_spread = v(-10, -10)
 tt.soldier.melee_slot_offset = v(10, 0)
 tt.vis.bans = 0
 tt.health.hp_max = b.hp[4]
@@ -3089,7 +3103,6 @@ tt.melee.attacks[1].hit_time = fts(16)
 tt.melee.attacks[1].damage_type = b.soldier.basic_attack.damage_type
 tt.melee.attacks[1].hit_decal = "decal_soldier_tower_ghost_hit"
 tt.melee.attacks[1].hit_offset = v(30, 20)
-tt.soldier.melee_slot_spread = v(-8, -8)
 tt.sound_events.death = "TowerGhostSoulAttackTravel"
 tt.ui.click_rect = r(-12, 2, 24, 30)
 tt.soul = "soul_soldier_tower_ghost_lvl4"
@@ -3326,49 +3339,29 @@ tt.main_script.remove = scripts.tower_ghost_hover_controller.remove
 
 -- 幽冥 END
 -- 圣殿 START
---#region tower_paladin_covenant_soldier_lvl1
-tt = RT("tower_paladin_covenant_soldier_lvl1", "soldier_militia")
-
-AC(tt, "nav_grid")
-
+--#region tower_paladin_covenant_soldier_lvl4
+tt = RT("tower_paladin_covenant_soldier_lvl4", "soldier_militia")
+AC(tt, "powers", "timed_attacks", "nav_grid")
 b = balance.towers.paladin_covenant
 tt.info.portrait = "kr5_info_portraits_soldiers_0001"
 tt.info.random_name_count = 18
 tt.info.random_name_format = "SOLDIER_PALADINS_%i_NAME"
 tt.main_script.update = scripts.tower_paladin_covenant.soldier_update
 tt.main_script.insert = scripts.tower_paladin_covenant.soldier_insert
-tt.render.sprites[1].prefix = "paladin_soldiers_lvl1"
+tt.render.sprites[1].prefix = "paladin_soldier_lvl4"
 tt.render.sprites[1].anchor = v(0.5, 0.5)
+tt.render.sprites[1].angles.walk = {"walk"}
 tt.unit.hit_offset = v(0, 12)
 tt.unit.mod_offset = v(0, 13)
-tt.health.hp_max = b.soldier.hp[1]
-tt.health.armor = b.soldier.armor[1]
-tt.health_bar.offset = v(0, 30)
-tt.health.dead_lifetime = b.soldier.dead_lifetime
-tt.motion.max_speed = b.soldier.speed
-tt.melee.range = b.soldier.basic_attack.range
-tt.melee.attacks[1].cooldown = b.soldier.basic_attack.cooldown
-tt.melee.attacks[1].damage_min = b.soldier.basic_attack.damage_min[1]
-tt.melee.attacks[1].damage_max = b.soldier.basic_attack.damage_max[1]
-tt.melee.attacks[1].hit_time = fts(10)
-tt.soldier.melee_slot_spread = v(-8, -8)
-tt.sound_events.death = "TowerPaladinCovenantUnitDeath"
-tt.ui.click_rect = r(-10, -2, 20, 25)
---#endregion
---#region tower_paladin_covenant_soldier_lvl4
-tt = RT("tower_paladin_covenant_soldier_lvl4", "tower_paladin_covenant_soldier_lvl1")
-AC(tt, "powers", "timed_attacks")
-b = balance.towers.paladin_covenant
-tt.info.portrait = "kr5_info_portraits_soldiers_0001"
-tt.render.sprites[1].prefix = "paladin_soldier_lvl4"
-tt.render.sprites[1].angles.walk = {"walk"}
 tt.idle_flip.animations = {"idle"}
 tt.health.hp_max = b.soldier.hp[4]
 tt.health.armor = b.soldier.armor[4]
 tt.health.magic_armor = b.soldier.magic_armor[4]
 tt.health_bar.offset = v(0, 35)
 tt.health.on_damage = scripts.tower_paladin_covenant.soldier_on_damage
+tt.health.dead_lifetime = b.soldier.dead_lifetime
 tt.motion.max_speed = b.soldier.speed
+tt.sound_events.death = "TowerPaladinCovenantUnitDeath"
 tt.ui.click_rect = r(-15, -2, 30, 35)
 tt.powers.lead = CC("power")
 tt.powers.lead.b = b.lead.soldier_veteran
@@ -3508,51 +3501,18 @@ tt.render.sprites[2].loop = false
 tt.render.sprites[2].animated = true
 tt.render.sprites[2].hide_after_runs = 1
 --#endregion
---#region tower_paladin_covenant_lvl1
-tt = RT("tower_paladin_covenant_lvl1", "tower")
-AC(tt, "barrack", "vis")
-tt.tower.type = "paladin_covenant"
-tt.tower.kind = TOWER_KIND_BARRACK
-tt.tower.level = 1
-tt.tower.price = b.price[1]
-tt.tower.menu_offset = v(0, 20)
-tt.info.i18n_key = "TOWER_PALADIN_COVENANT_1"
-tt.info.portrait = "kr5_portraits_towers_0001"
-tt.info.enc_icon = 5
-tt.render.sprites[1].animated = false
-tt.render.sprites[1].name = "terrain_barrack_%04i"
-tt.render.sprites[1].offset = v(0, 15)
-tt.render.sprites[2] = CC("sprite")
-tt.render.sprites[2].animated = false
-tt.render.sprites[2].name = "paladin_covenant_lvl1"
-tt.render.sprites[2].offset = v(0, 9)
-tt.render.sprites[3] = CC("sprite")
-tt.render.sprites[3].prefix = "paladin_covenant_lvl123_door"
-tt.render.sprites[3].name = "close"
-tt.render.sprites[3].loop = false
-tt.render.sprites[3].offset = v(0, 7)
-tt.barrack.soldier_type = "tower_paladin_covenant_soldier_lvl1"
-tt.barrack.rally_range = b.rally_range
-tt.barrack.respawn_offset = v(0, 9)
-tt.barrack.max_soldiers = b.max_soldiers
-tt.info.fn = scripts.tower_barrack.get_info
-tt.main_script.insert = scripts.tower_barrack.insert
-tt.main_script.update = scripts.tower_barrack.update
-tt.main_script.remove = scripts.tower_barrack.remove
-tt.sound_events.insert = "TowerPaladinCovenantTaunt"
-tt.sound_events.change_rally_point = "TowerPaladinCovenantTaunt"
-tt.sound_events.tower_room_select = "TowerPaladinCovenantTauntSelect"
-tt.ui.click_rect = r(-40, 0, 80, 70)
---#endregion
---#region tower_paladin_covenant_lvl4
-tt = RT("tower_paladin_covenant_lvl4", "tower_paladin_covenant_lvl1")
-AC(tt, "powers")
+
+tt = RT("tower_paladin_covenant_lvl4", "tower")
+AC(tt, "powers", "barrack")
 tt.info.portrait = "kr5_portraits_towers_0001"
 tt.info.room_portrait = "quickmenu_main_icons_main_icons_0001_0001"
 tt.info.enc_icon = 8
 tt.info.i18n_key = "TOWER_PALADIN_COVENANT_4"
+tt.info.fn = scripts.tower_barrack.get_info
 tt.tower.price = b.price[4]
 tt.tower.level = 1
+tt.tower.type = "paladin_covenant"
+tt.tower.kind = TOWER_KIND_BARRACK
 tt.tower.menu_offset = v(0, 25)
 tt.powers.lead = CC("power")
 tt.powers.lead.price_base = b.lead.price[1]
@@ -3565,17 +3525,29 @@ tt.powers.healing_prayer.price_inc = b.healing_prayer.price[3]
 tt.powers.healing_prayer.enc_icon = 1
 tt.barrack.soldier_type = "tower_paladin_covenant_soldier_lvl4"
 tt.barrack.rally_range = b.rally_range
+tt.barrack.respawn_offset = v(0, 9)
+tt.barrack.max_soldiers = b.max_soldiers
+tt.render.sprites[1].animated = false
+tt.render.sprites[1].name = "terrain_barrack_%04i"
+tt.render.sprites[1].offset = v(0, 15)
+tt.render.sprites[2] = CC("sprite")
+tt.render.sprites[2].animated = false
 tt.render.sprites[2].name = "paladin_covenant_lvl4"
+tt.render.sprites[2].offset = v(0, 9)
+tt.render.sprites[3] = CC("sprite")
 tt.render.sprites[3].prefix = "paladin_covenant_lvl4_door"
 tt.render.sprites[3].offset = v(0, 10)
+tt.render.sprites[3].name = "close"
+tt.render.sprites[3].loop = false
 tt.render.sprites[4] = CC("sprite")
 tt.render.sprites[4].name = "paladin_covenant_lvl4_flag"
 tt.render.sprites[4].offset = v(0, 9)
 tt.sound_events.insert = "TowerPaladinCovenantTaunt"
 tt.sound_events.change_rally_point = "TowerPaladinCovenantTaunt"
+tt.main_script.insert = scripts.tower_barrack.insert
+tt.main_script.update = scripts.tower_barrack.update
+tt.main_script.remove = scripts.tower_barrack.remove
 tt.ui.click_rect = r(-42, 0, 84, 90)
-
---#endregion
 
 tt = E:register_t("tower_arborean_sentinels", "tower")
 b = balance.specials.towers.arborean_sentinels

@@ -54,7 +54,8 @@ game.required_textures = {
 	"go_towers_ghost",
 	"go_towers_paladin_covenant",
 	"go_towers_arborean_emissary",
-	"go_towers_dragons"
+	"go_towers_dragons",
+	"tower_holders"
 }
 game.ref_h = REF_H
 game.ref_w = REF_W
@@ -165,7 +166,7 @@ function game:init(screen_w, screen_h, done_callback)
 	self.camera.wb = (visible_h - v_bottom) * self.game_scale
 	self.camera.zoom = 1
 	self.camera.min_zoom = aspect > 1.7777777777777777 and math.min(screen_w, MAX_SCREEN_ASPECT * screen_h) / (visible_w * self.game_scale) or 1
-	self.camera.max_zoom = 2
+	self.camera.max_zoom = 2.5
 
 	-- 打印所有 window, camera 参数
 	-- print( "screen_w:", screen_w, "screen_h:", screen_h, "game_scale:", self.game_scale)
@@ -314,7 +315,7 @@ function game:init_debug()
 
 	local data = require("data.game_debug_data")
 
-	self.current_enemy_page = data.default_page_for_level and data.default_page_for_level[self.store.level_idx] or data.default_page_for_terrain[self.store.level_terrain_type] or 1
+	self.current_enemy_page = data.default_page_for_level and data.default_page_for_level[self.store.level_idx] or 1
 	self.enemy_pages = data.enemy_pages
 	self.enemy_keys = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"}
 	self.dbg_active_pi = 1

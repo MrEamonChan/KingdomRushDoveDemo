@@ -7,6 +7,8 @@ local anchor_y = 0
 local image_x = 0
 local image_y = nil
 local tt = nil
+local b
+local balance = require("kr1.data.balance")
 local scripts = require("game_scripts")
 
 require("templates")
@@ -26,9 +28,7 @@ require("game_templates_utils")
 
 --#region tower_holder
 tt = RT("tower_holder")
-
-AC(tt, "tower", "tower_holder", "pos", "render", "ui", "editor", "editor_script")
-
+AC(tt, "tower", "tower_holder", "pos", "render", "ui", "editor", "editor_script", "main_script")
 tt.ui.click_rect = r(-40, -12, 80, 46)
 tt.ui.has_nav_mesh = true
 tt.tower.level = 1
@@ -41,7 +41,9 @@ tt.tower_holder.preview_ids = {
 	mage = 4
 }
 tt.render.sprites[1].animated = false
-tt.render.sprites[1].name = "build_terrain_%04i"
+-- tt.render.sprites[1].name = "build_terrain_%04i"
+-- default fallback
+tt.render.sprites[1].name = "build_terrain_0001"
 tt.render.sprites[1].offset = vec_2(0, 17)
 tt.render.sprites[1].z = Z_DECALS
 tt.render.sprites[2] = CC("sprite")
@@ -63,105 +65,121 @@ tt.editor.props = {{"tower.terrain_style", PT_NUMBER}, {"tower.default_rally_pos
 tt.editor_script.insert = scripts.editor_tower.insert
 tt.editor_script.remove = scripts.editor_tower.remove
 --#endregion
---#region tower_holder_grass
-tt = RT("tower_holder_grass", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_GRASS
-tt.render.sprites[1].name = "build_terrain_0001"
---#endregion
---#region tower_holder_snow
-tt = RT("tower_holder_snow", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_SNOW
-tt.render.sprites[1].name = "build_terrain_0002"
---#endregion
---#region tower_holder_wasteland
-tt = RT("tower_holder_wasteland", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WASTELAND
-tt.render.sprites[1].name = "build_terrain_0003"
---#endregion
---#region tower_holder_blackburn
-tt = RT("tower_holder_blackburn", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_BLACKBURN
-tt.render.sprites[1].name = "build_terrain_0008"
---#endregion
-tt = E:register_t("tower_holder_sea_of_trees", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_FOREST
--- tt.render.sprites[1].name = "build_terrain_0016"
-tt.render.sprites[1].name = "build_terrain_0001"
-tt = E:register_t("tower_holder_sea_of_trees_2", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DEFOREST
--- tt.render.sprites[1].name = "build_terrain_0017"
-tt.render.sprites[1].name = "build_terrain_0007"
-tt = E:register_t("tower_holder_sea_of_trees_3", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WILDBOAR
--- tt.render.sprites[1].name = "build_terrain_0018"
-tt.render.sprites[1].name = "build_terrain_0007"
-tt = E:register_t("tower_holder_sea_of_trees_4", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_TEMPLE
--- tt.render.sprites[1].name = "build_terrain_0019"
-tt.render.sprites[1].name = "build_terrain_0003"
-tt = E:register_t("tower_holder_sea_of_trees_5", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_ROTTEN
--- tt.render.sprites[1].name = "build_terrain_0020"
-tt.render.sprites[1].name = "build_terrain_0006"
-tt = E:register_t("tower_holder_sea_of_trees_6", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_ANGER
--- tt.render.sprites[1].name = "build_terrain_0021"
-tt.render.sprites[1].name = "build_terrain_0002"
-tt = E:register_t("tower_holder_sea_of_trees_7", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_HUNGER
--- tt.render.sprites[1].name = "build_terrain_0022"
-tt.render.sprites[1].name = "build_terrain_0005"
-tt = E:register_t("tower_holder_sea_of_trees_8", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DWARF
--- tt.render.sprites[1].name = "build_terrain_0023"
-tt.render.sprites[1].name = "build_terrain_0006"
-tt = E:register_t("tower_holder_sea_of_trees_9", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_FACTORY
--- tt.render.sprites[1].name = "build_terrain_0024"
-tt.render.sprites[1].name = "build_terrain_0006"
-tt = E:register_t("tower_holder_sea_of_trees_10", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_1
--- tt.render.sprites[1].name = "build_terrain_0025"
-tt.render.sprites[1].name = "build_terrain_0001"
-tt = E:register_t("tower_holder_sea_of_trees_11", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_2
--- tt.render.sprites[1].name = "build_terrain_0026"
-tt.render.sprites[1].name = "build_terrain_0001"
-tt = E:register_t("tower_holder_sea_of_trees_12", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_3
--- tt.render.sprites[1].name = "build_terrain_0027"
-tt.render.sprites[1].name = "build_terrain_0008"
-tt = E:register_t("tower_holder_sea_of_trees_13", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_4
-tt.render.sprites[1].name = "build_terrain_0007"
-tt = E:register_t("tower_holder_sea_of_trees_14", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_5
--- tt.render.sprites[1].name = "build_terrain_0029"
-tt.render.sprites[1].name = "build_terrain_0007"
-tt = E:register_t("tower_holder_sea_of_trees_15", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_6
--- tt.render.sprites[1].name = "build_terrain_0030"
-tt.render.sprites[1].name = "build_terrain_0007"
-tt = E:register_t("tower_holder_sea_of_trees_16", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_WUKONG_7
--- tt.render.sprites[1].name = "build_terrain_0031"
-tt.render.sprites[1].name = "build_terrain_0004"
 
-tt = RT("tower_holder_sea_of_trees_17", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DRAGON_1
-tt.render.sprites[1].name = "build_terrain_0007"
+--#region 所有塔位
+local holder_template_names = {
+	tower_holder_grass = TERRAIN_STYLE_GRASS,
+	tower_holder_snow = TERRAIN_STYLE_SNOW,
+	tower_holder_wasteland = TERRAIN_STYLE_WASTELAND,
+	tower_holder_blackburn = TERRAIN_STYLE_BLACKBURN,
+	tower_holder_desert = TERRAIN_STYLE_DESERT,
+	tower_holder_jungle = TERRAIN_STYLE_JUNGLE,
+	tower_holder_underground = TERRAIN_STYLE_UNDERGROUND,
+	tower_holder_beach = TERRAIN_STYLE_BEACH,
+	tower_holder_halloween = TERRAIN_STYLE_HALLOWEEN,
+	tower_holder_elven_woods = TERRAIN_STYLE_ELVEN_WOODS,
+	tower_holder_faerie_grove = TERRAIN_STYLE_FAERIE_GROVE,
+	tower_holder_ancient_metropolis = TERRAIN_STYLE_ANCIENT_METROPOLIS,
+	tower_holder_hulking_rage = TERRAIN_STYLE_HULKING_RAGE,
+	tower_holder_bittering_rancor = TERRAIN_STYLE_BITTERING_RANCOR,
+	tower_holder_forgotten_treasures = TERRAIN_STYLE_FORGOTTEN_TREASURES,
+	tower_holder_forest = TERRAIN_STYLE_FOREST,
+	tower_holder_deforest = TERRAIN_STYLE_DEFOREST,
+	tower_holder_wildboar = TERRAIN_STYLE_WILDBOAR,
+	tower_holder_temple = TERRAIN_STYLE_TEMPLE,
+	tower_holder_rotten = TERRAIN_STYLE_ROTTEN,
+	tower_holder_anger = TERRAIN_STYLE_ANGER,
+	tower_holder_hunger = TERRAIN_STYLE_HUNGER,
+	tower_holder_dwarf = TERRAIN_STYLE_DWARF,
+	tower_holder_factory = TERRAIN_STYLE_FACTORY,
+	tower_holder_sea_of_trees_10 = TERRAIN_STYLE_SEA_OF_TREES_10,
+	tower_holder_sea_of_trees_11 = TERRAIN_STYLE_SEA_OF_TREES_11,
+	tower_holder_sea_of_trees_12 = TERRAIN_STYLE_SEA_OF_TREES_12,
+	tower_holder_sea_of_trees_13 = TERRAIN_STYLE_SEA_OF_TREES_13,
+	tower_holder_sea_of_trees_14 = TERRAIN_STYLE_SEA_OF_TREES_14,
+	tower_holder_sea_of_trees_15 = TERRAIN_STYLE_SEA_OF_TREES_15,
+	tower_holder_sea_of_trees_16 = TERRAIN_STYLE_SEA_OF_TREES_16,
+	tower_holder_sea_of_trees_17 = TERRAIN_STYLE_SEA_OF_TREES_17,
+	tower_holder_sea_of_trees_18 = TERRAIN_STYLE_SEA_OF_TREES_18,
+	tower_holder_sea_of_trees_19 = TERRAIN_STYLE_SEA_OF_TREES_19,
+	tower_holder_sea_of_trees_20 = TERRAIN_STYLE_SEA_OF_TREES_20
+}
 
-tt = RT("tower_holder_sea_of_trees_18", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DRAGON_2
-tt.render.sprites[1].name = "build_terrain_0007"
+-- 注册所有模板
+for name, terrain_style in pairs(holder_template_names) do
+	local tt = RT(name, "tower_holder")
+	U.set_terrain_style(tt, terrain_style)
+end
+--#endregion
 
-tt = RT("tower_holder_sea_of_trees_19", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DRAGON_3
-tt.render.sprites[1].name = "build_terrain_0007"
+--#region tower_holder_blocked
+tt = RT("tower_holder_blocked")
+AC(tt, "tower", "tower_holder", "pos", "render", "ui", "sound_events", "editor")
+tt.tower.level = 1
+tt.tower.can_be_mod = false
+tt.tower.type = "blocked_holder"
+tt.tower_holder.blocked = true
+tt.render.sprites[1].animated = false
+tt.render.sprites[1].name = "build_terrain_blocked_%04i"
+tt.render.sprites[1].offset = vec_2(0, 17)
+tt.render.sprites[1].z = Z_DECALS
+tt.render.sprites[2] = CC("sprite")
+tt.ui.click_rect = r(-40, -12, 80, 46)
+tt.sound_events.remove = "GUITowerSell"
+--#endregion
 
-tt = RT("tower_holder_sea_of_trees_20", "tower_holder")
-tt.tower.terrain_style = TERRAIN_STYLE_DRAGON_4
-tt.render.sprites[1].name = "build_terrain_0007"
+--#region 所有 blocked 塔位
+local holder_blocked_names = {
+	tower_holder_blocked_jungle = {
+		terrain_style = TERRAIN_STYLE_JUNGLE,
+		unblock_price = 100,
+		sprite_name = "kr2_build_terrain_blocked_0002"
+	},
+	tower_holder_blocked_underground = {
+		terrain_style = TERRAIN_STYLE_UNDERGROUND,
+		unblock_price = 200,
+		sprite_name = "kr2_build_terrain_blocked_0003"
+	},
+	tower_holder_blocked_forest = {
+		terrain_style = TERRAIN_STYLE_FOREST,
+		unblock_price = balance.specials.trees.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0001"
+	},
+	tower_holder_blocked_wildboar = {
+		terrain_style = TERRAIN_STYLE_WILDBOAR,
+		unblock_price = balance.specials.trees.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0003"
+	},
+	tower_holder_blocked_temple = {
+		terrain_style = TERRAIN_STYLE_TEMPLE,
+		unblock_price = balance.specials.terrain_2.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0004"
+	},
+	tower_holder_blocked_rotten = {
+		terrain_style = TERRAIN_STYLE_ROTTEN,
+		unblock_price = balance.specials.terrain_3.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0005"
+	},
+	tower_holder_blocked_dwarf = {
+		terrain_style = TERRAIN_STYLE_DWARF,
+		unblock_price = balance.specials.terrain_6.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0008"
+	},
+	tower_holder_blocked_factory = {
+		terrain_style = TERRAIN_STYLE_FACTORY,
+		unblock_price = balance.specials.terrain_6.blocked_holders.price,
+		sprite_name = "kr5_build_terrain_blocked_0009"
+	}
+}
+
+-- 遍历注册所有 blocked 塔位
+for name, data in pairs(holder_blocked_names) do
+	local tt = E:register_t(name, "tower_holder_blocked")
+	tt.tower_holder.unblock_price = data.unblock_price
+	tt.tower.terrain_style = data.terrain_style
+	tt.render.sprites[1].name = data.sprite_name
+end
+--#endregion
 
 --#region tower_build_archer
 tt = RT("tower_build_archer", "tower_build")
@@ -622,9 +640,7 @@ tt.modifier.duration = 0.75
 --#endregion
 --#region soldier_barrack_1
 tt = RT("soldier_barrack_1", "soldier_militia")
-
 AC(tt, "revive")
-
 image_y = 46
 anchor_y = 11 / image_y
 tt.health.armor = 0.3
@@ -946,6 +962,7 @@ tt.render.sprites[tt.render.sid_gradiente].exo = true
 tt.render.sprites[tt.render.sid_gradiente].name = "buy"
 tt.render.sprites[tt.render.sid_gradiente].animated = true
 tt.render.sprites[tt.render.sid_gradiente].offset = v(-60, 85)
+-- tt.render.sprites[tt.render.sid_gradiente].hidden = true
 tt.render.sprites[tt.render.sid_dragon] = E:clone_c("sprite")
 tt.render.sprites[tt.render.sid_dragon].prefix = "stage31_wood_holder_dragonDef"
 tt.render.sprites[tt.render.sid_dragon].exo = true
